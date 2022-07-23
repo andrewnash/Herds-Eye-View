@@ -20,20 +20,44 @@ from PIL import Image
 from queue import Queue, Empty
 
 
-num_frames = 10
-num_robots = 4
+num_frames = 50
+num_robots = 6
 num_pucks = 16
 
 # HEV camera params
-bev_z = 1150
+bev_z = 750
 bev_fov = '17.5'
 
 folder = datetime.now().strftime("%m-%d-%Y_%H-%M-%S")
 print(f'outputting to: {folder}')
 os.mkdir(f'_out/{folder}/')
 os.mkdir(f'_out/{folder}/hev')
+os.mkdir(f'_out/{folder}/data')
 for i in range(num_robots):
     os.mkdir(f'_out/{folder}/robot_{i}')
+
+
+def get_cam_intrinsics(bp):
+    """ 
+    Build the K projection matrix.
+
+    K = [[Fx,  0, image_w/2],
+         [ 0, Fy, image_h/2],
+         [ 0,  0,         1]]
+    """
+    image_w = bp.get_attribute("image_size_x").as_int()
+    image_h = bp.get_attribute("image_size_y").as_int()
+    fov = bp.get_attribute("fov").as_float()
+    focal_x = image_w / (2.0 * np.tan(fov * np.pi / 360.0))
+    focal_y = image_h / (2.0 * np.tan(fov * np.pi / 360.0))
+
+    K = np.identity(3)
+    K[0, 0] = focal_x
+    K[1, 1] = focal_y
+    K[0, 2] = image_w / 2.0
+    K[1, 2] = image_h / 2.0
+
+    return K
 
 
 class Robot:
@@ -48,17 +72,19 @@ class Robot:
             transform=spawn)
 
         cam_bp = bp_lib.find('sensor.camera.rgb')
-        cam_bp.set_attribute('image_size_x', '512')
-        cam_bp.set_attribute('image_size_y', '256')
+        cam_bp.set_attribute('image_size_x', '480')
+        cam_bp.set_attribute('image_size_y', '224')
         self.camera = world.spawn_actor(
             blueprint=cam_bp,
             transform=carla.Transform(
                 carla.Location(x=3.4, z=0.9),
                 carla.Rotation(pitch=-20)),
             attach_to=self.robot)
-        
+
         self.queue = Queue()
         self.camera.listen(self.queue.put)
+        
+        self.intrinsics = get_cam_intrinsics(cam_bp)
 
     def random_transform(self):
         self.robot.set_transform(carla.Transform(
@@ -73,27 +99,6 @@ def random_transform():
         carla.Rotation(yaw=np.random.uniform(0, 360)),
     )
 
-class RandomSpawn:
-    def __init__(self, min_x, max_x, min_y, max_y, z):
-        self.min_x = min_x
-        self.max_x = max_x
-        self.min_y = min_y
-        self.max_y = max_y
-        self.z = z
-
-        self.grid = {}
-
-    def reset():
-        self.grid = {}
-
-    def random_transform():
-        return carla.Transform(
-            carla.Location(
-                x=np.random.uniform(self.min_x, self.max_x),
-                y=np.random.uniform(self.min_y, self.max_y),
-                z=self.z),
-            carla.Rotation(yaw=np.random.uniform(0, 360)),
-        )
 
 def scan(client):
     """
@@ -127,8 +132,8 @@ def scan(client):
                 transform=random_transform()))
 
         bev_camera_bp = bp_lib.find("sensor.camera.semantic_segmentation")
-        bev_camera_bp.set_attribute('image_size_x', '512')
-        bev_camera_bp.set_attribute('image_size_y', '256')
+        bev_camera_bp.set_attribute('image_size_x', '200')
+        bev_camera_bp.set_attribute('image_size_y', '200')
         bev_camera_bp.set_attribute('fov', bev_fov)
 
         bev_camera = world.spawn_actor(
@@ -149,9 +154,7 @@ def scan(client):
             for puck in pucks:
                 puck.set_transform(random_transform())
 
-            #for i in range(30):
             world.tick()
-
             world_frame = world.get_snapshot().frame
 
             try:
@@ -179,12 +182,24 @@ def scan(client):
             bev_image = Image.fromarray(bev_array)
             bev_image.save(f"_out/{folder}/hev/{file}__{frame}.png")
 
+            intrinsics = list()
+            extrinsics = list()
+
             for i, robot in enumerate(robots):
                 robot_array = np.frombuffer(robot.data.raw_data, dtype=np.dtype("uint8"))
                 robot_array = np.reshape(robot_array, (robot.data.height, robot.data.width, 4))
                 robot_array = robot_array[:, :, :3][:, :, ::-1]
                 robot_image = Image.fromarray(robot_array)
                 robot_image.save(f"_out/{folder}/robot_{i}/{file}__{frame}.png")
+
+                extrinsics.append(robot.camera.get_transform().get_matrix())
+                intrinsics.append(robot.intrinsics)
+            
+            data = {
+                'intrinsics': np.array(intrinsics),
+                'extrinsics': np.array(extrinsics),
+            }
+            np.savez_compressed(f'_out/{folder}/data/{file}__{frame}.npz', aux=data)
             
     finally:
         world.apply_settings(original_settings)
