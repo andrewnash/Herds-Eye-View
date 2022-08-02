@@ -12,6 +12,7 @@ except IndexError:
     pass
 
 import cv2
+import json
 import yaml
 import time
 import carla
@@ -20,9 +21,9 @@ from PIL import Image
 from queue import Queue, Empty
 
 
-num_frames = 50
+num_frames = 1500
 num_robots = 6
-num_pucks = 16
+num_pucks = 12
 
 # HEV camera params
 bev_z = 750
@@ -35,6 +36,13 @@ os.mkdir(f'_out/{folder}/hev')
 os.mkdir(f'_out/{folder}/data')
 for i in range(num_robots):
     os.mkdir(f'_out/{folder}/robot_{i}')
+
+config = {
+    'num_frames': num_frames,
+    'num_robots': num_robots,
+}
+with open(f'_out/{folder}/config.json', 'w') as f:
+    json.dump(config, f)
 
 
 def get_cam_intrinsics(bp):
@@ -180,7 +188,7 @@ def scan(client):
             bev_array = np.reshape(bev_array, (bev_data.height, bev_data.width, 4))
             bev_array = bev_array[:, :, :3][:, :, ::-1]
             bev_image = Image.fromarray(bev_array)
-            bev_image.save(f"_out/{folder}/hev/{file}__{frame}.png")
+            bev_image.save(f"_out/{folder}/hev/{frame}.png")
 
             intrinsics = list()
             extrinsics = list()
@@ -190,7 +198,7 @@ def scan(client):
                 robot_array = np.reshape(robot_array, (robot.data.height, robot.data.width, 4))
                 robot_array = robot_array[:, :, :3][:, :, ::-1]
                 robot_image = Image.fromarray(robot_array)
-                robot_image.save(f"_out/{folder}/robot_{i}/{file}__{frame}.png")
+                robot_image.save(f"_out/{folder}/robot_{i}/{frame}.png")
 
                 extrinsics.append(robot.camera.get_transform().get_matrix())
                 intrinsics.append(robot.intrinsics)
@@ -199,7 +207,7 @@ def scan(client):
                 'intrinsics': np.array(intrinsics),
                 'extrinsics': np.array(extrinsics),
             }
-            np.savez_compressed(f'_out/{folder}/data/{file}__{frame}.npz', aux=data)
+            np.savez_compressed(f'_out/{folder}/data/{frame}.npz', aux=data)
             
     finally:
         world.apply_settings(original_settings)
