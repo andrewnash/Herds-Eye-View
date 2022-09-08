@@ -12,8 +12,6 @@ except IndexError:
     pass
 
 import cv2
-import math
-import time
 import json
 import yaml
 import time
@@ -22,14 +20,23 @@ import numpy as np
 from PIL import Image
 from queue import Queue, Empty
 
-num_frames = 50
+
+num_frames = 1500
 num_robots = 6
 num_pucks = 6
 
-# HEV camera params
-bev_z = 775
-bev_fov = '17.5'
+robot_transforms = [
+    carla.Transform(carla.Location(x=52,    y=97.75,  z=4.3), carla.Rotation(yaw=220)),
+    carla.Transform(carla.Location(x=-52,   y=97.75,  z=4.3), carla.Rotation(yaw=320)),
+    carla.Transform(carla.Location(x=-52,   y=-97.75, z=4.3), carla.Rotation(yaw=50)),
+    carla.Transform(carla.Location(x=52,    y=-97.75, z=4.3), carla.Rotation(yaw=120)),
+    carla.Transform(carla.Location(x=74,  y=2.65,   z=4.3), carla.Rotation(yaw=180)),
+    carla.Transform(carla.Location(x=-74, y=2.65,   z=4.3), carla.Rotation(yaw=0)),
+]
 
+# HEV camera params
+bev_z = 950
+bev_fov = '17.5'
 
 root_folder = 'C:data/'
 folder = datetime.now().strftime("%m-%d-%Y_%H-%M-%S")
@@ -73,30 +80,22 @@ def get_cam_intrinsics(bp):
 
 class Robot:
     """Robot camera and body actors + thread safe queue for cam imgs."""
-    z = 4.6
 
-    def __init__(self, world):
+    def __init__(self, world, spawn):
         """Create Robot."""
         bp_lib = world.get_blueprint_library()
 
         self.robot = world.spawn_actor(
             blueprint=bp_lib.find('walker.pedestrian.0050'),
-            transform=carla.Transform(carla.Location(z=self.z)))
-
-        self.robot.set_simulate_physics(False)
-        self.robot.set_location(carla.Location(z=self.z))
+            transform=spawn)
 
         cam_bp = bp_lib.find('sensor.camera.rgb')
         cam_bp.set_attribute('image_size_x', '480')
         cam_bp.set_attribute('image_size_y', '224')
-        cam_bp.set_attribute("enable_postprocess_effects", str(True))
-        cam_bp.set_attribute("fstop", str(0.8))
-        cam_bp.set_attribute("focal_distance", str(100))
-
         self.camera = world.spawn_actor(
             blueprint=cam_bp,
             transform=carla.Transform(
-                carla.Location(x=3.4, z=2),
+                carla.Location(x=3.4, z=0.9),
                 carla.Rotation(pitch=-20)),
             attach_to=self.robot)
 
@@ -106,25 +105,17 @@ class Robot:
         self.intrinsics = get_cam_intrinsics(cam_bp)
 
     def random_transform(self):
-        x = np.random.uniform(-70, 70)
-        y = np.random.uniform(-90, 90)
-
-        mid = math.degrees(math.atan2(-y, -x))
-        mid = mid + 360 if mid < 0 else mid
-        yaw = np.random.normal(mid, 50)
-        yaw = yaw + 360 if yaw < 0 else yaw
-
         self.robot.set_transform(carla.Transform(
-            carla.Location(x=x, y=y, z=self.z),
-            carla.Rotation(yaw=yaw),
+            carla.Location(x=np.random.uniform(-70, 70), y=np.random.uniform(-90, 90), z=0),
+            carla.Rotation(yaw=np.random.uniform(0, 360)),
         ))
 
 
 def random_transform():
-    return carla.Transform(carla.Location(
-        x=np.random.uniform(-70, 70),
-        y=np.random.uniform(-90, 90),
-        z=1.15))
+    return carla.Transform(
+        carla.Location(x=np.random.uniform(-70, 70), y=np.random.uniform(-90, 90), z=1.15),
+        carla.Rotation(yaw=np.random.uniform(0, 360)),
+    )
 
 
 def scan(client):
@@ -150,8 +141,8 @@ def scan(client):
     pucks = []
 
     try:
-        for _ in range(num_robots):
-            robots.append(Robot(world))
+        for robot_transform in robot_transforms:
+            robots.append(Robot(world, robot_transform))
 
         for _ in range(num_pucks):
             pucks.append(world.spawn_actor(
@@ -159,8 +150,8 @@ def scan(client):
                 transform=random_transform()))
 
         bev_camera_bp = bp_lib.find("sensor.camera.semantic_segmentation")
-        bev_camera_bp.set_attribute('image_size_x', '144')
-        bev_camera_bp.set_attribute('image_size_y', '96')
+        bev_camera_bp.set_attribute('image_size_x', '200')
+        bev_camera_bp.set_attribute('image_size_y', '100')
         bev_camera_bp.set_attribute('fov', bev_fov)
 
         bev_camera = world.spawn_actor(
@@ -175,10 +166,9 @@ def scan(client):
 
         # print((((start_x, start_y), (end_x, end_y)), centroid_dir))
         for frame in range(num_frames):
-            time.sleep(1)
             # move robots & pucks to new random locations
-            for robot in robots:
-                robot.random_transform()
+            # for robot in robots:
+            #     robot.random_transform()
             for puck in pucks:
                 puck.set_transform(random_transform())
 
