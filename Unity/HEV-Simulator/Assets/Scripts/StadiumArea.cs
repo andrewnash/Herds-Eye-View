@@ -52,19 +52,17 @@ public class StadiumArea : MonoBehaviour
             var cubeSize = cube.GetComponent<Renderer>().bounds.size.z/2 - 2;
 
             pos = Random.insideUnitCircle * archSize;
-            pos.z = pos.y > transform.position.z ? pos.y + cubeSize : pos.y - cubeSize;
-            pos.y = 0;
+            pos.z = pos.y > 0 ? pos.y + cubeSize : pos.y - cubeSize;
+            pos += transform.position;
         }
         else
         {
-            var bounds = cube.GetComponent<Renderer>().bounds;
-            pos.x = Random.Range(bounds.min.x - bounds.max.x, bounds.max.x);
-            pos.z = Random.Range(bounds.min.z, bounds.max.z);
+            var bounds = floors.transform.GetChild(Random.Range(0, 2)).GetComponent<Renderer>().bounds;
+            pos.x = Random.Range(bounds.min.x+2, bounds.max.x-2);
+            pos.z = Random.Range(bounds.min.z+2, bounds.max.z-2);
         }
 
         pos.y = 0.1f;
-        pos.x = pos.x - 1;
-        pos.z = pos.z - 1;
         return pos;
     }
 
