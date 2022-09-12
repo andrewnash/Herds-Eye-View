@@ -2,8 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Unity.MLAgents;
+using Unity.MLAgents.Sensors;
+using Unity.MLAgents.Actuators;
 
-public class RaycastAgent : MonoBehaviour
+public class RaycastAgent : Agent
 {
     Rigidbody m_AgentRb;
 
@@ -13,6 +16,20 @@ public class RaycastAgent : MonoBehaviour
         m_AgentRb = GetComponent<Rigidbody>();
     }
 
+    public override void OnEpisodeBegin()
+    {
+
+    }
+
+    public override void CollectObservations(VectorSensor sensor)
+    {
+
+    }
+
+    public override void OnActionReceived(ActionBuffers actionBuffers)
+    {
+
+    }
 
     // Update is called once per frame
     void Update()
@@ -44,10 +61,5 @@ public class RaycastAgent : MonoBehaviour
         var position = transform.position;
         position.y = 1;
         transform.position = position;
-    }
-
-    void EndEpisode()
-    {
-        transform.position.Set(0, 1, 0);
     }
 }
