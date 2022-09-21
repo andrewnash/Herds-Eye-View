@@ -1,3 +1,4 @@
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,12 @@ using UnityEngine.InputSystem;
 
 public class StadiumArea : MonoBehaviour
 {
+    public bool collectData;
+    private int frame = 0;
+
+    private string time;
+    private string rootFolder = "C:data/";
+
     GameObject pucks;
     GameObject agents;
     GameObject floors;
@@ -16,7 +23,22 @@ public class StadiumArea : MonoBehaviour
         floors = GameObject.Find("Floor");
         agents = GameObject.Find("Agents");
 
+        setupHEVSaving();
         ResetStadium();
+    }
+
+    void setupHEVSaving()
+    {
+        time = string.Format("{0}-{1}-{2}_{3}-{4}-{5}",
+            System.DateTime.Now.Year.ToString(), System.DateTime.Now.Month.ToString(), System.DateTime.Now.Day.ToString(),
+            System.DateTime.Now.Hour.ToString(), System.DateTime.Now.Minute.ToString(), System.DateTime.Now.Second.ToString());
+        rootFolder = "C:data/" + time + "/";
+
+        Directory.CreateDirectory(rootFolder);
+        Directory.CreateDirectory(rootFolder + "/hev");
+        Directory.CreateDirectory(rootFolder + "/data");
+        for(int i = 0; i < agents.transform.childCount; i++)
+            Directory.CreateDirectory(rootFolder + "/robot_" + i.ToString());
     }
 
     void ResetStadium()
@@ -36,10 +58,10 @@ public class StadiumArea : MonoBehaviour
         obj.transform.GetComponent<Rigidbody>().velocity = Vector3.zero;
         obj.transform.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
         obj.transform.eulerAngles = new Vector3(0, Random.Range(0, 360), 0);
-        obj.transform.position = RandomPos();
+        obj.transform.position = RandomPos(0.5f);
     }
 
-    Vector3 RandomPos()
+    Vector3 RandomPos(float y)
     {
         var pos = Vector3.zero;
         var cube = floors.transform.GetChild(0);
@@ -62,8 +84,40 @@ public class StadiumArea : MonoBehaviour
             pos.z = Random.Range(bounds.min.z+2, bounds.max.z-2);
         }
 
-        pos.y = 0.1f;
+        pos.y = y;
         return pos;
+    }
+
+    void CaptureHEVFrames()
+    {
+        for (int i = 0; i < agents.transform.childCount; i++)
+        {
+            Camera camera = agents.transform.GetChild(i).transform.Find("AgentCamera").GetComponent<Camera>();
+            print("collecting camera: " + i.ToString());
+            Capture(camera, string.Format("{0}/robot_{1}/", rootFolder, i.ToString()));
+        }
+    }
+
+    public void Capture(Camera cam, string path)
+    {
+        int resWidth = cam.pixelWidth;
+        int resHeight = cam.pixelHeight;
+        RenderTexture rt = new RenderTexture(resWidth, resHeight, 24);
+        cam.targetTexture = rt;
+        cam.Render();
+        
+        Texture2D screenShot = new Texture2D(resWidth, resHeight, TextureFormat.RGB24, false);
+        RenderTexture.active = rt;
+        screenShot.ReadPixels(cam.pixelRect, 0, 0);
+        screenShot.Apply();
+        
+        byte[] bytes = screenShot.EncodeToPNG();
+        string filename = string.Format("{0}/{1}.png", path, frame.ToString());
+        System.IO.File.WriteAllBytes(filename, bytes);
+        
+        cam.targetTexture = null;
+        RenderTexture.active = null;
+        rt.Release();
     }
 
     // Update is called once per frame
@@ -74,6 +128,13 @@ public class StadiumArea : MonoBehaviour
         if (keyboard.escapeKey.wasPressedThisFrame)
             ResetStadium();
 
+        if (collectData == true)
+        {
+            ResetStadium();
+            CaptureHEVFrames();
+        }
+
+        // reset objects if they fall off the map
         foreach (Transform puck in pucks.transform)
         {
             if (puck.transform.position.y < -1)
