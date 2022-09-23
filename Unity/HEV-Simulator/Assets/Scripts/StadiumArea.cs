@@ -45,23 +45,27 @@ public class StadiumArea : MonoBehaviour
     {
         foreach (Transform puck in pucks.transform)
         {
-            ResetObject(puck);
+            Vector3 pos = RandomPos();
+            pos.y = 0f;
+            ResetObject(puck, pos);
         }
         foreach (Transform agent in agents.transform)
         {
-            ResetObject(agent);
+            Vector3 pos = RandomPos();
+            pos.y = 1f;
+            ResetObject(agent, pos);
         }
     }
 
-    void ResetObject(Transform obj)
+    void ResetObject(Transform obj, Vector3 position)
     {
         obj.transform.GetComponent<Rigidbody>().velocity = Vector3.zero;
         obj.transform.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
         obj.transform.eulerAngles = new Vector3(0, Random.Range(0, 360), 0);
-        obj.transform.position = RandomPos(0.5f);
+        obj.transform.position = position;
     }
 
-    Vector3 RandomPos(float y)
+    Vector3 RandomPos()
     {
         var pos = Vector3.zero;
         var cube = floors.transform.GetChild(0);
@@ -84,7 +88,7 @@ public class StadiumArea : MonoBehaviour
             pos.z = Random.Range(bounds.min.z+2, bounds.max.z-2);
         }
 
-        pos.y = y;
+        pos.y = 0;
         return pos;
     }
 
@@ -138,7 +142,7 @@ public class StadiumArea : MonoBehaviour
         foreach (Transform puck in pucks.transform)
         {
             if (puck.transform.position.y < -1)
-                ResetObject(puck);
+                ResetObject(puck, RandomPos());
         }
     }
 }
