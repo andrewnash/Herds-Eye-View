@@ -3,8 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Unity.MLAgents;
+using Unity.MLAgents.Sensors;
+using Unity.MLAgents.Actuators;
 
-public class StadiumArea : MonoBehaviour
+public class StadiumArea : Agent
 {
     public bool collectData;
     private int frame = 0;
@@ -16,7 +19,6 @@ public class StadiumArea : MonoBehaviour
     GameObject agents;
     GameObject floors;
 
-    // Start is called before the first frame update
     void Start()
     {
         pucks = GameObject.Find("Pucks");
@@ -25,6 +27,11 @@ public class StadiumArea : MonoBehaviour
 
         setupHEVSaving();
         ResetStadium();
+    }
+
+    public override void CollectObservations(VectorSensor sensor)
+    {
+        print(sensor);
     }
 
     void setupHEVSaving()
