@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 using Unity.MLAgents;
 using Unity.MLAgents.Sensors;
 using Unity.MLAgents.Actuators;
+using Unity.MLAgents.Sensors.Reflection;
 
 public class StadiumArea : Agent
 {
@@ -27,11 +28,13 @@ public class StadiumArea : Agent
 
         setupHEVSaving();
         ResetStadium();
+
     }
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        print(sensor);
+/*        print(sensor);
+        print(GetComponent<GridSensorComponent>().GetObjectData());*/
     }
 
     void setupHEVSaving()
@@ -151,5 +154,12 @@ public class StadiumArea : Agent
             if (puck.transform.position.y < -1)
                 ResetObject(puck, RandomPos());
         }
+
+        //OneHotGridSensor
+
+        //var writer = ObservationWriter();
+        GameObject test = new GameObject();
+        print(GetComponent<HEVGridSensorComponent>().ObservationStacks);
+
     }
 }
