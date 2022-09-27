@@ -88,15 +88,6 @@
       },
       "hash": "68474b92978ac4c6f26a4e170d257c6d8de72025"
     },
-    "com.unity.ml-agents.extensions": {
-      "version": "file:C:/Users/adn11/OneDrive/Documents/GitHub/ml-agents/com.unity.ml-agents.extensions",
-      "depth": 0,
-      "source": "local",
-      "dependencies": {
-        "com.unity.ml-agents": "2.2.1-exp.1",
-        "com.unity.modules.physics": "1.0.0"
-      }
-    },
     "com.unity.probuilder": {
       "version": "4.5.2",
       "depth": 0,

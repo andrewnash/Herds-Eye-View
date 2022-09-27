@@ -6,7 +6,6 @@
     "com.unity.ide.vscode": "1.2.4",
     "com.unity.inputsystem": "1.3.0",
     "com.unity.ml-agents": "git+https://github.com/Unity-Technologies/ml-agents.git?path=com.unity.ml-agents#release_19",
-    "com.unity.ml-agents.extensions": "file:C:/Users/adn11/OneDrive/Documents/GitHub/ml-agents/com.unity.ml-agents.extensions",
     "com.unity.probuilder": "4.5.2",
     "com.unity.progrids": "3.0.3-preview.6",
     "com.unity.test-framework": "1.1.29",
