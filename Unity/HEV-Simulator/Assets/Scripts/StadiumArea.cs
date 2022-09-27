@@ -31,12 +31,6 @@ public class StadiumArea : Agent
 
     }
 
-    public override void CollectObservations(VectorSensor sensor)
-    {
-/*        print(sensor);
-        print(GetComponent<GridSensorComponent>().GetObjectData());*/
-    }
-
     void setupHEVSaving()
     {
         time = string.Format("{0}-{1}-{2}_{3}-{4}-{5}",
@@ -107,9 +101,14 @@ public class StadiumArea : Agent
         for (int i = 0; i < agents.transform.childCount; i++)
         {
             Camera camera = agents.transform.GetChild(i).transform.Find("AgentCamera").GetComponent<Camera>();
-            print("collecting camera: " + i.ToString());
             Capture(camera, string.Format("{0}/robot_{1}/", rootFolder, i.ToString()));
         }
+
+        GetComponent<HEVGridSensorComponent>().grid()[0].Update();
+        byte[] bytes = GetComponent<HEVGridSensorComponent>().grid()[0].GetCompressedObservation();
+        string filename = string.Format("{0}/hev/{1}.png", rootFolder, frame.ToString());
+
+        System.IO.File.WriteAllBytes(filename, bytes);
     }
 
     public void Capture(Camera cam, string path)
@@ -154,12 +153,5 @@ public class StadiumArea : Agent
             if (puck.transform.position.y < -1)
                 ResetObject(puck, RandomPos());
         }
-
-        //OneHotGridSensor
-
-        //var writer = ObservationWriter();
-        GameObject test = new GameObject();
-        print(GetComponent<HEVGridSensorComponent>().ObservationStacks);
-
     }
 }

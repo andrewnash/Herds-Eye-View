@@ -89,7 +89,7 @@
       "hash": "68474b92978ac4c6f26a4e170d257c6d8de72025"
     },
     "com.unity.ml-agents.extensions": {
-      "version": "file:D:/git/ml-agents/com.unity.ml-agents.extensions",
+      "version": "file:C:/Users/adn11/OneDrive/Documents/GitHub/ml-agents/com.unity.ml-agents.extensions",
       "depth": 0,
       "source": "local",
       "dependencies": {
