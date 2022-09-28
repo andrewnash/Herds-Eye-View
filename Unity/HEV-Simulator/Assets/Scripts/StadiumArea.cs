@@ -108,9 +108,15 @@ namespace UnityEngine
                 Capture(camera, string.Format("{0}/robot_{1}/", rootFolder, i.ToString()));
             }
 
-   
-            //GetComponent<HEVGridSensorComponent>().grid()[0].Update();
-            byte[] bytes = GetComponent<HEVGridSensorComponent>().grid()[0].GetCompressedObservation();
+
+            ISensor grid = GetComponent<HEVGridSensorComponent>().CreateSensors()[0];
+            //print(sensors[0].GetCompressedObservation()); ;
+            //GridSensorBase grid = GetComponent<HEVGridSensorComponent>().grid()[0];
+
+            grid.Reset();
+            grid.Update();
+            //print(grid.ObservationSize());
+            byte[] bytes = grid.GetCompressedObservation();
             string filename = string.Format("{0}/hev/{1}.png", rootFolder, frame.ToString());
             System.IO.File.WriteAllBytes(filename, bytes);
         }
