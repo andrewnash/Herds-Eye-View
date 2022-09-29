@@ -9,6 +9,7 @@ using Unity.MLAgents;
 using Unity.MLAgents.Sensors;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors.Reflection;
+using MBaske.Sensors.Grid;
 
 namespace UnityEngine
 {
@@ -32,7 +33,6 @@ namespace UnityEngine
 
             setupHEVSaving();
             ResetStadium();
-
         }
 
         void setupHEVSaving()
@@ -109,11 +109,16 @@ namespace UnityEngine
             }
 
 
-            ISensor grid = GetComponent<HEVGridSensorComponent>().CreateSensors()[0];
-            //print(sensors[0].GetCompressedObservation()); ;
+            //ISensor grid = GetComponent<HEVGridSensorComponent>().CreateSensors()[0];
+            var grid = GetComponent<GridSensorComponent2D>().GridSensor;
+            //var grid = grid2d[0].GridSensor;
+            //grid2d.GetCompressedObservation()
+
+            //print(grid2d[0]);
+            //print(grid2d[1]);       
             //GridSensorBase grid = GetComponent<HEVGridSensorComponent>().grid()[0];
 
-            grid.Reset();
+            //grid.Reset();
             grid.Update();
             //print(grid.ObservationSize());
             byte[] bytes = grid.GetCompressedObservation();
@@ -146,14 +151,15 @@ namespace UnityEngine
         void Update()
         {
             var keyboard = Keyboard.current;
-
             if (keyboard.escapeKey.wasPressedThisFrame)
                 ResetStadium();
 
             if (collectData == true)
             {
-                ResetStadium();
-                CaptureHEVFrames();
+                if (frame++ % 2 == 0)
+                    CaptureHEVFrames();
+                else
+                    ResetStadium();
             }
 
             // reset objects if they fall off the map

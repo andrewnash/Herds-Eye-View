@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "com.dbrizov.naughtyattributes": {
-      "version": "git+https://github.com/dbrizov/NaughtyAttributes.git#upm",
+      "version": "https://github.com/dbrizov/NaughtyAttributes.git#upm",
       "depth": 0,
       "source": "git",
       "dependencies": {},

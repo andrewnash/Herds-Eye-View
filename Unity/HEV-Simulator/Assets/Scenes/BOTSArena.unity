@@ -388,7 +388,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh20678
+  m_Name: pb_Mesh21092
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -2043,7 +2043,8 @@ MonoBehaviour:
       - {x: -1, y: 0, z: 0}
     m_LocalPoints:
     - {x: -1, y: 0, z: 0}
-    m_WorldPoints: []
+    m_WorldPoints:
+    - {x: -12, y: 2, z: 8}
     m_MergeDisconnected: 0
     m_Flatten: 1
     m_MaxLOD: 0
@@ -2052,7 +2053,7 @@ MonoBehaviour:
     m_GizmoLOD: 0
     m_Projection: 0
     m_PointCount: 1
-    m_DrawGrid: 0
+    m_DrawGrid: 1
 --- !u!1 &92107081 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1293290366791352, guid: 70d695e1d8399400bb0f2873bdf29bb0, type: 3}
@@ -3723,7 +3724,7 @@ MonoBehaviour:
     m_GizmoLOD: 0
     m_Projection: 0
     m_PointCount: 0
-    m_DrawGrid: 0
+    m_DrawGrid: 1
 --- !u!1 &285255534
 GameObject:
   m_ObjectHideFlags: 0
@@ -3902,7 +3903,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh20352
+  m_Name: pb_Mesh20746
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -4468,7 +4469,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh20690
+  m_Name: pb_Mesh21104
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -4632,7 +4633,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh20478
+  m_Name: pb_Mesh20880
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -4796,7 +4797,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh20460
+  m_Name: pb_Mesh20862
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -4960,7 +4961,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh20576
+  m_Name: pb_Mesh20984
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -5124,7 +5125,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh20510
+  m_Name: pb_Mesh20914
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -9161,9 +9162,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Shape:
-    m_ScanResultsByLOD: []
-    m_LocalPoints: []
-    m_WorldPoints: []
+    m_ScanResultsByLOD:
+    - LocalPoints:
+      - {x: -1, y: 0, z: 0.00000011920929}
+    m_LocalPoints:
+    - {x: -1, y: 0, z: 0.00000011920929}
+    m_WorldPoints:
+    - {x: -12, y: 2, z: -0.00000047683716}
     m_MergeDisconnected: 0
     m_Flatten: 1
     m_MaxLOD: 0
@@ -9171,8 +9176,8 @@ MonoBehaviour:
     m_ScanLOD: 0
     m_GizmoLOD: 0
     m_Projection: 0
-    m_PointCount: 0
-    m_DrawGrid: 0
+    m_PointCount: 1
+    m_DrawGrid: 1
 --- !u!1 &748050445
 GameObject:
   m_ObjectHideFlags: 0
@@ -9215,7 +9220,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh20490
+  m_Name: pb_Mesh20892
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -10876,14 +10881,14 @@ MonoBehaviour:
     m_GizmoLOD: 0
     m_Projection: 0
     m_PointCount: 0
-    m_DrawGrid: 0
+    m_DrawGrid: 1
 --- !u!43 &859206664
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh20664
+  m_Name: pb_Mesh21078
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -12392,7 +12397,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh20608
+  m_Name: pb_Mesh21018
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -12645,7 +12650,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh20410
+  m_Name: pb_Mesh20810
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -14306,14 +14311,14 @@ MonoBehaviour:
     m_GizmoLOD: 0
     m_Projection: 0
     m_PointCount: 0
-    m_DrawGrid: 0
+    m_DrawGrid: 1
 --- !u!43 &1323613187
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh20382
+  m_Name: pb_Mesh20780
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -16911,7 +16916,7 @@ MonoBehaviour:
     m_GizmoLOD: 0
     m_Projection: 0
     m_PointCount: 0
-    m_DrawGrid: 0
+    m_DrawGrid: 1
 --- !u!1 &1490555422
 GameObject:
   m_ObjectHideFlags: 0
@@ -17231,7 +17236,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh20638
+  m_Name: pb_Mesh21050
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -17395,7 +17400,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh20724
+  m_Name: pb_Mesh21140
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -19969,7 +19974,7 @@ MonoBehaviour:
     m_GizmoLOD: 0
     m_Projection: 0
     m_PointCount: 0
-    m_DrawGrid: 0
+    m_DrawGrid: 1
 --- !u!1 &1732174413
 GameObject:
   m_ObjectHideFlags: 0
@@ -20877,7 +20882,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh20622
+  m_Name: pb_Mesh21034
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -22267,7 +22272,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh20650
+  m_Name: pb_Mesh21062
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -22687,7 +22692,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh20758
+  m_Name: pb_Mesh21176
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -23752,7 +23757,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh20432
+  m_Name: pb_Mesh20832
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -25618,14 +25623,14 @@ MonoBehaviour:
     m_GizmoLOD: 0
     m_Projection: 0
     m_PointCount: 0
-    m_DrawGrid: 0
+    m_DrawGrid: 1
 --- !u!43 &2099725196
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh20526
+  m_Name: pb_Mesh20932
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -25852,16 +25857,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec8722596ac4fb346894cd62602b3999, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ObservationShape: 2 channels x 40 width x 70 height
-  m_SensorName: GridSensor
+  m_ObservationShape: 2 channels x 20 width x 35 height
+  m_SensorName: HEVGridSensor2D
   m_ObservationStacks: 1
   m_CompressionType: 1
   m_ObservationType: 0
   m_ChannelLabels: []
-  m_Debug_CreateSensorOnAwake: 1
+  m_Debug_CreateSensorOnAwake: 0
   m_Debug_CreateSensorOnValidate: 1
   m_Debug_FrameInterval: 1
-  m_Debug_DrawGridBuffer: 0
+  m_Debug_DrawGridBuffer: 1
   m_Debug_GridBufferDrawer:
     Context: {fileID: 0}
     Editor: {fileID: 0}
@@ -25870,15 +25875,29 @@ MonoBehaviour:
     IsStandby: 0
   m_GridShape:
     NumChannels: 2
-    Width: 40
-    Height: 70
+    Width: 20
+    Height: 35
   m_ClearCacheOnReset: 0
   m_ColliderBufferSize: 64
   m_TmpObjectToAdd: {fileID: 0}
   m_GameObjectSettingsList:
+  - Tag: Puck
+    Enabled: 1
+    DetectionType: 1
+    Modifier: 0
+    Detectable: {fileID: 719110505}
+    m_UserObservables:
+      m_Observables: []
+    m_Observables:
+    - Name: One-Hot
+      Type: 1
+      Index: -1
+      Enabled: 1
+      Color: {r: 1, g: 0, b: 0, a: 1}
+    m_DetectorSpaceType: 0
   - Tag: Agent
     Enabled: 1
-    DetectionType: 0
+    DetectionType: 1
     Modifier: 0
     Detectable: {fileID: 914073161}
     m_UserObservables:
@@ -25888,34 +25907,20 @@ MonoBehaviour:
       Type: 1
       Index: -1
       Enabled: 1
-      Color: {r: 0.7017485, g: 0.51975536, b: 0.2644162, a: 1}
+      Color: {r: 0, g: 0, b: 1, a: 1}
     m_DetectorSpaceType: 0
-  - Tag: Puck
-    Enabled: 1
-    DetectionType: 0
-    Modifier: 0
-    Detectable: {fileID: 2055851315}
-    m_UserObservables:
-      m_Observables: []
-    m_Observables:
-    - Name: One-Hot
-      Type: 1
-      Index: -1
-      Enabled: 1
-      Color: {r: 0.8957008, g: 0.09551923, b: 0.40718853, a: 1}
-    m_DetectorSpaceType: 0
-  m_RotationType: 0
+  m_RotationType: 2
   m_DetectionBounds:
-    m_Center: {x: 0, y: 1, z: 0}
-    m_Extent: {x: 20, y: 0.5, z: 35}
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 20, y: 1, z: 35}
   m_EditorBounds:
-    m_Center: {x: 0, y: 1, z: 0}
-    m_Extent: {x: 20, y: 0.5, z: 35}
-  m_CellSize: 1
-  m_NumCells: {x: 40, y: 1, z: 70}
-  m_DetectionSize: {x: 40, y: 1, z: 70}
-  m_BoundsSize: {x: 40, y: 1, z: 70}
-  m_Offset: {x: 0, y: 1, z: 0}
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 20, y: 1, z: 35}
+  m_CellSize: 2
+  m_NumCells: {x: 20, y: 1, z: 35}
+  m_DetectionSize: {x: 40, y: 2, z: 70}
+  m_BoundsSize: {x: 40, y: 2, z: 70}
+  m_Offset: {x: 0, y: 0, z: 0}
 --- !u!114 &2100257759
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26011,7 +26016,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh20592
+  m_Name: pb_Mesh21002
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
