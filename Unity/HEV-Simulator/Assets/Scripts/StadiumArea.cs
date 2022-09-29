@@ -45,6 +45,7 @@ namespace UnityEngine
             Directory.CreateDirectory(rootFolder);
             Directory.CreateDirectory(rootFolder + "/hev");
             Directory.CreateDirectory(rootFolder + "/data");
+            Directory.CreateDirectory(rootFolder + "/debug_cam");
             for (int i = 0; i < agents.transform.childCount; i++)
                 Directory.CreateDirectory(rootFolder + "/robot_" + i.ToString());
         }
@@ -108,19 +109,11 @@ namespace UnityEngine
                 Capture(camera, string.Format("{0}/robot_{1}/", rootFolder, i.ToString()));
             }
 
+            Camera debugCam = GameObject.Find("Main Camera").GetComponent<Camera>();
+            Capture(debugCam, string.Format("{0}/debug_cam/", rootFolder));
 
-            //ISensor grid = GetComponent<HEVGridSensorComponent>().CreateSensors()[0];
             var grid = GetComponent<GridSensorComponent2D>().GridSensor;
-            //var grid = grid2d[0].GridSensor;
-            //grid2d.GetCompressedObservation()
-
-            //print(grid2d[0]);
-            //print(grid2d[1]);       
-            //GridSensorBase grid = GetComponent<HEVGridSensorComponent>().grid()[0];
-
-            //grid.Reset();
             grid.Update();
-            //print(grid.ObservationSize());
             byte[] bytes = grid.GetCompressedObservation();
             string filename = string.Format("{0}/hev/{1}.png", rootFolder, frame.ToString());
             System.IO.File.WriteAllBytes(filename, bytes);
