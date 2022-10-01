@@ -16,7 +16,6 @@ namespace UnityEngine
     public class StadiumArea : Agent
     {
         public bool collectData;
-        private int frame = 0;
 
         private string time;
         private string rootFolder = "C:data/";
@@ -24,12 +23,29 @@ namespace UnityEngine
         GameObject pucks;
         GameObject agents;
         GameObject floors;
+        GridSensor grid;
+
+        Transform cube;
+        Transform arch;
+
+        Bounds bounds;
+        float archSize;
+        float cubeSize;
 
         void Start()
         {
             pucks = GameObject.Find("Pucks");
             floors = GameObject.Find("Floor");
             agents = GameObject.Find("Agents");
+            grid = GetComponentInChildren<GridSensorComponent2D>().GridSensor;
+
+            cube = floors.transform.GetChild(0);
+            arch = floors.transform.GetChild(2);
+            
+            archSize = arch.GetComponent<Renderer>().bounds.size.x - 2;
+            cubeSize = cube.GetComponent<Renderer>().bounds.size.z / 2 - 2;
+            bounds = floors.transform.GetChild(Random.Range(0, 2)).GetComponent<Renderer>().bounds;
+
 
             setupHEVSaving();
             ResetStadium();
@@ -77,27 +93,20 @@ namespace UnityEngine
         Vector3 RandomPos()
         {
             var pos = Vector3.zero;
-            var cube = floors.transform.GetChild(0);
-            var arch = floors.transform.GetChild(2);
 
             // 50% chance to spawan in middle or sides
             if (Random.Range(0, 2) == 1)
             {
-                var archSize = arch.GetComponent<Renderer>().bounds.size.x - 2;
-                var cubeSize = cube.GetComponent<Renderer>().bounds.size.z / 2 - 2;
-
                 pos = Random.insideUnitCircle * archSize;
                 pos.z = pos.y > 0 ? pos.y + cubeSize : pos.y - cubeSize;
                 pos += transform.position;
             }
             else
             {
-                var bounds = floors.transform.GetChild(Random.Range(0, 2)).GetComponent<Renderer>().bounds;
                 pos.x = Random.Range(bounds.min.x + 2, bounds.max.x - 2);
                 pos.z = Random.Range(bounds.min.z + 2, bounds.max.z - 2);
             }
 
-            pos.y = 0;
             return pos;
         }
 
@@ -112,10 +121,10 @@ namespace UnityEngine
             Camera debugCam = GameObject.Find("Main Camera").GetComponent<Camera>();
             Capture(debugCam, string.Format("{0}/debug_cam/", rootFolder));
 
-            var grid = GetComponent<GridSensorComponent2D>().GridSensor;
+            
             grid.Update();
             byte[] bytes = grid.GetCompressedObservation();
-            string filename = string.Format("{0}/hev/{1}.png", rootFolder, frame.ToString());
+            string filename = string.Format("{0}/hev/{1}.png", rootFolder, Time.frameCount.ToString());
             System.IO.File.WriteAllBytes(filename, bytes);
         }
 
@@ -133,7 +142,7 @@ namespace UnityEngine
             screenShot.Apply();
 
             byte[] bytes = screenShot.EncodeToPNG();
-            string filename = string.Format("{0}/{1}.png", path, frame.ToString());
+            string filename = string.Format("{0}/{1}.png", path, Time.frameCount.ToString());
             System.IO.File.WriteAllBytes(filename, bytes);
 
             cam.targetTexture = null;
@@ -143,16 +152,13 @@ namespace UnityEngine
 
         void Update()
         {
-            var keyboard = Keyboard.current;
-            if (keyboard.escapeKey.wasPressedThisFrame)
+            if (Keyboard.current.escapeKey.wasPressedThisFrame)
                 ResetStadium();
 
             if (collectData == true)
             {
-                if (frame++ % 2 == 0)
-                    CaptureHEVFrames();
-                else
-                    ResetStadium();
+                CaptureHEVFrames();
+                ResetStadium();
             }
 
             // reset objects if they fall off the map
