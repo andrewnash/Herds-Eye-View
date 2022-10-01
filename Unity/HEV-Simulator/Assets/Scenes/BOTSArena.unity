@@ -4330,7 +4330,7 @@ GameObject:
   - component: {fileID: 349409587}
   - component: {fileID: 349409586}
   m_Layer: 0
-  m_Name: GridSensor
+  m_Name: HEVGridSensor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27128,6 +27128,7 @@ MonoBehaviour:
   hasUpgradedFromAgentParameters: 1
   MaxStep: 0
   collectData: 1
+  numFrames: 0
 --- !u!114 &2100257759
 MonoBehaviour:
   m_ObjectHideFlags: 0
