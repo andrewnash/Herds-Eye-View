@@ -1,14 +1,8 @@
-using System;
 using System.IO;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Profiling;
 using Unity.MLAgents;
-using Unity.MLAgents.Sensors;
-using Unity.MLAgents.Actuators;
-using Unity.MLAgents.Sensors.Reflection;
+using Unity.Mathematics;
 using MBaske.Sensors.Grid;
 
 public class StadiumArea : Agent
@@ -45,7 +39,6 @@ public class StadiumArea : Agent
         archSize = arch.GetComponent<Renderer>().bounds.size.x - 2;
         cubeSize = cube.GetComponent<Renderer>().bounds.size.z / 2 - 2;
         bounds = floors.transform.GetChild(UnityEngine.Random.Range(0, 2)).GetComponent<Renderer>().bounds;
-
 
         setupHEVSaving();
         ResetStadium();
@@ -89,6 +82,7 @@ public class StadiumArea : Agent
         obj.transform.eulerAngles = new Vector3(0, BiasRandomAngle(position), 0);
         obj.transform.position = position;
     }
+
     public static float RandomGaussian(float minValue = 0.0f, float maxValue = 1.0f)
     {
         float u, v, S;
@@ -118,6 +112,23 @@ public class StadiumArea : Agent
         return RandomGaussian(mid - 180, mid + 180);
     }
 
+    float3x3 GetIntrinsics(Camera cam)
+    {
+        float pixel_aspect_ratio = (float)cam.pixelWidth / (float)cam.pixelHeight;
+
+        float alpha_u = cam.focalLength * ((float)cam.pixelWidth / cam.sensorSize.x);
+        float alpha_v = cam.focalLength * pixel_aspect_ratio * ((float)cam.pixelHeight / cam.sensorSize.y);
+
+        float u_0 = (float)cam.pixelWidth / 2;
+        float v_0 = (float)cam.pixelHeight / 2;
+
+        //IntrinsicMatrix in row major
+        float3x3 camIntriMatrix = new float3x3(new float3(alpha_u, 0f, u_0),
+                                            new float3(0f, alpha_v, v_0),
+                                            new float3(0f, 0f, 1f));
+        return camIntriMatrix;
+    }
+
     Vector3 RandomPos()
     {
         var pos = Vector3.zero;
@@ -143,6 +154,7 @@ public class StadiumArea : Agent
         for (int i = 0; i < agents.transform.childCount; i++)
         {
             Camera camera = agents.transform.GetChild(i).transform.Find("AgentCamera").GetComponent<Camera>();
+            GetIntrinsics(camera);
             Capture(camera, string.Format("{0}/robot_{1}/", rootFolder, i.ToString()));
         }
 
@@ -175,7 +187,7 @@ public class StadiumArea : Agent
         cam.targetTexture = null;
         RenderTexture.active = null;
         rt.Release();
-    }
+    }   
 
     void Update()
     {
