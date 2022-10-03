@@ -49,8 +49,8 @@ public class StadiumArea : Agent
 
     struct Config
     {
-        public int numFrames;
-        public int numRobots;
+        public int num_frames;
+        public int num_robots;
     }
 
     void Start()
@@ -86,8 +86,8 @@ public class StadiumArea : Agent
             Directory.CreateDirectory(rootFolder + "/robot_" + i.ToString());
 
         Config config;
-        config.numFrames = numFrames;
-        config.numRobots = numRobots;
+        config.num_frames = numFrames;
+        config.num_robots = numRobots;
         System.IO.File.WriteAllText(string.Format("{0}/config.json", rootFolder), JsonUtility.ToJson(config, true));
     }
 

@@ -29411,7 +29411,7 @@ MonoBehaviour:
   hasUpgradedFromAgentParameters: 1
   MaxStep: 0
   collectData: 1
-  numFrames: 50
+  numFrames: 1500
   numRobots: 6
 --- !u!114 &2100257759
 MonoBehaviour:
