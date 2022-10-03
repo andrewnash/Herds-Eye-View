@@ -9,7 +9,7 @@ public class StadiumArea : Agent
 {
     public bool collectData;
     public int numFrames;
-    private int numRobots;
+    public int numRobots;
 
     string time;
     string rootFolder = "C:data/";
@@ -25,6 +25,33 @@ public class StadiumArea : Agent
     Bounds bounds;
     float archSize;
     float cubeSize;
+
+    [System.Serializable]
+    struct CVTData
+    {
+        public string intrinsics;
+        public string extrinsics;
+
+        // Convert matrixes into json friendly strings
+        public CVTData(float3x3 i, Matrix4x4 e)
+        {
+            intrinsics = string.Format("[[{0}, {1}, {2}], [{3}, {4}, {5}], [{6}, {7}, {8}]]",
+                i.c0.x, i.c0.y, i.c0.z,
+                i.c1.x, i.c1.y, i.c1.z,
+                i.c2.x, i.c2.y, i.c2.z);
+            extrinsics = string.Format("[[{0}, {1}, {2}, {3}], [{4}, {5}, {6}, {7}], [{8}, {9}, {10}, {11}], [{12}, {13}, {14}, {15}]]",
+                e.m00, e.m01, e.m02, e.m03,
+                e.m10, e.m11, e.m12, e.m13,
+                e.m20, e.m21, e.m22, e.m23,
+                e.m30, e.m31, e.m32, e.m33);
+        }
+    }
+
+    struct Config
+    {
+        public int numFrames;
+        public int numRobots;
+    }
 
     void Start()
     {
@@ -57,6 +84,11 @@ public class StadiumArea : Agent
         Directory.CreateDirectory(rootFolder + "/debug_cam");
         for (int i = 0; i < agents.transform.childCount; i++)
             Directory.CreateDirectory(rootFolder + "/robot_" + i.ToString());
+
+        Config config;
+        config.numFrames = numFrames;
+        config.numRobots = numRobots;
+        System.IO.File.WriteAllText(string.Format("{0}/config.json", rootFolder), JsonUtility.ToJson(config, true));
     }
 
     void ResetStadium()
@@ -123,9 +155,9 @@ public class StadiumArea : Agent
         float v_0 = (float)cam.pixelHeight / 2;
 
         //IntrinsicMatrix in row major
-        float3x3 camIntriMatrix = new float3x3(new float3(alpha_u, 0f, u_0),
-                                            new float3(0f, alpha_v, v_0),
-                                            new float3(0f, 0f, 1f));
+        float3x3 camIntriMatrix = new float3x3(new float3(alpha_u, 0f,      u_0),
+                                               new float3(0f,      alpha_v, v_0),
+                                               new float3(0f,      0f,       1f));
         return camIntriMatrix;
     }
 
@@ -153,18 +185,24 @@ public class StadiumArea : Agent
     {
         for (int i = 0; i < agents.transform.childCount; i++)
         {
+            // Save Robot Cameras
             Camera camera = agents.transform.GetChild(i).transform.Find("AgentCamera").GetComponent<Camera>();
-            GetIntrinsics(camera);
             Capture(camera, string.Format("{0}/robot_{1}/", rootFolder, i.ToString()));
+
+            // Save intrinsics & extrinsics
+            CVTData data = new CVTData(GetIntrinsics(camera), Matrix4x4.TRS(camera.transform.localPosition, camera.transform.localRotation, camera.transform.localScale));
+            System.IO.File.WriteAllText(string.Format("{0}/data/{1}.json", rootFolder, Time.frameCount.ToString()), JsonUtility.ToJson(data, true));
         }
 
+        // Save Debug Camera
         Camera debugCam = GameObject.Find("Main Camera").GetComponent<Camera>();
         Capture(debugCam, string.Format("{0}/debug_cam/", rootFolder));
 
+
+        // Save HEV
         grid.Update();
         byte[] bytes = grid.GetCompressedObservation();
-        string filename = string.Format("{0}/hev/{1}.png", rootFolder, Time.frameCount.ToString());
-        System.IO.File.WriteAllBytes(filename, bytes);
+        System.IO.File.WriteAllBytes(string.Format("{0}/hev/{1}.png", rootFolder, Time.frameCount.ToString()), bytes);
     }
 
     public void Capture(Camera cam, string path)
@@ -205,6 +243,12 @@ public class StadiumArea : Agent
         {
             if (puck.transform.position.y < -1)
                 ResetObject(puck, RandomPos());
+        }
+
+
+        if (Time.frameCount >= numFrames)
+        {
+            UnityEditor.EditorApplication.isPlaying = false;
         }
     }
 }
