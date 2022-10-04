@@ -10,6 +10,7 @@ public class StadiumSaver : MonoBehaviour
     public int numFrames;
     public int numRobots;
 
+    int frameCount = 0;
     string time;
     string rootFolder = "C:data/";
 
@@ -63,7 +64,7 @@ public class StadiumSaver : MonoBehaviour
             data.AddCamera(camera);
         }
         //print(JsonUtility.ToJson(data.Objectify(), true));
-        System.IO.File.WriteAllText(string.Format("{0}/data/{1}.json", rootFolder, Time.frameCount), JsonUtility.ToJson(data.Objectify(), true));
+        System.IO.File.WriteAllText(string.Format("{0}/data/{1}.json", rootFolder, frameCount), JsonUtility.ToJson(data.Objectify(), true));
 
         // Save Debug Camera
         Camera debugCam = GameObject.Find("Main Camera").GetComponent<Camera>();
@@ -72,7 +73,7 @@ public class StadiumSaver : MonoBehaviour
         // Save HEV
         grid.Update();
         byte[] bytes = grid.GetCompressedObservation();
-        System.IO.File.WriteAllBytes(string.Format("{0}/hev/{1}.png", rootFolder, Time.frameCount), bytes);
+        System.IO.File.WriteAllBytes(string.Format("{0}/hev/{1}.png", rootFolder, frameCount), bytes);
     }
 
     public void Capture(Camera cam, string path)
@@ -89,7 +90,7 @@ public class StadiumSaver : MonoBehaviour
         screenShot.Apply();
 
         byte[] bytes = screenShot.EncodeToPNG();
-        string filename = string.Format("{0}/{1}.png", path, Time.frameCount);
+        string filename = string.Format("{0}/{1}.png", path, frameCount);
         System.IO.File.WriteAllBytes(filename, bytes);
 
         cam.targetTexture = null;
@@ -104,7 +105,7 @@ public class StadiumSaver : MonoBehaviour
             CaptureHEVFrames();
             stadium.ResetStadium();
 
-            if (Time.frameCount >= numFrames)
+            if (++frameCount >= numFrames)
             {
                 UnityEditor.EditorApplication.isPlaying = false;
             }
