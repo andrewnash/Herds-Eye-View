@@ -200,11 +200,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 20968265540301958, guid: 70d695e1d8399400bb0f2873bdf29bb0, type: 3}
       propertyPath: field of view
-      value: 60.000004
+      value: 62.97986
+      objectReference: {fileID: 0}
+    - target: {fileID: 20968265540301958, guid: 70d695e1d8399400bb0f2873bdf29bb0, type: 3}
+      propertyPath: m_FOVAxisMode
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 20968265540301958, guid: 70d695e1d8399400bb0f2873bdf29bb0, type: 3}
       propertyPath: m_FocalLength
-      value: 20.78461
+      value: 6.1136966
+      objectReference: {fileID: 0}
+    - target: {fileID: 20968265540301958, guid: 70d695e1d8399400bb0f2873bdf29bb0, type: 3}
+      propertyPath: m_SensorSize.x
+      value: 10.26
+      objectReference: {fileID: 0}
+    - target: {fileID: 20968265540301958, guid: 70d695e1d8399400bb0f2873bdf29bb0, type: 3}
+      propertyPath: m_SensorSize.y
+      value: 7.49
+      objectReference: {fileID: 0}
+    - target: {fileID: 20968265540301958, guid: 70d695e1d8399400bb0f2873bdf29bb0, type: 3}
+      propertyPath: m_TargetTexture
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 20968265540301958, guid: 70d695e1d8399400bb0f2873bdf29bb0, type: 3}
       propertyPath: m_projectionMatrixMode
@@ -4021,11 +4037,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 20968265540301958, guid: 70d695e1d8399400bb0f2873bdf29bb0, type: 3}
       propertyPath: field of view
-      value: 60.000004
+      value: 62.97986
+      objectReference: {fileID: 0}
+    - target: {fileID: 20968265540301958, guid: 70d695e1d8399400bb0f2873bdf29bb0, type: 3}
+      propertyPath: m_FOVAxisMode
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 20968265540301958, guid: 70d695e1d8399400bb0f2873bdf29bb0, type: 3}
       propertyPath: m_FocalLength
-      value: 20.78461
+      value: 6.1136966
+      objectReference: {fileID: 0}
+    - target: {fileID: 20968265540301958, guid: 70d695e1d8399400bb0f2873bdf29bb0, type: 3}
+      propertyPath: m_SensorSize.x
+      value: 10.26
+      objectReference: {fileID: 0}
+    - target: {fileID: 20968265540301958, guid: 70d695e1d8399400bb0f2873bdf29bb0, type: 3}
+      propertyPath: m_SensorSize.y
+      value: 7.49
+      objectReference: {fileID: 0}
+    - target: {fileID: 20968265540301958, guid: 70d695e1d8399400bb0f2873bdf29bb0, type: 3}
+      propertyPath: m_TargetTexture
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 20968265540301958, guid: 70d695e1d8399400bb0f2873bdf29bb0, type: 3}
       propertyPath: m_projectionMatrixMode
@@ -4380,11 +4412,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 20968265540301958, guid: 70d695e1d8399400bb0f2873bdf29bb0, type: 3}
       propertyPath: field of view
-      value: 60.000004
+      value: 62.97986
+      objectReference: {fileID: 0}
+    - target: {fileID: 20968265540301958, guid: 70d695e1d8399400bb0f2873bdf29bb0, type: 3}
+      propertyPath: m_FOVAxisMode
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 20968265540301958, guid: 70d695e1d8399400bb0f2873bdf29bb0, type: 3}
       propertyPath: m_FocalLength
-      value: 20.78461
+      value: 6.1136966
+      objectReference: {fileID: 0}
+    - target: {fileID: 20968265540301958, guid: 70d695e1d8399400bb0f2873bdf29bb0, type: 3}
+      propertyPath: m_SensorSize.x
+      value: 10.26
+      objectReference: {fileID: 0}
+    - target: {fileID: 20968265540301958, guid: 70d695e1d8399400bb0f2873bdf29bb0, type: 3}
+      propertyPath: m_SensorSize.y
+      value: 7.49
+      objectReference: {fileID: 0}
+    - target: {fileID: 20968265540301958, guid: 70d695e1d8399400bb0f2873bdf29bb0, type: 3}
+      propertyPath: m_TargetTexture
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 20968265540301958, guid: 70d695e1d8399400bb0f2873bdf29bb0, type: 3}
       propertyPath: m_projectionMatrixMode
@@ -14918,11 +14966,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 20968265540301958, guid: 70d695e1d8399400bb0f2873bdf29bb0, type: 3}
       propertyPath: field of view
-      value: 60.000004
+      value: 62.97986
+      objectReference: {fileID: 0}
+    - target: {fileID: 20968265540301958, guid: 70d695e1d8399400bb0f2873bdf29bb0, type: 3}
+      propertyPath: m_FOVAxisMode
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 20968265540301958, guid: 70d695e1d8399400bb0f2873bdf29bb0, type: 3}
       propertyPath: m_FocalLength
-      value: 20.78461
+      value: 6.1136966
+      objectReference: {fileID: 0}
+    - target: {fileID: 20968265540301958, guid: 70d695e1d8399400bb0f2873bdf29bb0, type: 3}
+      propertyPath: m_SensorSize.x
+      value: 10.26
+      objectReference: {fileID: 0}
+    - target: {fileID: 20968265540301958, guid: 70d695e1d8399400bb0f2873bdf29bb0, type: 3}
+      propertyPath: m_SensorSize.y
+      value: 7.49
+      objectReference: {fileID: 0}
+    - target: {fileID: 20968265540301958, guid: 70d695e1d8399400bb0f2873bdf29bb0, type: 3}
+      propertyPath: m_TargetTexture
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 20968265540301958, guid: 70d695e1d8399400bb0f2873bdf29bb0, type: 3}
       propertyPath: m_projectionMatrixMode
@@ -15457,11 +15521,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 20968265540301958, guid: 70d695e1d8399400bb0f2873bdf29bb0, type: 3}
       propertyPath: field of view
-      value: 60.000004
+      value: 62.97986
+      objectReference: {fileID: 0}
+    - target: {fileID: 20968265540301958, guid: 70d695e1d8399400bb0f2873bdf29bb0, type: 3}
+      propertyPath: m_FOVAxisMode
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 20968265540301958, guid: 70d695e1d8399400bb0f2873bdf29bb0, type: 3}
       propertyPath: m_FocalLength
-      value: 20.78461
+      value: 6.1136966
+      objectReference: {fileID: 0}
+    - target: {fileID: 20968265540301958, guid: 70d695e1d8399400bb0f2873bdf29bb0, type: 3}
+      propertyPath: m_SensorSize.x
+      value: 10.26
+      objectReference: {fileID: 0}
+    - target: {fileID: 20968265540301958, guid: 70d695e1d8399400bb0f2873bdf29bb0, type: 3}
+      propertyPath: m_SensorSize.y
+      value: 7.49
+      objectReference: {fileID: 0}
+    - target: {fileID: 20968265540301958, guid: 70d695e1d8399400bb0f2873bdf29bb0, type: 3}
+      propertyPath: m_TargetTexture
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 20968265540301958, guid: 70d695e1d8399400bb0f2873bdf29bb0, type: 3}
       propertyPath: m_projectionMatrixMode
@@ -25967,11 +26047,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 20968265540301958, guid: 70d695e1d8399400bb0f2873bdf29bb0, type: 3}
       propertyPath: field of view
-      value: 60.000004
+      value: 62.97986
+      objectReference: {fileID: 0}
+    - target: {fileID: 20968265540301958, guid: 70d695e1d8399400bb0f2873bdf29bb0, type: 3}
+      propertyPath: m_FOVAxisMode
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 20968265540301958, guid: 70d695e1d8399400bb0f2873bdf29bb0, type: 3}
       propertyPath: m_FocalLength
-      value: 20.78461
+      value: 6.1136966
+      objectReference: {fileID: 0}
+    - target: {fileID: 20968265540301958, guid: 70d695e1d8399400bb0f2873bdf29bb0, type: 3}
+      propertyPath: m_SensorSize.x
+      value: 10.26
+      objectReference: {fileID: 0}
+    - target: {fileID: 20968265540301958, guid: 70d695e1d8399400bb0f2873bdf29bb0, type: 3}
+      propertyPath: m_SensorSize.y
+      value: 7.49
+      objectReference: {fileID: 0}
+    - target: {fileID: 20968265540301958, guid: 70d695e1d8399400bb0f2873bdf29bb0, type: 3}
+      propertyPath: m_TargetTexture
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 20968265540301958, guid: 70d695e1d8399400bb0f2873bdf29bb0, type: 3}
       propertyPath: m_projectionMatrixMode
@@ -29428,7 +29524,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collectData: 1
   numFrames: 50
-  numRobots: 5
+  numRobots: 6
 --- !u!114 &2100257759
 MonoBehaviour:
   m_ObjectHideFlags: 0
