@@ -13,7 +13,7 @@ public class StadiumArea : Agent
 
     Bounds bounds;
     float archSize;
-    float cubeSize;
+    float cubeoffset;
 
 
     void Start()
@@ -26,8 +26,7 @@ public class StadiumArea : Agent
         arch = floors.transform.GetChild(2);
             
         archSize = arch.GetComponent<Renderer>().bounds.size.x - 2;
-        cubeSize = cube.GetComponent<Renderer>().bounds.size.z / 2 - 2;
-        bounds = floors.transform.GetChild(Random.Range(0, 2)).GetComponent<Renderer>().bounds;
+        cubeoffset = cube.GetComponent<Renderer>().bounds.size.z / 2 - 2;
         
         ResetStadium();
     }
@@ -93,11 +92,13 @@ public class StadiumArea : Agent
         if (Random.Range(0, 2) == 1)
         {
             pos = Random.insideUnitCircle * archSize;
-            pos.z = pos.y > 0 ? pos.y + cubeSize : pos.y - cubeSize;
+            pos.z = pos.y > 0 ? pos.y + cubeoffset : pos.y - cubeoffset;
             pos += transform.position;
         }
         else
         {
+            // 50% chance to spawn in top or bottom middle rectangles
+            bounds = floors.transform.GetChild(Random.Range(0, 2)).GetComponent<Renderer>().bounds;
             pos.x = Random.Range(bounds.min.x + 2, bounds.max.x - 2);
             pos.z = Random.Range(bounds.min.z + 2, bounds.max.z - 2);
         }
