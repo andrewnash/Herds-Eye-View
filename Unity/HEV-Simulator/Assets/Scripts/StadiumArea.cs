@@ -4,9 +4,10 @@ using Unity.MLAgents;
 
 public class StadiumArea : Agent
 {
+    public GameObject walls;
+    public GameObject floors;
     public GameObject pucks;
     public GameObject agents;
-    public GameObject floors;
 
     Transform cube;
     Transform arch;
@@ -18,8 +19,9 @@ public class StadiumArea : Agent
 
     void Start()
     {
+        walls = GameObject.Find("Walls");
+        floors = GameObject.Find("Floors");
         pucks = GameObject.Find("Pucks");
-        floors = GameObject.Find("Floor");
         agents = GameObject.Find("Agents");
 
         cube = floors.transform.GetChild(0);
@@ -29,6 +31,7 @@ public class StadiumArea : Agent
         cubeoffset = cube.GetComponent<Renderer>().bounds.size.z / 2 - 2;
         
         ResetStadium();
+        ResetColors();
     }
 
     public void ResetStadium()
@@ -105,6 +108,22 @@ public class StadiumArea : Agent
 
         return pos;
     }   
+
+    Color RandomColor()
+    {
+        return new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
+    }
+
+    public void ResetColors()
+    {
+        // floor & wall pairs have matching indexs
+        for (int i=0; i < walls.transform.childCount; i++)
+        {
+            Color randColor = RandomColor();
+            walls.transform.GetChild(i).GetComponent<Renderer>().material.SetColor("_Color", randColor);
+            floors.transform.GetChild(i).GetComponent<Renderer>().material.SetColor("_Color", randColor);
+        }
+    }
 
     void Update()
     {

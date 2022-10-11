@@ -9,6 +9,7 @@ public class StadiumSaver : MonoBehaviour
     public bool collectData;
     public int numFrames;
     public int numRobots;
+    public int colorChangeInterval;
 
     int frameCount = 0;
     string time;
@@ -36,7 +37,7 @@ public class StadiumSaver : MonoBehaviour
         time = string.Format("{0}-{1}-{2}_{3}-{4}-{5}",
             System.DateTime.Now.Year.ToString(), System.DateTime.Now.Month.ToString(), System.DateTime.Now.Day.ToString(),
             System.DateTime.Now.Hour.ToString(), System.DateTime.Now.Minute.ToString(), System.DateTime.Now.Second.ToString());
-        rootFolder = "C:data/" + time + "/";
+        rootFolder = "C:/data/" + time + "/";
 
         Directory.CreateDirectory(rootFolder);
         Directory.CreateDirectory(rootFolder + "/hev");
@@ -103,12 +104,14 @@ public class StadiumSaver : MonoBehaviour
         if (collectData == true)
         {
             CaptureHEVFrames();
-            stadium.ResetStadium();
 
             if (++frameCount >= numFrames)
-            {
                 UnityEditor.EditorApplication.isPlaying = false;
-            }
+
+            stadium.ResetStadium();
+
+            if (frameCount % colorChangeInterval == 0)
+                stadium.ResetColors();
         }
     }
 }
