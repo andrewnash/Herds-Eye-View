@@ -8935,6 +8935,8 @@ GameObject:
   - component: {fileID: 349409585}
   - component: {fileID: 349409587}
   - component: {fileID: 349409586}
+  - component: {fileID: 349409589}
+  - component: {fileID: 349409588}
   m_Layer: 0
   m_Name: HEVGridSensor
   m_TagString: Untagged
@@ -9030,6 +9032,53 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f8abecd5902d09449e947799d9330a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &349409588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 349409584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88b6042bc9a5d4aa58d931eae49442e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 0
+--- !u!114 &349409589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 349409584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d1c4e0b1822b495aa52bc52839ecb30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_BrainParameters:
+    VectorObservationSize: 1
+    NumStackedVectorObservations: 1
+    m_ActionSpec:
+      m_NumContinuousActions: 0
+      BranchSizes: 01000000
+    VectorActionSize: 01000000
+    VectorActionDescriptions: []
+    VectorActionSpaceType: 0
+    hasUpgradedBrainParametersWithActionSpec: 1
+  m_Model: {fileID: 0}
+  m_InferenceDevice: 0
+  m_BehaviorType: 0
+  m_BehaviorName: My Behavior
+  TeamId: 0
+  m_UseChildSensors: 1
+  m_UseChildActuators: 1
+  m_DeterministicInference: 0
+  m_ObservableAttributeHandling: 0
 --- !u!1001 &359479656
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -38115,6 +38164,7 @@ GameObject:
   - component: {fileID: 1171461065}
   - component: {fileID: 1171461064}
   - component: {fileID: 1171461063}
+  - component: {fileID: 1171461068}
   m_Layer: 0
   m_Name: StadiumAreaBEV
   m_TagString: Untagged
@@ -38195,10 +38245,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80ad9d57404e3af45bfb1e24230a745c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agentParameters:
-    maxStep: 0
-  hasUpgradedFromAgentParameters: 1
-  MaxStep: 0
   walls: {fileID: 0}
   floors: {fileID: 588161748}
   pucks: {fileID: 1554214381}
@@ -38222,6 +38268,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1171461068
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1171461062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88b6042bc9a5d4aa58d931eae49442e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 0
 --- !u!43 &1193890668
 Mesh:
   m_ObjectHideFlags: 0
@@ -67722,8 +67784,6 @@ GameObject:
   - component: {fileID: 2100257756}
   - component: {fileID: 2100257757}
   - component: {fileID: 2100257758}
-  - component: {fileID: 2100257760}
-  - component: {fileID: 2100257759}
   m_Layer: 0
   m_Name: StadiumAreaHEV
   m_TagString: Untagged
@@ -67763,15 +67823,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80ad9d57404e3af45bfb1e24230a745c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agentParameters:
-    maxStep: 0
-  hasUpgradedFromAgentParameters: 1
-  MaxStep: 0
-  walls: {fileID: 748050445}
-  floors: {fileID: 912397028}
-  pucks: {fileID: 2051886955}
-  agents: {fileID: 1415988211}
-  pucksRange: {x: 3, y: 10}
+  walls: {fileID: 634133339}
+  floors: {fileID: 912397029}
+  pucks: {fileID: 2051886956}
+  agents: {fileID: 1415988212}
+  pucksRange: {x: 3, y: 12}
 --- !u!114 &2100257758
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -67788,51 +67844,6 @@ MonoBehaviour:
   numFrames: 10000
   numRobots: 6
   colorChangeInterval: 10
---- !u!114 &2100257759
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2100257755}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DecisionPeriod: 1
-  TakeActionsBetweenDecisions: 1
---- !u!114 &2100257760
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2100257755}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d1c4e0b1822b495aa52bc52839ecb30, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_BrainParameters:
-    VectorObservationSize: 0
-    NumStackedVectorObservations: 1
-    m_ActionSpec:
-      m_NumContinuousActions: 0
-      BranchSizes: 01000000
-    VectorActionSize: 01000000
-    VectorActionDescriptions: []
-    VectorActionSpaceType: 0
-    hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 0}
-  m_InferenceDevice: 0
-  m_BehaviorType: 0
-  m_BehaviorName: HEVBehavior
-  TeamId: 0
-  m_UseChildSensors: 1
-  m_UseChildActuators: 1
-  m_DeterministicInference: 0
-  m_ObservableAttributeHandling: 0
 --- !u!43 &2105668451
 Mesh:
   m_ObjectHideFlags: 0

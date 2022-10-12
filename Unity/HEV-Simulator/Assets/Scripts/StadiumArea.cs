@@ -1,8 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Unity.MLAgents;
 
-public class StadiumArea : Agent
+public class StadiumArea : MonoBehaviour
 {
     public Transform walls;
     public Transform floors;
