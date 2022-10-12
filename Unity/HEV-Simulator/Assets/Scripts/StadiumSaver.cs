@@ -60,9 +60,10 @@ public class StadiumSaver : MonoBehaviour
         for (int i = 0; i < stadium.agents.transform.childCount; i++)
         {
             // Save Robot Cameras
-            Camera camera = stadium.agents.transform.GetChild(i).transform.Find("AgentCamera").GetComponent<Camera>();
+            Transform agent = stadium.agents.transform.GetChild(i);
+            Camera camera = agent.transform.Find("AgentCamera").GetComponent<Camera>();
             Capture(camera, string.Format("{0}/robot_{1}/", rootFolder, i.ToString()));
-            data.AddCamera(camera);
+            data.AddCamera(camera, agent);
         }
         //print(JsonUtility.ToJson(data.Objectify(), true));
         System.IO.File.WriteAllText(string.Format("{0}/data/{1}.json", rootFolder, frameCount), JsonUtility.ToJson(data.Objectify(), true));
@@ -146,10 +147,10 @@ class CameraData
         return camIntriMatrix;
     }
 
-    public void AddCamera(Camera camera)
+    public void AddCamera(Camera camera, Transform agent)
     {
         float3x3 i = GetIntrinsics(camera);
-        Matrix4x4 e = Matrix4x4.TRS(camera.transform.localPosition, camera.transform.localRotation, camera.transform.localScale);
+        Matrix4x4 e = Matrix4x4.TRS(camera.transform.localPosition, agent.localRotation, camera.transform.localScale);
 
         intrinsics.Add(string.Format("[[{0}, {1}, {2}], [{3}, {4}, {5}], [{6}, {7}, {8}]]",
             i.c0.x, i.c0.y, i.c0.z,
