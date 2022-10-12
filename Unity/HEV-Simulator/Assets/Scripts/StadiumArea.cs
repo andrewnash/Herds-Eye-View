@@ -4,11 +4,10 @@ using Unity.MLAgents;
 
 public class StadiumArea : Agent
 {
-    // TODO: CONVERT TO TRANSFORM
-    public GameObject walls;
-    public GameObject floors;
-    public GameObject pucks;
-    public GameObject agents;
+    public Transform walls;
+    public Transform floors;
+    public Transform pucks;
+    public Transform agents;
 
     Transform cube;
     Transform arch;
@@ -21,10 +20,10 @@ public class StadiumArea : Agent
 
     void Start()
     {
-        walls = GameObject.Find("Walls");
-        floors = GameObject.Find("Floors");
-        pucks = GameObject.Find("Pucks");
-        agents = GameObject.Find("Agents");
+        walls = GameObject.Find("Walls").transform;
+        floors = GameObject.Find("Floors").transform;
+        pucks = GameObject.Find("Pucks").transform;
+        agents = GameObject.Find("Agents").transform;
 
         cube = floors.transform.GetChild(0);
         arch = floors.transform.GetChild(2);
@@ -41,9 +40,9 @@ public class StadiumArea : Agent
     {
         int maxPucks = Random.Range(pucksRange.x, pucksRange.y);
 
-        for (int i=0; i < pucks.transform.childCount; i++)
+        for (int i=0; i < pucks.childCount; i++)
         {
-            Transform puck = pucks.transform.GetChild(i);
+            Transform puck = pucks.GetChild(i);
             if (i >= maxPucks)
             {
                 ResetObject(puck, new Vector3(0, -20, 0));
@@ -54,7 +53,7 @@ public class StadiumArea : Agent
             pos.y = 0;
             ResetObject(puck, pos);
         }
-        foreach (Transform agent in agents.transform)
+        foreach (Transform agent in agents)
         {
             Vector3 pos = RandomPos();
             pos.y = 1;
@@ -64,10 +63,10 @@ public class StadiumArea : Agent
 
     void ResetObject(Transform obj, Vector3 position)
     {
-        obj.transform.GetComponent<Rigidbody>().velocity = Vector3.zero;
-        obj.transform.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-        obj.transform.eulerAngles = new Vector3(0, BiasRandomAngle(position), 0);
-        obj.transform.position = position;
+        obj.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        obj.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        obj.eulerAngles = new Vector3(0, BiasRandomAngle(position), 0);
+        obj.position = position;
     }
 
     public static float RandomGaussian(float minValue = 0.0f, float maxValue = 1.0f)
@@ -113,7 +112,7 @@ public class StadiumArea : Agent
         else
         {
             // 50% chance to spawn in top or bottom middle rectangles
-            bounds = floors.transform.GetChild(Random.Range(0, 2)).GetComponent<Renderer>().bounds;
+            bounds = floors.GetChild(Random.Range(0, 2)).GetComponent<Renderer>().bounds;
             pos.x = Random.Range(bounds.min.x + 2, bounds.max.x - 2);
             pos.z = Random.Range(bounds.min.z + 2, bounds.max.z - 2);
         }
@@ -129,11 +128,11 @@ public class StadiumArea : Agent
     public void ResetColors()
     {
         // floor & wall pairs have matching indexs
-        for (int i=0; i < walls.transform.childCount; i++)
+        for (int i=0; i < walls.childCount; i++)
         {
             Color randColor = RandomColor();
-            walls.transform.GetChild(i).GetComponent<Renderer>().material.SetColor("_Color", randColor);
-            floors.transform.GetChild(i).GetComponent<Renderer>().material.SetColor("_Color", randColor);
+            walls.GetChild(i).GetComponent<Renderer>().material.SetColor("_Color", randColor);
+            floors.GetChild(i).GetComponent<Renderer>().material.SetColor("_Color", randColor);
         }
     }
 

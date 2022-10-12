@@ -43,7 +43,7 @@ public class StadiumSaver : MonoBehaviour
         Directory.CreateDirectory(rootFolder + "/hev");
         Directory.CreateDirectory(rootFolder + "/data");
         Directory.CreateDirectory(rootFolder + "/debug_cam");
-        for (int i = 0; i < stadium.agents.transform.childCount; i++)
+        for (int i = 0; i < stadium.agents.childCount; i++)
             Directory.CreateDirectory(rootFolder + "/robot_" + i.ToString());
 
         Config config;
@@ -57,11 +57,11 @@ public class StadiumSaver : MonoBehaviour
         // Save intrinsics & extrinsics
         CameraData data = new CameraData();
 
-        for (int i = 0; i < stadium.agents.transform.childCount; i++)
+        for (int i = 0; i < stadium.agents.childCount; i++)
         {
             // Save Robot Cameras
-            Transform agent = stadium.agents.transform.GetChild(i);
-            Camera camera = agent.transform.Find("AgentCamera").GetComponent<Camera>();
+            Transform agent = stadium.agents.GetChild(i);
+            Camera camera = agent.Find("AgentCamera").GetComponent<Camera>();
             Capture(camera, string.Format("{0}/robot_{1}/", rootFolder, i.ToString()));
             data.AddCamera(camera, agent);
         }
