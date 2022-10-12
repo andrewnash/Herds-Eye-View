@@ -4,6 +4,7 @@ using Unity.MLAgents;
 
 public class StadiumArea : Agent
 {
+    // TODO: CONVERT TO TRANSFORM
     public GameObject walls;
     public GameObject floors;
     public GameObject pucks;
@@ -16,6 +17,7 @@ public class StadiumArea : Agent
     float archSize;
     float cubeoffset;
 
+    public Vector2Int pucksRange;
 
     void Start()
     {
@@ -34,18 +36,28 @@ public class StadiumArea : Agent
         ResetColors();
     }
 
+    // int pucks to reset, int agents to reset
     public void ResetStadium()
     {
-        foreach (Transform puck in pucks.transform)
+        int maxPucks = Random.Range(pucksRange.x, pucksRange.y);
+
+        for (int i=0; i < pucks.transform.childCount; i++)
         {
+            Transform puck = pucks.transform.GetChild(i);
+            if (i >= maxPucks)
+            {
+                ResetObject(puck, new Vector3(0, -20, 0));
+                continue;
+            }
+
             Vector3 pos = RandomPos();
-            pos.y = 0f;
+            pos.y = 0;
             ResetObject(puck, pos);
         }
         foreach (Transform agent in agents.transform)
         {
             Vector3 pos = RandomPos();
-            pos.y = 1f;
+            pos.y = 1;
             ResetObject(agent, pos);
         }
     }
@@ -129,12 +141,5 @@ public class StadiumArea : Agent
     {
         if (Keyboard.current.escapeKey.wasPressedThisFrame)
             ResetStadium();
-
-        // reset objects if they fall off the map
-        foreach (Transform puck in pucks.transform)
-        {
-            if (puck.transform.position.y < -1)
-                ResetObject(puck, RandomPos());
-        }
     }
 }
