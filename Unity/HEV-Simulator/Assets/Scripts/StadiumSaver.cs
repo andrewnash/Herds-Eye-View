@@ -115,6 +115,11 @@ public class StadiumSaver : MonoBehaviour
                 stadium.ResetColors();
         }
     }
+    void OnCollisionEnter(Collision collision)
+    {
+        print("test");
+        Debug.Log(collision.gameObject.tag);
+    }
 }
 
 class CameraData

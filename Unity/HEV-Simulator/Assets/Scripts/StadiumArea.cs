@@ -48,15 +48,11 @@ public class StadiumArea : MonoBehaviour
                 continue;
             }
 
-            Vector3 pos = RandomPos();
-            pos.y = 0;
-            ResetObject(puck, pos);
+            ResetObject(puck, RandomPos(0f));
         }
         foreach (Transform agent in agents)
         {
-            Vector3 pos = RandomPos();
-            pos.y = 1;
-            ResetObject(agent, pos);
+            ResetObject(agent, RandomPos(1f));
         }
     }
 
@@ -66,6 +62,14 @@ public class StadiumArea : MonoBehaviour
         obj.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
         obj.eulerAngles = new Vector3(0, BiasRandomAngle(position), 0);
         obj.position = position;
+    }
+
+    public void ChildReset(Transform child, float y)
+    {
+        child.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        child.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        child.eulerAngles = new Vector3(0, BiasRandomAngle(child.transform.position), 0);
+        child.position = RandomPos(y);
     }
 
     public static float RandomGaussian(float minValue = 0.0f, float maxValue = 1.0f)
@@ -97,7 +101,7 @@ public class StadiumArea : MonoBehaviour
         return RandomGaussian(mid - 180, mid + 180);
     }
 
-    Vector3 RandomPos()
+    Vector3 RandomPos(float y = 0f)
     {
         var pos = Vector3.zero;
 
@@ -116,6 +120,7 @@ public class StadiumArea : MonoBehaviour
             pos.z = Random.Range(bounds.min.z + 2, bounds.max.z - 2);
         }
 
+        pos.y = y;
         return pos;
     }   
 
