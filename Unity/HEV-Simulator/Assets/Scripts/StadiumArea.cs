@@ -101,7 +101,7 @@ public class StadiumArea : MonoBehaviour
         return RandomGaussian(mid - 180, mid + 180);
     }
 
-    Vector3 RandomPos(float y = 0f)
+    public Vector3 RandomPos(float y = 0f)
     {
         var pos = Vector3.zero;
 

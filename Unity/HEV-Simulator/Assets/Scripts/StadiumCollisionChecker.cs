@@ -10,7 +10,7 @@ public class StadiumCollisionChecker : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StadiumArea stadiumArea = GetComponentInParent<StadiumArea>();//.ChildReset(transform);
+        StadiumArea stadiumArea = GetComponentInParent<StadiumArea>();
     }
 
     void Update()

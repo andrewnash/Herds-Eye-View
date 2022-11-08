@@ -114,12 +114,6 @@ public class StadiumSaver : MonoBehaviour
             if (frameCount % colorChangeInterval == 0)
                 stadium.ResetColors();
         }
-    }
-    void OnCollisionEnter(Collision collision)
-    {
-        print("test");
-        Debug.Log(collision.gameObject.tag);
-    }
 }
 
 class CameraData
