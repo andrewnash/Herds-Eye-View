@@ -35,7 +35,7 @@ public class PlanarConstructionAgent : Agent
     public override void OnActionReceived(ActionBuffers actionBuffers)
     {
         AddReward(-0.1f);
-        foreach(Transform puck in stadium.pucks)
+        foreach (Transform puck in stadium.pucks)
         {
             Debug.Log(Vector3.Distance(Vector3.zero, puck.localPosition));
         }
@@ -55,8 +55,27 @@ public class PlanarConstructionAgent : Agent
             case 4:
                 zVelocity = 0.3f;
                 break;
+            default:
+                zVelocity = 0f;
+                break;
         }
 
-        rb.velocity = new Vector3(0.3f, 0f, zVelocity);
+        rb.angularVelocity = new Vector3(0f, zVelocity*4, 0f);
+        rb.velocity += transform.forward * 0.5f;
+    }
+
+    public override void Heuristic(in ActionBuffers actionsOut)
+    {
+        var DiscreteActionsOut = actionsOut.DiscreteActions;
+
+        if (Input.GetKey(KeyCode.A))
+        {
+            DiscreteActionsOut[0] = 1;
+
+        }
+        else if (Input.GetKey(KeyCode.D))
+        {
+            DiscreteActionsOut[0] = 4;
+        }
     }
 }

@@ -114,6 +114,7 @@ public class StadiumSaver : MonoBehaviour
             if (frameCount % colorChangeInterval == 0)
                 stadium.ResetColors();
         }
+    }
 }
 
 class CameraData

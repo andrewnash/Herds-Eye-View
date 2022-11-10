@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class StadiumArea : MonoBehaviour
 {
@@ -142,7 +141,7 @@ public class StadiumArea : MonoBehaviour
 
     void Update()
     {
-        if (Keyboard.current.escapeKey.wasPressedThisFrame)
+        if (Input.GetKey(KeyCode.Escape))
             ResetStadium();
     }
 }
