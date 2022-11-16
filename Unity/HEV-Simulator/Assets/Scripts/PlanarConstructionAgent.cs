@@ -18,9 +18,10 @@ public class PlanarConstructionAgent : Agent
 
     public override void OnEpisodeBegin()
     {
-        rb.velocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
-        rb.transform.localPosition = stadium.RandomPos(1);
+        /*        rb.velocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+                rb.transform.localPosition = stadium.RandomPos(1);*/
+        stadium.ResetStadium();
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -35,10 +36,23 @@ public class PlanarConstructionAgent : Agent
     public override void OnActionReceived(ActionBuffers actionBuffers)
     {
         AddReward(-0.1f);
-        /*        foreach (Transform puck in stadium.pucks)
-                {
-                    Debug.Log(Vector3.Distance(Vector3.zero, puck.localPosition));
-                }*/
+
+        float totalDist = 0;
+        int countDist = 0;
+        foreach (Transform puck in stadium.pucks)
+        {
+            if (puck.transform.position.y > 0)
+            {
+                totalDist += Vector3.Distance(stadium.transform.position, puck.position);
+                countDist++;
+            }
+        }
+        if (totalDist/countDist < 5)
+        {
+            AddReward(10f);
+            EndEpisode();
+        }
+
 
         float rotate = 0;
         switch (actionBuffers.DiscreteActions[0])
