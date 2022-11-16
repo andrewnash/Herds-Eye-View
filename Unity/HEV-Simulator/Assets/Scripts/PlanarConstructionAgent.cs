@@ -35,33 +35,34 @@ public class PlanarConstructionAgent : Agent
     public override void OnActionReceived(ActionBuffers actionBuffers)
     {
         AddReward(-0.1f);
-        foreach (Transform puck in stadium.pucks)
-        {
-            Debug.Log(Vector3.Distance(Vector3.zero, puck.localPosition));
-        }
+        /*        foreach (Transform puck in stadium.pucks)
+                {
+                    Debug.Log(Vector3.Distance(Vector3.zero, puck.localPosition));
+                }*/
 
-        float zVelocity = 0;
+        float rotate = 0;
         switch (actionBuffers.DiscreteActions[0])
         {
             case 1:
-                zVelocity = -0.3f;
+                rotate = -0.3f;
                 break;
             case 2:
-                zVelocity = -0.15f;
+                rotate = -0.15f;
                 break;
             case 3:
-                zVelocity = 0.15f;
+                rotate = 0;
                 break;
             case 4:
-                zVelocity = 0.3f;
+                rotate = 0.15f;
                 break;
-            default:
-                zVelocity = 0f;
+            case 5:
+                rotate = 0.3f;
                 break;
         }
 
-        rb.angularVelocity = new Vector3(0f, zVelocity*4, 0f);
-        rb.velocity += transform.forward * 0.5f;
+        float moveSpeed = 0.5f;
+        rb.AddForce(transform.forward * moveSpeed, ForceMode.VelocityChange);
+        transform.Rotate(transform.up * rotate, Time.fixedDeltaTime * 100);
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
@@ -75,7 +76,11 @@ public class PlanarConstructionAgent : Agent
         }
         else if (Input.GetKey(KeyCode.D))
         {
-            DiscreteActionsOut[0] = 4;
+            DiscreteActionsOut[0] = 5;
+        }
+        else
+        {
+            DiscreteActionsOut[0] = 3;
         }
     }
 }

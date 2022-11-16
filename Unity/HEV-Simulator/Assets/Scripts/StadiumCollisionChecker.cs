@@ -20,7 +20,7 @@ public class StadiumCollisionChecker : MonoBehaviour
 
     void OnTriggerEnter(Collider c)
     {
-        if (c.tag != "Floor" && transform.position.y > y-5)
+        if (c.tag == "Wall" || transform.position.y < y-5)
         {
             stadiumArea.ChildReset(transform, y);
         }
