@@ -1,14 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Unity.MLAgents;
 using Unity.MLAgents.Sensors;
 using Unity.MLAgents.Actuators;
+using static UnityEditor.PlayerSettings;
 
 public class PlanarConstructionAgent : Agent
 {
     Rigidbody rb;
     StadiumArea stadium;
+
+    int m_puckOverlaps = 0;
+
+    float MOVEMENT_SPEED = 0.5f;
 
     void Start()
     {
@@ -26,8 +29,8 @@ public class PlanarConstructionAgent : Agent
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        sensor.AddObservation(rb.velocity.x);
-        sensor.AddObservation(rb.velocity.z);
+        /*sensor.AddObservation(rb.velocity.x);
+        sensor.AddObservation(rb.velocity.z);*/
 
         sensor.AddObservation(rb.transform.localPosition.x);
         sensor.AddObservation(rb.transform.localPosition.z);
@@ -35,8 +38,41 @@ public class PlanarConstructionAgent : Agent
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
     {
-        AddReward(-0.1f);
+        // time penalty
+        AddReward(-0.01f);
 
+        // if agent currently colliding with puck
+        if (m_puckOverlaps > 0)
+        {
+            AddReward(0.005f);
+
+            // and if agent is moving puck towards the center of the stadium
+            float centerAngle = Vector3.Angle(rb.transform.forward, stadium.transform.position - rb.transform.position);
+            if (-10 < centerAngle && centerAngle < 10)
+            {
+                AddReward(0.005f);
+            }
+        }
+        else
+        {
+            // if agent is moving towards any puck
+            foreach (Transform puck in stadium.pucks)
+            {
+                float puckAngle = Vector3.Angle(rb.transform.forward, puck.position - rb.transform.position);
+                if (-10 < puckAngle && puckAngle < 10)
+                {
+                    AddReward(0.005f);
+                    break;
+                }
+            }
+        }
+
+        checkCompleted();
+        moveAgent(actionBuffers);
+    }
+
+    void checkCompleted()
+    {
         float totalDist = 0;
         int countDist = 0;
         foreach (Transform puck in stadium.pucks)
@@ -47,13 +83,15 @@ public class PlanarConstructionAgent : Agent
                 countDist++;
             }
         }
-        if (totalDist/countDist < 5)
+        if (totalDist / countDist < 10)
         {
-            AddReward(10f);
+            AddReward(100f);
             EndEpisode();
         }
+    }
 
-
+    void moveAgent(ActionBuffers actionBuffers)
+    {
         float rotate = 0;
         switch (actionBuffers.DiscreteActions[0])
         {
@@ -74,8 +112,7 @@ public class PlanarConstructionAgent : Agent
                 break;
         }
 
-        float moveSpeed = 0.5f;
-        rb.AddForce(transform.forward * moveSpeed, ForceMode.VelocityChange);
+        rb.AddForce(transform.forward * MOVEMENT_SPEED, ForceMode.VelocityChange);
         transform.Rotate(transform.up * rotate, Time.fixedDeltaTime * 100);
     }
 
@@ -95,6 +132,23 @@ public class PlanarConstructionAgent : Agent
         else
         {
             DiscreteActionsOut[0] = 3;
+        }
+    }
+
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Puck"))
+        {
+            m_puckOverlaps++;
+        }
+    }
+
+    void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Puck"))
+        {
+            m_puckOverlaps--;
         }
     }
 }

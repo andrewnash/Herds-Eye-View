@@ -18,11 +18,6 @@ public class StadiumArea : MonoBehaviour
 
     void Start()
     {
-        walls = GameObject.Find("Walls").transform;
-        floors = GameObject.Find("Floors").transform;
-        pucks = GameObject.Find("Pucks").transform;
-        agents = GameObject.Find("Agents").transform;
-
         cube = floors.transform.GetChild(0);
         arch = floors.transform.GetChild(2);
             
