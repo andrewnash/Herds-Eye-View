@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using Unity.MLAgents;
 using Unity.MLAgents.Sensors;
@@ -77,15 +78,18 @@ public class PlanarConstructionAgent : Agent
         int countDist = 0;
         foreach (Transform puck in stadium.pucks)
         {
-            if (puck.transform.position.y > 0)
+            if (puck.transform.position.y >= 0)
             {
-                totalDist += Vector3.Distance(stadium.transform.position, puck.position);
-                countDist++;
+                totalDist += Vector3.Distance(
+                    new Vector2(stadium.transform.position.x, stadium.transform.position.z),
+                    new Vector2(puck.position.x, puck.position.z));
             }
         }
-        if (totalDist / countDist < 10)
+        
+        if (totalDist / stadium.currentMaxPucks < 5)
         {
             AddReward(100f);
+            stadium.winAnimation();
             EndEpisode();
         }
     }

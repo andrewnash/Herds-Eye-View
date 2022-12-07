@@ -1,3 +1,5 @@
+using MBaske.Sensors.Grid;
+using System.Collections;
 using UnityEngine;
 
 public class StadiumArea : MonoBehaviour
@@ -7,12 +9,17 @@ public class StadiumArea : MonoBehaviour
     public Transform pucks;
     public Transform agents;
 
+    public Transform win;
+    public Transform loose;
+
     Transform cube;
     Transform arch;
 
     Bounds bounds;
     float archSize;
     float cubeoffset;
+
+    public float currentMaxPucks;
 
     public Vector2Int pucksRange;
 
@@ -31,13 +38,14 @@ public class StadiumArea : MonoBehaviour
     // int pucks to reset, int agents to reset
     public void ResetStadium()
     {
-        int maxPucks = Random.Range(pucksRange.x, pucksRange.y);
+        currentMaxPucks = Random.Range(pucksRange.x, pucksRange.y);
 
         for (int i=0; i < pucks.childCount; i++)
         {
             Transform puck = pucks.GetChild(i);
-            if (i >= maxPucks)
+            if (i >= currentMaxPucks)
             {
+                // disable puck over current max
                 ResetObject(puck, new Vector3(0, -20, 0));
                 continue;
             }
@@ -139,4 +147,22 @@ public class StadiumArea : MonoBehaviour
         if (Input.GetKey(KeyCode.Escape))
             ResetStadium();
     }
+
+    public void winAnimation()
+    {
+        StartCoroutine(TargetReachedSwapGroundMaterial(win, 0.5f));
+    }
+
+    public void looseAnimation()
+    {
+        StartCoroutine(TargetReachedSwapGroundMaterial(loose, 0.5f));
+    }
+
+    IEnumerator TargetReachedSwapGroundMaterial(Transform ind, float time)
+    {
+        ind.position = new Vector3(transform.position.x, 1, transform.position.z);
+        yield return new WaitForSeconds(time); // Wait for 2 sec
+        ind.position = new Vector3(transform.position.x, -2, transform.position.z);
+    }
+    
 }
