@@ -25,7 +25,11 @@ public class PlanarConstructionAgent : Agent
         /*        rb.velocity = Vector3.zero;
                 rb.angularVelocity = Vector3.zero;
                 rb.transform.localPosition = stadium.RandomPos(1);*/
-        stadium.ResetStadium();
+
+        do
+        {
+            stadium.ResetStadium();
+        } while (isCompeted());
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -39,61 +43,33 @@ public class PlanarConstructionAgent : Agent
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
     {
-        // time penalty
-        AddReward(-0.01f);
+        // Base reward
+        float baseReward = 0.01f;
 
-        // if agent currently colliding with puck
-        if (m_puckOverlaps > 0)
-        {
-            AddReward(0.005f);
+        // scaled fitness - time penalty
+        AddReward(stadium.puckFitness() * baseReward - baseReward);
 
-            // and if agent is moving puck towards the center of the stadium
-            float centerAngle = Vector3.Angle(rb.transform.forward, stadium.transform.position - rb.transform.position);
-            if (-10 < centerAngle && centerAngle < 10)
-            {
-                AddReward(0.005f);
-            }
-        }
-        else
-        {
-            // if agent is moving towards any puck
-            foreach (Transform puck in stadium.pucks)
-            {
-                float puckAngle = Vector3.Angle(rb.transform.forward, puck.position - rb.transform.position);
-                if (-10 < puckAngle && puckAngle < 10)
-                {
-                    AddReward(0.005f);
-                    break;
-                }
-            }
-        }
-
-        checkCompleted();
-        moveAgent(actionBuffers);
-    }
-
-    void checkCompleted()
-    {
-        float totalDist = 0;
-        int countDist = 0;
-        foreach (Transform puck in stadium.pucks)
-        {
-            if (puck.transform.position.y >= 0)
-            {
-                totalDist += Vector3.Distance(
-                    new Vector2(stadium.transform.position.x, stadium.transform.position.z),
-                    new Vector2(puck.position.x, puck.position.z));
-            }
-        }
-        
-        if (totalDist / stadium.currentMaxPucks < 5)
+        // check if completed
+        if (isCompeted())
         {
             AddReward(100f);
             stadium.winAnimation();
             EndEpisode();
         }
+        
+        moveAgent(actionBuffers);
     }
 
+    bool isCompeted()
+    {
+        if (stadium.AvgDistToGoalPuck() < 8)
+        {
+            return true;
+        }
+
+        return false;
+    }
+    
     void moveAgent(ActionBuffers actionBuffers)
     {
         float rotate = 0;

@@ -9,6 +9,8 @@ public class StadiumArea : MonoBehaviour
     public Transform pucks;
     public Transform agents;
 
+    public Transform GoalStadiumArea;
+
     public Transform win;
     public Transform loose;
 
@@ -47,9 +49,11 @@ public class StadiumArea : MonoBehaviour
             {
                 // disable puck over current max
                 ResetObject(puck, new Vector3(0, -20, 0));
+                puck.gameObject.SetActive(false);
                 continue;
             }
 
+            puck.gameObject.SetActive(true);
             ResetObject(puck, RandomPos(0f));
         }
         foreach (Transform agent in agents)
@@ -165,4 +169,25 @@ public class StadiumArea : MonoBehaviour
         ind.position = new Vector3(transform.position.x, -2, transform.position.z);
     }
     
+    public float AvgDistToGoalPuck()
+    {
+        Transform goalPuck = GoalStadiumArea.GetComponent<StadiumArea>().pucks.GetChild(0);
+        float dist = 0;
+
+        foreach (Transform puck in pucks)
+        {
+            if (puck.gameObject.activeSelf)
+            {
+                dist += Vector3.Distance(puck.localPosition, goalPuck.localPosition);
+            }
+        }
+
+        return dist;
+    }
+
+    public float puckFitness()
+    {
+        // scaled average distance to goal puck
+        return 1 - (AvgDistToGoalPuck() / 60);
+    }
 }
