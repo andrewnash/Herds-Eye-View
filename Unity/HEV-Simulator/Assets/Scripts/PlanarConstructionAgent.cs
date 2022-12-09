@@ -12,7 +12,7 @@ public class PlanarConstructionAgent : Agent
 
     int m_puckOverlaps = 0;
 
-    float MOVEMENT_SPEED = 0.5f;
+    float MOVEMENT_SPEED = 0.8f;
 
     void Start()
     {
@@ -39,6 +39,8 @@ public class PlanarConstructionAgent : Agent
 
         sensor.AddObservation(rb.transform.localPosition.x);
         sensor.AddObservation(rb.transform.localPosition.z);
+
+        sensor.AddObservation(stadium.AvgDistToGoalPuck());
     }
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
@@ -76,19 +78,13 @@ public class PlanarConstructionAgent : Agent
         switch (actionBuffers.DiscreteActions[0])
         {
             case 1:
-                rotate = -0.3f;
+                rotate = -0.5f;
                 break;
             case 2:
-                rotate = -0.15f;
-                break;
-            case 3:
                 rotate = 0;
                 break;
-            case 4:
-                rotate = 0.15f;
-                break;
-            case 5:
-                rotate = 0.3f;
+            case 3:
+                rotate = 0.5f;
                 break;
         }
 
@@ -107,11 +103,11 @@ public class PlanarConstructionAgent : Agent
         }
         else if (Input.GetKey(KeyCode.D))
         {
-            DiscreteActionsOut[0] = 5;
+            DiscreteActionsOut[0] = 3;
         }
         else
         {
-            DiscreteActionsOut[0] = 3;
+            DiscreteActionsOut[0] = 2;
         }
     }
 

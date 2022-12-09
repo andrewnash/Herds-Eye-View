@@ -40,12 +40,12 @@ public class StadiumArea : MonoBehaviour
     // int pucks to reset, int agents to reset
     public void ResetStadium()
     {
-        currentMaxPucks = Random.Range(pucksRange.x, pucksRange.y);
+        currentMaxPucks = Random.Range(pucksRange.x-1, pucksRange.y);
 
         for (int i=0; i < pucks.childCount; i++)
         {
             Transform puck = pucks.GetChild(i);
-            if (i >= currentMaxPucks)
+            if (i > currentMaxPucks)
             {
                 // disable puck over current max
                 ResetObject(puck, new Vector3(0, -20, 0));
@@ -171,14 +171,26 @@ public class StadiumArea : MonoBehaviour
     
     public float AvgDistToGoalPuck()
     {
-        Transform goalPuck = GoalStadiumArea.GetComponent<StadiumArea>().pucks.GetChild(0);
+        Transform goalPucks = GoalStadiumArea.GetComponent<StadiumArea>().pucks;
         float dist = 0;
 
         foreach (Transform puck in pucks)
         {
             if (puck.gameObject.activeSelf)
             {
-                dist += Vector3.Distance(puck.localPosition, goalPuck.localPosition);
+                // get distance to closest goal puck
+                float minDist = float.MaxValue;
+                foreach (Transform goalPuck in goalPucks)
+                {
+                    if (goalPuck.gameObject.activeSelf)
+                    {
+                        float d = Vector3.Distance(puck.localPosition, goalPuck.localPosition);
+                        if (d < minDist)
+                            minDist = d;
+                    }
+                }
+
+                dist += minDist;
             }
         }
 
