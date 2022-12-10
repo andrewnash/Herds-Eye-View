@@ -11,6 +11,7 @@ public class PlanarConstructionAgent : Agent
     StadiumArea stadium;
 
     int m_puckOverlaps = 0;
+    private int pucks = 0;
 
     float MOVEMENT_SPEED = 0.8f;
 
@@ -64,7 +65,7 @@ public class PlanarConstructionAgent : Agent
 
     bool isCompeted()
     {
-        if (stadium.AvgDistToGoalPuck() < 8)
+        if (stadium.AvgDistToGoalPuck() < 5*(stadium.currentMaxPucks+1))
         {
             return true;
         }
