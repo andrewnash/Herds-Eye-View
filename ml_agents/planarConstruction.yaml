@@ -20,7 +20,66 @@ behaviors:
         gamma: 0.99
         strength: 1.0
     keep_checkpoints: 5
-    max_steps: 50000000
+    max_steps: 100000000
     time_horizon: 1000
     summary_freq: 10000
     threaded: True
+environment_parameters:
+  min_pucks:
+    curriculum:
+      - name: Lesson0
+        completion_criteria:
+          measure: progress
+          behavior: minPucks
+          signal_smoothing: true
+          min_lesson_length: 1000
+          threshold: 0.2
+          require_reset: true
+        value: 1.0
+      - name: Lesson1
+        completion_criteria:
+          measure: progress
+          behavior: minPucks
+          signal_smoothing: true
+          min_lesson_length: 10000
+          threshold: 0.4
+        value: 2.0
+      - name: Lesson2
+        completion_criteria:
+          measure: progress
+          behavior: minPucks
+          signal_smoothing: true
+          min_lesson_length: 100000
+          threshold: 0.7
+        value: 4.0
+      - name: Lesson3
+        value: 6.0
+  max_pucks:
+    curriculum:
+      - name: Lesson0
+        completion_criteria:
+          measure: progress
+          behavior: maxPucks
+          signal_smoothing: true
+          min_lesson_length: 1000
+          threshold: 0.2
+          require_reset: true
+        value: 2.0
+      - name: Lesson1
+        completion_criteria:
+          measure: progress
+          behavior: maxPucks
+          signal_smoothing: true
+          min_lesson_length: 10000
+          threshold: 0.4
+        value: 4.0
+      - name: Lesson2
+        completion_criteria:
+          measure: progress
+          behavior: maxPucks
+          signal_smoothing: true
+          min_lesson_length: 100000
+          threshold: 0.7
+        value: 8.0
+      - name: Lesson3
+        value: 12.0

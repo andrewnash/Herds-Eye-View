@@ -15,17 +15,20 @@ public class PlanarConstructionAgent : Agent
 
     float MOVEMENT_SPEED = 0.8f;
 
+    private EnvironmentParameters resetParams;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         stadium = GetComponentInParent<StadiumArea>();
+        resetParams = Academy.Instance.EnvironmentParameters;
     }
 
     public override void OnEpisodeBegin()
     {
-        /*        rb.velocity = Vector3.zero;
-                rb.angularVelocity = Vector3.zero;
-                rb.transform.localPosition = stadium.RandomPos(1);*/
+        stadium.pucksRange = new Vector2Int(
+            (int)resetParams.GetWithDefault("max_pucks", 1),
+            (int)resetParams.GetWithDefault("min_pucks", 2));
 
         do
         {
