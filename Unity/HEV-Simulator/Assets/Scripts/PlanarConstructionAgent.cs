@@ -17,6 +17,9 @@ public class PlanarConstructionAgent : Agent
 
     private EnvironmentParameters resetParams;
 
+    private float lastFitness = 0;
+    private float changeInFitness = 0;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -49,11 +52,18 @@ public class PlanarConstructionAgent : Agent
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
     {
-        // Base reward
-        float baseReward = 0.01f;
+        moveAgent(actionBuffers);
+        UpdateChangeInFitness();
 
-        // scaled fitness - time penalty
-        AddReward(stadium.puckFitness() * baseReward - baseReward);
+        // if fitness has increased, positive reward
+        if (changeInFitness > 0.0001f)
+        {
+            AddReward(0.01f);
+        }
+        else // time penalty
+        {
+            AddReward(-0.01f);
+        }
 
         // check if completed
         if (isCompeted())
@@ -62,20 +72,9 @@ public class PlanarConstructionAgent : Agent
             stadium.winAnimation();
             EndEpisode();
         }
-        
-        moveAgent(actionBuffers);
     }
 
-    bool isCompeted()
-    {
-        if (stadium.AvgDistToGoalPuck() < 5*(stadium.currentMaxPucks+1))
-        {
-            return true;
-        }
 
-        return false;
-    }
-    
     void moveAgent(ActionBuffers actionBuffers)
     {
         float rotate = 0;
@@ -96,6 +95,22 @@ public class PlanarConstructionAgent : Agent
         transform.Rotate(transform.up * rotate, Time.fixedDeltaTime * 100);
     }
 
+    bool isCompeted()
+    {
+        if (stadium.AvgDistToGoalPuck() < 5 * (stadium.currentMaxPucks + 1))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private void UpdateChangeInFitness()
+    {
+        float fitness = stadium.Fitness();
+        changeInFitness = fitness - lastFitness;
+        lastFitness = fitness;
+    }
     public override void Heuristic(in ActionBuffers actionsOut)
     {
         var DiscreteActionsOut = actionsOut.DiscreteActions;

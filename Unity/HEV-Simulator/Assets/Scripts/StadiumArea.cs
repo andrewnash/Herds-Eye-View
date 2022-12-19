@@ -197,7 +197,7 @@ public class StadiumArea : MonoBehaviour
         return dist;
     }
 
-    public float puckFitness()
+    public float Fitness()
     {
         // scaled average distance to goal puck
         return 1 - (AvgDistToGoalPuck() / 60);
