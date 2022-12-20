@@ -11,9 +11,9 @@ public class PlanarConstructionAgent : Agent
     StadiumArea stadium;
 
     int m_puckOverlaps = 0;
-    private int pucks = 0;
 
     float MOVEMENT_SPEED = 0.8f;
+    float TURN_SPEED = 0.8f;
 
     private EnvironmentParameters resetParams;
 
@@ -82,13 +82,13 @@ public class PlanarConstructionAgent : Agent
         switch (actionBuffers.DiscreteActions[0])
         {
             case 1:
-                rotate = -0.5f;
+                rotate = -TURN_SPEED;
                 break;
             case 2:
                 rotate = 0;
                 break;
             case 3:
-                rotate = 0.5f;
+                rotate = TURN_SPEED;
                 break;
         }
 
