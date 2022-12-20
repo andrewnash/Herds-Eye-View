@@ -17,6 +17,8 @@ public class PlanarConstructionAgent : Agent
 
     private EnvironmentParameters resetParams;
 
+    private int distanceThreshold = 0;
+    
     private float lastFitness = 0;
     private float changeInFitness = 0;
 
@@ -32,6 +34,8 @@ public class PlanarConstructionAgent : Agent
         stadium.pucksRange = new Vector2Int(
             (int)resetParams.GetWithDefault("max_pucks", 1),
             (int)resetParams.GetWithDefault("min_pucks", 2));
+        distanceThreshold = (int)resetParams.GetWithDefault("distance_threshold", 10);
+
 
         do
         {
@@ -41,9 +45,6 @@ public class PlanarConstructionAgent : Agent
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        /*sensor.AddObservation(rb.velocity.x);
-        sensor.AddObservation(rb.velocity.z);*/
-
         sensor.AddObservation(rb.transform.localPosition.x);
         sensor.AddObservation(rb.transform.localPosition.z);
 
@@ -58,17 +59,17 @@ public class PlanarConstructionAgent : Agent
         // if fitness has increased, positive reward
         if (changeInFitness > 0.0001f)
         {
-            AddReward(0.01f);
+            AddReward(1f / MaxStep);
         }
         else // time penalty
         {
-            AddReward(-0.01f);
+            AddReward(-1f / MaxStep);
         }
 
         // check if completed
         if (isCompeted())
         {
-            AddReward(100f);
+            AddReward(10f);
             stadium.winAnimation();
             EndEpisode();
         }
@@ -97,7 +98,7 @@ public class PlanarConstructionAgent : Agent
 
     bool isCompeted()
     {
-        if (stadium.AvgDistToGoalPuck() < 5 * (stadium.currentMaxPucks + 1))
+        if (stadium.AvgDistToGoalPuck() < distanceThreshold * (stadium.currentMaxPucks + 1))
         {
             return true;
         }
