@@ -106,8 +106,8 @@ public class StadiumSaver : MonoBehaviour
         {
             CaptureHEVFrames();
 
-            if (++frameCount >= numFrames)
-                UnityEditor.EditorApplication.isPlaying = false;
+            // if (++frameCount >= numFrames)
+            //     UnityEditor.EditorApplication.isPlaying = false;
 
             stadium.ResetStadium();
 

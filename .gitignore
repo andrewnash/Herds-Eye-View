@@ -1,2 +1,6 @@
+# ML training output folders
 carla/_out/*
 ml_agents/results/*
+
+# Ignore build files
+Unity/Builds/*
