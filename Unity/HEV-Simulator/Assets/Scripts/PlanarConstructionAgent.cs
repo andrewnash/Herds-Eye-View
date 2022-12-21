@@ -2,11 +2,15 @@ using UnityEngine;
 using Unity.MLAgents;
 using Unity.MLAgents.Sensors;
 using Unity.MLAgents.Actuators;
+using MBaske.Sensors.Grid;
 
 public class PlanarConstructionAgent : Agent
 {
     Rigidbody rb;
     StadiumArea stadium;
+
+    GridSensor gridSensor;
+    GridSensorComponent2D gridComponent;
 
     int m_puckOverlaps = 0;
 
@@ -22,9 +26,13 @@ public class PlanarConstructionAgent : Agent
 
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        rb = GetComponentInChildren<Rigidbody>();
         stadium = GetComponentInParent<StadiumArea>();
         resetParams = Academy.Instance.EnvironmentParameters;
+
+        /*gridSensor = gridComponent.GridSensor;
+        gridComponent = stadium.GetComponentInChildren<GridSensorComponent2D>();
+        CameraSensorComponent cameraSensor = stadium.GetComponentInChildren<CameraSensorComponent>();*/
     }
 
     public override void OnEpisodeBegin()
@@ -36,17 +44,22 @@ public class PlanarConstructionAgent : Agent
 
 
         do
-        {
+        { 
             stadium.ResetStadium();
         } while (isCompeted());
     }
 
     public override void CollectObservations(VectorSensor sensor)
     {
+        // hack to stop grid sensor form
+        // gridComponent.transform.localPosition = Vector3.zero;
+
         sensor.AddObservation(rb.transform.localPosition.x);
         sensor.AddObservation(rb.transform.localPosition.z);
 
         sensor.AddObservation(stadium.AvgDistToGoalPuck());
+
+        //sensor.addObservation();
     }
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
@@ -90,8 +103,8 @@ public class PlanarConstructionAgent : Agent
                 break;
         }
 
-        rb.AddForce(transform.forward * MOVEMENT_SPEED, ForceMode.VelocityChange);
-        transform.Rotate(transform.up * rotate, Time.fixedDeltaTime * 100);
+        rb.AddForce(rb.transform.forward * MOVEMENT_SPEED, ForceMode.VelocityChange);
+        rb.transform.Rotate(rb.transform.up * rotate, Time.fixedDeltaTime * 100);
     }
 
     bool isCompeted()

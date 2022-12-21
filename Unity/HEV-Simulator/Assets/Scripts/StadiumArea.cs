@@ -1,5 +1,6 @@
 using MBaske.Sensors.Grid;
 using System.Collections;
+using Unity.MLAgents.Sensors;
 using UnityEngine;
 
 public class StadiumArea : MonoBehaviour
@@ -58,7 +59,7 @@ public class StadiumArea : MonoBehaviour
         }
         foreach (Transform agent in agents)
         {
-            ResetObject(agent, RandomPos(1f));
+            ResetObject(agent.GetComponentInChildren<Rigidbody>().transform, RandomPos(1f));
         }
     }
 
