@@ -9,9 +9,6 @@ public class PlanarConstructionAgent : Agent
     Rigidbody rb;
     StadiumArea stadium;
 
-    GridSensor gridSensor;
-    GridSensorComponent2D gridComponent;
-
     int m_puckOverlaps = 0;
 
     float MOVEMENT_SPEED = 0.8f;
@@ -29,10 +26,6 @@ public class PlanarConstructionAgent : Agent
         rb = GetComponentInChildren<Rigidbody>();
         stadium = GetComponentInParent<StadiumArea>();
         resetParams = Academy.Instance.EnvironmentParameters;
-
-        /*gridSensor = gridComponent.GridSensor;
-        gridComponent = stadium.GetComponentInChildren<GridSensorComponent2D>();
-        CameraSensorComponent cameraSensor = stadium.GetComponentInChildren<CameraSensorComponent>();*/
     }
 
     public override void OnEpisodeBegin()
@@ -42,7 +35,6 @@ public class PlanarConstructionAgent : Agent
             (int)resetParams.GetWithDefault("min_pucks", 2));
         distanceThreshold = (int)resetParams.GetWithDefault("distance_threshold", 10);
 
-
         do
         { 
             stadium.ResetStadium();
@@ -51,15 +43,11 @@ public class PlanarConstructionAgent : Agent
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        // hack to stop grid sensor form
-        // gridComponent.transform.localPosition = Vector3.zero;
-
-        sensor.AddObservation(rb.transform.localPosition.x);
-        sensor.AddObservation(rb.transform.localPosition.z);
-
+        // sensor.AddObservation(rb.transform.localPosition.x);
+        // sensor.AddObservation(rb.transform.localPosition.z);
+        
         sensor.AddObservation(stadium.AvgDistToGoalPuck());
-
-        //sensor.addObservation();
+        sensor.AddObservation(rb.transform.eulerAngles.y / 180.0f - 1);
     }
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
