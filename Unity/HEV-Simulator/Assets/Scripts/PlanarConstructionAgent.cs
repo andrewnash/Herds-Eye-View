@@ -16,10 +16,15 @@ public class PlanarConstructionAgent : Agent
 
     private EnvironmentParameters resetParams;
 
-    private int distanceThreshold = 0;
+    private int distanceThreshold = 0; 
     
     private float lastFitness = 0;
     private float changeInFitness = 0;
+
+    public bool isTraining = true;
+    
+    public bool turnController = false;
+    public bool NESWController = true;
 
     void Start()
     {
@@ -52,7 +57,16 @@ public class PlanarConstructionAgent : Agent
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
     {
-        moveAgent(actionBuffers);
+        // move agent
+        if (turnController)
+        {
+            MoveAgentTurnSpeed(actionBuffers);
+        }
+        else
+        {
+            MoveAgentGoalAngle(actionBuffers);
+        }
+        
         UpdateChangeInFitness();
 
         // if fitness has increased, positive reward
@@ -75,7 +89,7 @@ public class PlanarConstructionAgent : Agent
     }
 
 
-    void moveAgent(ActionBuffers actionBuffers)
+    void MoveAgentTurnSpeed(ActionBuffers actionBuffers)
     {
         float rotate = 0;
         switch (actionBuffers.DiscreteActions[0])
@@ -95,6 +109,53 @@ public class PlanarConstructionAgent : Agent
         rb.transform.Rotate(rb.transform.up * rotate, Time.fixedDeltaTime * 100);
     }
 
+    void MoveAgentGoalAngle(ActionBuffers actionBuffers)
+    {
+        float currentAngle = rb.transform.eulerAngles.y;
+
+        // 8 possible goal angles
+        int goalAngle = 0;
+        switch (actionBuffers.DiscreteActions[0])
+        {
+            case 1:
+                goalAngle = 45;
+                break;
+            case 2:
+                goalAngle = 90;
+                break;
+            case 3:
+                goalAngle = 135;
+                break;
+            case 4:
+                goalAngle = 180;
+                break;
+            case 5:
+                goalAngle = 225;
+                break;
+            case 6:
+                goalAngle = 270;
+                break;
+            case 7:
+                goalAngle = 315;
+                break;
+
+        }
+
+        float angleDifference = (goalAngle - currentAngle % 360 + 180) % 360 - 180;
+
+        if (angleDifference > 5 || angleDifference < -180)
+        {
+            rb.transform.Rotate(transform.up * TURN_SPEED, Time.fixedDeltaTime * 100);
+        }
+        else if (angleDifference < -5)
+        {
+            rb.transform.Rotate(transform.up * -TURN_SPEED, Time.fixedDeltaTime * 100);
+        }
+
+        if (actionBuffers.DiscreteActions[1] == 1)
+            rb.AddForce(rb.transform.forward * MOVEMENT_SPEED, ForceMode.VelocityChange);
+    }
+
     bool isCompeted()
     {
         if (stadium.AvgDistToGoalPuck() < distanceThreshold * (stadium.currentMaxPucks + 1))
@@ -111,14 +172,56 @@ public class PlanarConstructionAgent : Agent
         changeInFitness = fitness - lastFitness;
         lastFitness = fitness;
     }
+    
     public override void Heuristic(in ActionBuffers actionsOut)
+    {
+        // move agent
+        if (turnController)
+        {
+            HeuristicTurn(actionsOut);
+        }
+        else
+        {
+            HeuristicGoalAngle(actionsOut);
+        }
+    }
+
+    // Set global goal angle with WEDSXZAQ keys
+    private void HeuristicGoalAngle(ActionBuffers actionsOut)
+    {
+        var DiscreteActionsOut = actionsOut.DiscreteActions;
+
+        // default go up
+        DiscreteActionsOut[0] = 0;
+        
+        if (Input.GetKey(KeyCode.E))
+            DiscreteActionsOut[0] = 1;
+        else if (Input.GetKey(KeyCode.D))
+            DiscreteActionsOut[0] = 2;
+        else if (Input.GetKey(KeyCode.C))
+            DiscreteActionsOut[0] = 3;
+        else if (Input.GetKey(KeyCode.X))
+            DiscreteActionsOut[0] = 4;
+        else if (Input.GetKey(KeyCode.Z))
+            DiscreteActionsOut[0] = 5;
+        else if (Input.GetKey(KeyCode.A))
+            DiscreteActionsOut[0] = 6;
+        else if (Input.GetKey(KeyCode.Q))
+            DiscreteActionsOut[0] = 7;
+
+        DiscreteActionsOut[1] = 1;
+        if (Input.GetKey(KeyCode.S))
+            DiscreteActionsOut[1] = 0;
+    }
+
+    // A&D Keyboard turn
+    private void HeuristicTurn(ActionBuffers actionsOut)
     {
         var DiscreteActionsOut = actionsOut.DiscreteActions;
 
         if (Input.GetKey(KeyCode.A))
         {
             DiscreteActionsOut[0] = 1;
-
         }
         else if (Input.GetKey(KeyCode.D))
         {
@@ -129,7 +232,6 @@ public class PlanarConstructionAgent : Agent
             DiscreteActionsOut[0] = 2;
         }
     }
-
 
     void OnCollisionEnter(Collision collision)
     {
