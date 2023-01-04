@@ -21,10 +21,9 @@ public class PlanarConstructionAgent : Agent
     private float lastFitness = 0;
     private float changeInFitness = 0;
 
-    public bool isTraining = true;
-    
-    public bool turnController = false;
-    public bool NESWController = true;
+    public bool isTraining;
+    public bool LocalADController;
+    public bool GlobalWASDController;
 
     void Start()
     {
@@ -58,7 +57,7 @@ public class PlanarConstructionAgent : Agent
     public override void OnActionReceived(ActionBuffers actionBuffers)
     {
         // move agent
-        if (turnController)
+        if (LocalADController)
         {
             MoveAgentTurnSpeed(actionBuffers);
         }
@@ -211,7 +210,7 @@ public class PlanarConstructionAgent : Agent
     public override void Heuristic(in ActionBuffers actionsOut)
     {
         // move agent
-        if (turnController)
+        if (LocalADController)
         {
             HeuristicTurn(actionsOut);
         }
