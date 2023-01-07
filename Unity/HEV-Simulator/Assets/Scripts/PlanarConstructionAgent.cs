@@ -27,7 +27,13 @@ public class PlanarConstructionAgent : Agent
 
     void Start()
     {
-        rb = GetComponentInChildren<Rigidbody>();
+        // rb located in child for HEV but same component for BEV
+        rb = GetComponent<Rigidbody>();
+        if (rb == null)
+        {
+            rb = GetComponentInChildren<Rigidbody>();
+        }
+        
         stadium = GetComponentInParent<StadiumArea>();
         resetParams = Academy.Instance.EnvironmentParameters;
     }
@@ -49,7 +55,8 @@ public class PlanarConstructionAgent : Agent
     {
         // sensor.AddObservation(rb.transform.localPosition.x);
         // sensor.AddObservation(rb.transform.localPosition.z);
-        
+
+        sensor.AddObservation(stadium.ClosestGoalPuckDist(rb.transform));
         sensor.AddObservation(stadium.AvgDistToGoalPuck());
         sensor.AddObservation(rb.transform.eulerAngles.y / 180.0f - 1);
     }
@@ -65,7 +72,7 @@ public class PlanarConstructionAgent : Agent
         {
             MoveAgentGoalAngle(actionBuffers);
         }
-        
+
         UpdateChangeInFitness();
 
         // if fitness has increased, positive reward
@@ -128,11 +135,11 @@ public class PlanarConstructionAgent : Agent
         }
 
         // if angle difference is small && any key pressed, move forward 
-        if (120 > angleDifference && angleDifference > -120)
+        if (30 > angleDifference && angleDifference > -30)
             rb.AddForce(rb.transform.forward * MOVEMENT_SPEED, ForceMode.VelocityChange);
     }
 
-    float ControlsToGoalAngle(ActionBuffers actionBuffers)
+    private float ControlsToGoalAngle(ActionBuffers actionBuffers)
     {
         // 8 possible goal angles
         float goalAngle = 0;

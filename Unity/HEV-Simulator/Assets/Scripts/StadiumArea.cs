@@ -172,30 +172,35 @@ public class StadiumArea : MonoBehaviour
     
     public float AvgDistToGoalPuck()
     {
-        Transform goalPucks = GoalStadiumArea.GetComponent<StadiumArea>().pucks;
         float dist = 0;
 
         foreach (Transform puck in pucks)
         {
             if (puck.gameObject.activeSelf)
             {
-                // get distance to closest goal puck
-                float minDist = float.MaxValue;
-                foreach (Transform goalPuck in goalPucks)
-                {
-                    if (goalPuck.gameObject.activeSelf)
-                    {
-                        float d = Vector3.Distance(puck.localPosition, goalPuck.localPosition);
-                        if (d < minDist)
-                            minDist = d;
-                    }
-                }
-
-                dist += minDist;
+                dist += ClosestGoalPuckDist(puck);
             }
         }
 
         return dist;
+    }
+
+    public float ClosestGoalPuckDist(Transform obj)
+    {
+        Transform goalPucks = GoalStadiumArea.GetComponent<StadiumArea>().pucks;
+        
+        float minDist = float.MaxValue;
+        foreach (Transform goalPuck in goalPucks)
+        {
+            if (goalPuck.gameObject.activeSelf)
+            {
+                float d = Vector3.Distance(obj.localPosition, goalPuck.localPosition);
+                if (d < minDist)
+                    minDist = d;
+            }
+        }
+
+        return minDist;
     }
 
     public float Fitness()
