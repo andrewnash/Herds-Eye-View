@@ -9,10 +9,11 @@ public class PlanarConstructionAgent : Agent
     Rigidbody rb;
     StadiumArea stadium;
 
-    int m_puckOverlaps = 0;
+    private int m_puckOverlaps = 0;
+    private int m_wallOverlaps = 0;
 
     float MOVEMENT_SPEED = 0.8f;
-    float TURN_SPEED = 0.8f;
+    float TURN_SPEED = 1.5f;
 
     private EnvironmentParameters resetParams;
 
@@ -100,19 +101,24 @@ public class PlanarConstructionAgent : Agent
         float rotate = 0;
         switch (actionBuffers.DiscreteActions[0])
         {
-            case 1:
+            case 0:
                 rotate = -TURN_SPEED;
                 break;
-            case 2:
+            case 1:
                 rotate = 0;
                 break;
-            case 3:
+            case 2:
                 rotate = TURN_SPEED;
                 break;
         }
-
-        rb.AddForce(rb.transform.forward * MOVEMENT_SPEED, ForceMode.VelocityChange);
         rb.transform.Rotate(rb.transform.up * rotate, Time.fixedDeltaTime * 100);
+
+        float speed = MOVEMENT_SPEED;
+        if (m_wallOverlaps > 0)
+        {
+            speed /= 2;
+        }
+        rb.AddForce(rb.transform.forward * speed, ForceMode.VelocityChange);
     }
 
     void MoveAgentGoalAngle(ActionBuffers actionBuffers)
@@ -255,15 +261,15 @@ public class PlanarConstructionAgent : Agent
 
         if (Input.GetKey(KeyCode.A))
         {
-            DiscreteActionsOut[0] = 1;
+            DiscreteActionsOut[0] = 0;
         }
         else if (Input.GetKey(KeyCode.D))
         {
-            DiscreteActionsOut[0] = 3;
+            DiscreteActionsOut[0] = 2;
         }
         else
         {
-            DiscreteActionsOut[0] = 2;
+            DiscreteActionsOut[0] = 1;
         }
     }
 
@@ -273,6 +279,10 @@ public class PlanarConstructionAgent : Agent
         {
             m_puckOverlaps++;
         }
+        else if (collision.gameObject.CompareTag("Wall"))
+        {
+            m_wallOverlaps++;
+        }
     }
 
     void OnCollisionExit(Collision collision)
@@ -280,6 +290,10 @@ public class PlanarConstructionAgent : Agent
         if (collision.gameObject.CompareTag("Puck"))
         {
             m_puckOverlaps--;
+        }
+        else if (collision.gameObject.CompareTag("Wall"))
+        {
+            m_wallOverlaps--;
         }
     }
 }
