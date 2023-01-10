@@ -1,5 +1,6 @@
 using MBaske.Sensors.Grid;
 using System.Collections;
+using System.Net.WebSockets;
 using Unity.MLAgents.Sensors;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ public class StadiumArea : MonoBehaviour
     public Transform floors;
     public Transform pucks;
     public Transform agents;
+    public Transform obstructions;
 
     public Transform GoalStadiumArea;
 
@@ -36,6 +38,17 @@ public class StadiumArea : MonoBehaviour
         
         ResetStadium();
         ResetColors();
+        // ResetObstructionScales();
+
+    }
+
+    // Randomize the scale of all pucks
+    public void ResetObstructionScales()
+    {
+        foreach (Transform obs in obstructions)
+        {
+            obs.localScale = new Vector3(Random.Range(0.5f, 2.5f), obs.localScale.y, Random.Range(0.5f, 2.5f));
+        }
     }
 
     // int pucks to reset, int agents to reset
@@ -178,29 +191,33 @@ public class StadiumArea : MonoBehaviour
         {
             if (puck.gameObject.activeSelf)
             {
-                dist += ClosestGoalPuckDist(puck);
+                dist += ClosestGoalPuck(puck)[0];
             }
         }
 
         return dist;
     }
 
-    public float ClosestGoalPuckDist(Transform obj)
+    public Vector2 ClosestGoalPuck(Transform obj)
     {
         Transform goalPucks = GoalStadiumArea.GetComponent<StadiumArea>().pucks;
         
         float minDist = float.MaxValue;
+        float minAngle = 0;
         foreach (Transform goalPuck in goalPucks)
         {
             if (goalPuck.gameObject.activeSelf)
             {
                 float d = Vector3.Distance(obj.localPosition, goalPuck.localPosition);
                 if (d < minDist)
+                {
                     minDist = d;
+                    minAngle = Vector3.Angle(obj.forward, goalPuck.localPosition - obj.localPosition);
+                }
             }
         }
 
-        return minDist;
+        return new Vector2(minDist, minAngle);
     }
 
     public float Fitness()
