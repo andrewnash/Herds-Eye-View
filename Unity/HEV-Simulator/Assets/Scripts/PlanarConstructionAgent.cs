@@ -12,8 +12,8 @@ public class PlanarConstructionAgent : Agent
     private int m_puckOverlaps = 0;
     private int m_wallOverlaps = 0;
 
-    float MOVEMENT_SPEED = 0.8f;
-    float TURN_SPEED = 1.5f;
+    float MOVEMENT_SPEED = 1.0f;
+    float TURN_SPEED = 1.25f;
 
     private EnvironmentParameters resetParams;
 
@@ -42,8 +42,8 @@ public class PlanarConstructionAgent : Agent
     public override void OnEpisodeBegin()
     {
         stadium.pucksRange = new Vector2Int(
-            (int)resetParams.GetWithDefault("max_pucks", 1),
-            (int)resetParams.GetWithDefault("min_pucks", 2));
+            (int)resetParams.GetWithDefault("max_pucks", 2),
+            (int)resetParams.GetWithDefault("min_pucks", 1));
         distanceThreshold = (int)resetParams.GetWithDefault("distance_threshold", 10);
 
         do
@@ -56,10 +56,13 @@ public class PlanarConstructionAgent : Agent
     {
         // sensor.AddObservation(rb.transform.localPosition.x);
         // sensor.AddObservation(rb.transform.localPosition.z);
-
-        sensor.AddObservation(stadium.ClosestGoalPuckDist(rb.transform));
+        
+        Vector2 closestGoalPuck = stadium.ClosestGoalPuck(rb.transform);
+        sensor.AddObservation(closestGoalPuck[0] / 32.0f);  // distance diff normalized
+        sensor.AddObservation(closestGoalPuck[1] / 180.0f); // angle diff normalized
+        
         sensor.AddObservation(stadium.AvgDistToGoalPuck());
-        sensor.AddObservation(rb.transform.eulerAngles.y / 180.0f - 1);
+        sensor.AddObservation(rb.transform.eulerAngles.y / 180.0f);
     }
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
@@ -101,13 +104,13 @@ public class PlanarConstructionAgent : Agent
         float rotate = 0;
         switch (actionBuffers.DiscreteActions[0])
         {
-            case 0:
+            case 1:
                 rotate = -TURN_SPEED;
                 break;
-            case 1:
+            case 2:
                 rotate = 0;
                 break;
-            case 2:
+            case 3:
                 rotate = TURN_SPEED;
                 break;
         }
@@ -261,15 +264,15 @@ public class PlanarConstructionAgent : Agent
 
         if (Input.GetKey(KeyCode.A))
         {
-            DiscreteActionsOut[0] = 0;
+            DiscreteActionsOut[0] = 1;
         }
         else if (Input.GetKey(KeyCode.D))
         {
-            DiscreteActionsOut[0] = 2;
+            DiscreteActionsOut[0] = 3;
         }
         else
         {
-            DiscreteActionsOut[0] = 1;
+            DiscreteActionsOut[0] = 2;
         }
     }
 
