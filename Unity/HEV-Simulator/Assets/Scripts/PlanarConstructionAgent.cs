@@ -24,6 +24,7 @@ public class PlanarConstructionAgent : Agent
 
     public bool isTraining;
     public bool LocalADController;
+    public bool LocalWASDController;
     public bool GlobalWASDController;
 
     void Start()
@@ -70,9 +71,9 @@ public class PlanarConstructionAgent : Agent
         // move agent
         if (LocalADController)
         {
-            MoveAgentTurnSpeed(actionBuffers);
+            MoveAgentADController(actionBuffers);
         }
-        else
+        else if (GlobalWASDController)
         {
             MoveAgentGoalAngle(actionBuffers);
         }
@@ -98,8 +99,7 @@ public class PlanarConstructionAgent : Agent
         }
     }
 
-
-    void MoveAgentTurnSpeed(ActionBuffers actionBuffers)
+    void MoveAgentADController(ActionBuffers actionBuffers)
     {
         float rotate = 0;
         switch (actionBuffers.DiscreteActions[0])
@@ -136,11 +136,11 @@ public class PlanarConstructionAgent : Agent
 
         if (angleDifference > 5 || angleDifference < -180)
         {
-            rb.transform.Rotate(transform.up * TURN_SPEED, Time.fixedDeltaTime * 100);
+            rb.transform.Rotate(rb.transform.up * TURN_SPEED*2, Time.fixedDeltaTime * 100);
         }
         else if (angleDifference < -5)
         {
-            rb.transform.Rotate(transform.up * -TURN_SPEED, Time.fixedDeltaTime * 100);
+            rb.transform.Rotate(rb.transform.up * -TURN_SPEED*2, Time.fixedDeltaTime * 100);
         }
 
         // if angle difference is small && any key pressed, move forward 
@@ -153,9 +153,9 @@ public class PlanarConstructionAgent : Agent
         // 8 possible goal angles
         float goalAngle = 0;
         bool w = actionBuffers.DiscreteActions[0] == 1;
+        bool s = actionBuffers.DiscreteActions[0] == 3;
         bool a = actionBuffers.DiscreteActions[1] == 1;
-        bool s = actionBuffers.DiscreteActions[2] == 1;
-        bool d = actionBuffers.DiscreteActions[3] == 1;
+        bool d = actionBuffers.DiscreteActions[1] == 3;
 
         if (w && !a && !s && !d)
         {
@@ -196,14 +196,7 @@ public class PlanarConstructionAgent : Agent
     // check if keys all 0 or all 1
     private bool AllKeysOnOrOff(ActionBuffers actionBuffers)
     {
-        bool allOn = true;
-        bool allOff = true;
-        for (int i = 0; i < actionBuffers.DiscreteActions.Length; i++)
-        {
-            allOn &= actionBuffers.DiscreteActions[i] == 1;
-            allOff &= actionBuffers.DiscreteActions[i] == 0;
-        }
-        return allOn || allOff;
+        return actionBuffers.DiscreteActions[0] == 2 && actionBuffers.DiscreteActions[1] == 2;
     }
 
     bool isCompeted()
@@ -236,25 +229,24 @@ public class PlanarConstructionAgent : Agent
         }
     }
 
-    // Set global goal angle with WEDSXZAQ keys
+    // Set global goal angle with WASD keys
     private void HeuristicGoalAngle(ActionBuffers actionsOut)
     {
         var DiscreteActionsOut = actionsOut.DiscreteActions;
 
         // default off
-        DiscreteActionsOut[0] = 0;
-        DiscreteActionsOut[1] = 0;
-        DiscreteActionsOut[2] = 0;
-        DiscreteActionsOut[3] = 0;
+        DiscreteActionsOut[0] = 2;
+        DiscreteActionsOut[1] = 2;
 
-        if (Input.GetKey(KeyCode.W))
+        if (Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S))
             DiscreteActionsOut[0] = 1;
-        if (Input.GetKey(KeyCode.A))
+        else if (!Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.S))
+            DiscreteActionsOut[0] = 3;
+        
+        if (Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
             DiscreteActionsOut[1] = 1;
-        if (Input.GetKey(KeyCode.S))
-            DiscreteActionsOut[2] = 1;
-        if (Input.GetKey(KeyCode.D))
-            DiscreteActionsOut[3] = 1;
+        else if (!Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.D))
+            DiscreteActionsOut[1] = 3;
     }
 
     // A&D Keyboard turn
