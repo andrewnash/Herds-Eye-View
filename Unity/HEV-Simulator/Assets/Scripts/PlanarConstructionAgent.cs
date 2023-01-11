@@ -24,8 +24,8 @@ public class PlanarConstructionAgent : Agent
 
     public bool isTraining;
     public bool LocalADController;
-    public bool LocalWASDController;
-    public bool GlobalWASDController;
+    public bool GlobalTurnController;
+    public bool GlobalVectorController;
 
     void Start()
     {
@@ -73,9 +73,13 @@ public class PlanarConstructionAgent : Agent
         {
             MoveAgentADController(actionBuffers);
         }
-        else if (GlobalWASDController)
+        else if (GlobalTurnController)
         {
-            MoveAgentGoalAngle(actionBuffers);
+            MoveAgentGlobalTurn(actionBuffers);
+        }
+        else if (GlobalVectorController)
+        {
+            MoveAgentGlobalVector(actionBuffers);
         }
 
         UpdateChangeInFitness();
@@ -124,13 +128,14 @@ public class PlanarConstructionAgent : Agent
         rb.AddForce(rb.transform.forward * speed, ForceMode.VelocityChange);
     }
 
-    void MoveAgentGoalAngle(ActionBuffers actionBuffers)
+    void MoveAgentGlobalTurn(ActionBuffers actionBuffers)
     {
         // if all or no keys pressed don't move
         if (AllKeysOnOrOff(actionBuffers))
             return;
 
         float goalAngle = ControlsToGoalAngle(actionBuffers);
+        
         float currentAngle = rb.transform.eulerAngles.y;
         float angleDifference = (goalAngle - currentAngle % 360 + 180) % 360 - 180;
 
@@ -146,6 +151,17 @@ public class PlanarConstructionAgent : Agent
         // if angle difference is small && any key pressed, move forward 
         if (30 > angleDifference && angleDifference > -30)
             rb.AddForce(rb.transform.forward * MOVEMENT_SPEED, ForceMode.VelocityChange);
+    }
+
+    void MoveAgentGlobalVector(ActionBuffers actionBuffers)
+    {
+        // if all or no keys pressed don't move
+        if (AllKeysOnOrOff(actionBuffers))
+            return;
+
+        float goalAngle = ControlsToGoalAngle(actionBuffers);
+        rb.transform.eulerAngles = new Vector3(0, goalAngle, 0);
+        rb.AddForce(rb.transform.forward * MOVEMENT_SPEED, ForceMode.VelocityChange);
     }
 
     private float ControlsToGoalAngle(ActionBuffers actionBuffers)
@@ -221,16 +237,16 @@ public class PlanarConstructionAgent : Agent
         // move agent
         if (LocalADController)
         {
-            HeuristicTurn(actionsOut);
+            HeuristicAD(actionsOut);
         }
         else
         {
-            HeuristicGoalAngle(actionsOut);
+            HeuristicWASD(actionsOut);
         }
     }
 
     // Set global goal angle with WASD keys
-    private void HeuristicGoalAngle(ActionBuffers actionsOut)
+    private void HeuristicWASD(ActionBuffers actionsOut)
     {
         var DiscreteActionsOut = actionsOut.DiscreteActions;
 
@@ -250,7 +266,7 @@ public class PlanarConstructionAgent : Agent
     }
 
     // A&D Keyboard turn
-    private void HeuristicTurn(ActionBuffers actionsOut)
+    private void HeuristicAD(ActionBuffers actionsOut)
     {
         var DiscreteActionsOut = actionsOut.DiscreteActions;
 
