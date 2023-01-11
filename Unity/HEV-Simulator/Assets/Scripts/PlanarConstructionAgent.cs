@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Unity.MLAgents;
 using Unity.MLAgents.Sensors;
@@ -160,6 +161,10 @@ public class PlanarConstructionAgent : Agent
             return;
 
         float goalAngle = ControlsToGoalAngle(actionBuffers);
+        
+        if (float.IsNaN(goalAngle))
+            return;
+
         rb.transform.eulerAngles = new Vector3(0, goalAngle, 0);
         rb.AddForce(rb.transform.forward * MOVEMENT_SPEED, ForceMode.VelocityChange);
     }
@@ -167,43 +172,44 @@ public class PlanarConstructionAgent : Agent
     private float ControlsToGoalAngle(ActionBuffers actionBuffers)
     {
         // 8 possible goal angles
-        float goalAngle = 0;
-        bool w = actionBuffers.DiscreteActions[0] == 1;
-        bool s = actionBuffers.DiscreteActions[0] == 3;
-        bool a = actionBuffers.DiscreteActions[1] == 1;
-        bool d = actionBuffers.DiscreteActions[1] == 3;
+        float goalAngle = float.NaN;
+        bool up = actionBuffers.DiscreteActions[0] == 1;
+        bool down = actionBuffers.DiscreteActions[0] == 3;
+        bool left = actionBuffers.DiscreteActions[1] == 1;
+        bool right = actionBuffers.DiscreteActions[1] == 3;
 
-        if (w && !a && !s && !d)
+        
+        if (up && !left && !right)
         {
             goalAngle = 0;
         }
-        else if (!w && a && !s && !d)
-        {
-            goalAngle = 270;
-        }
-        else if (!w && !a && s && !d)
-        {
-            goalAngle = 180;
-        }
-        else if (!w && !a && !s && d)
-        {
-            goalAngle = 90;
-        }
-        else if (w && a && !s && !d)
+        else if (up && left && !right)
         {
             goalAngle = 315;
         }
-        else if (w && !a && !s && d)
+        else if (up && !left && right)
         {
             goalAngle = 45;
         }
-        else if (!w && a && s && !d)
+        else if (down && !left && !right)
+        {
+            goalAngle = 180;
+        }
+        else if (down && left && !right)
         {
             goalAngle = 225;
         }
-        else if (!w && !a && s && d)
+        else if (down && !left && right)
         {
             goalAngle = 135;
+        }
+        else if (!up && !down && left)
+        {
+            goalAngle = 270;
+        }
+        else if (!up && !down && right)
+        {
+            goalAngle = 90;
         }
 
         return goalAngle;
