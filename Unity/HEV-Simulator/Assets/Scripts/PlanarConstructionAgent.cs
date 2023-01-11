@@ -109,13 +109,13 @@ public class PlanarConstructionAgent : Agent
         float rotate = 0;
         switch (actionBuffers.DiscreteActions[0])
         {
-            case 1:
+            case 0:
                 rotate = -TURN_SPEED;
                 break;
-            case 2:
+            case 1:
                 rotate = 0;
                 break;
-            case 3:
+            case 2:
                 rotate = TURN_SPEED;
                 break;
         }
@@ -131,12 +131,11 @@ public class PlanarConstructionAgent : Agent
 
     void MoveAgentGlobalTurn(ActionBuffers actionBuffers)
     {
-        // if all or no keys pressed don't move
-        if (AllKeysOnOrOff(actionBuffers))
+        float goalAngle = ControlsToGoalAngle(actionBuffers);
+
+        if (float.IsNaN(goalAngle))
             return;
 
-        float goalAngle = ControlsToGoalAngle(actionBuffers);
-        
         float currentAngle = rb.transform.eulerAngles.y;
         float angleDifference = (goalAngle - currentAngle % 360 + 180) % 360 - 180;
 
@@ -156,10 +155,6 @@ public class PlanarConstructionAgent : Agent
 
     void MoveAgentGlobalVector(ActionBuffers actionBuffers)
     {
-        // if all or no keys pressed don't move
-        if (AllKeysOnOrOff(actionBuffers))
-            return;
-
         float goalAngle = ControlsToGoalAngle(actionBuffers);
         
         if (float.IsNaN(goalAngle))
@@ -173,41 +168,38 @@ public class PlanarConstructionAgent : Agent
     {
         // 8 possible goal angles
         float goalAngle = float.NaN;
-        bool up = actionBuffers.DiscreteActions[0] == 1;
-        bool down = actionBuffers.DiscreteActions[0] == 3;
-        bool left = actionBuffers.DiscreteActions[1] == 1;
-        bool right = actionBuffers.DiscreteActions[1] == 3;
+        var vert = actionBuffers.DiscreteActions[0];
+        var horz = actionBuffers.DiscreteActions[1];
 
-        
-        if (up && !left && !right)
+        if (vert == 0 && horz == 1)
         {
             goalAngle = 0;
         }
-        else if (up && left && !right)
+        else if (vert == 0 && horz == 0)
         {
             goalAngle = 315;
         }
-        else if (up && !left && right)
+        else if (vert == 0 && horz == 2)
         {
             goalAngle = 45;
         }
-        else if (down && !left && !right)
+        else if (vert == 2 && horz == 1)
         {
             goalAngle = 180;
         }
-        else if (down && left && !right)
+        else if (vert == 2 && horz == 0)
         {
             goalAngle = 225;
         }
-        else if (down && !left && right)
+        else if (vert == 2 && horz == 2)
         {
             goalAngle = 135;
         }
-        else if (!up && !down && left)
+        else if (vert == 1 && horz == 0)
         {
             goalAngle = 270;
         }
-        else if (!up && !down && right)
+        else if (vert == 1 && horz == 2)
         {
             goalAngle = 90;
         }
@@ -257,18 +249,18 @@ public class PlanarConstructionAgent : Agent
         var DiscreteActionsOut = actionsOut.DiscreteActions;
 
         // default off
-        DiscreteActionsOut[0] = 2;
-        DiscreteActionsOut[1] = 2;
+        DiscreteActionsOut[0] = 1;
+        DiscreteActionsOut[1] = 1;
 
         if (Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S))
-            DiscreteActionsOut[0] = 1;
+            DiscreteActionsOut[0] = 0;
         else if (!Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.S))
-            DiscreteActionsOut[0] = 3;
+            DiscreteActionsOut[0] = 2;
         
         if (Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
-            DiscreteActionsOut[1] = 1;
+            DiscreteActionsOut[1] = 0;
         else if (!Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.D))
-            DiscreteActionsOut[1] = 3;
+            DiscreteActionsOut[1] = 2;
     }
 
     // A&D Keyboard turn
@@ -278,15 +270,15 @@ public class PlanarConstructionAgent : Agent
 
         if (Input.GetKey(KeyCode.A))
         {
-            DiscreteActionsOut[0] = 1;
+            DiscreteActionsOut[0] = 0;
         }
         else if (Input.GetKey(KeyCode.D))
         {
-            DiscreteActionsOut[0] = 3;
+            DiscreteActionsOut[0] = 2;
         }
         else
         {
-            DiscreteActionsOut[0] = 2;
+            DiscreteActionsOut[0] = 1;
         }
     }
 
