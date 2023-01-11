@@ -56,15 +56,15 @@ public class PlanarConstructionAgent : Agent
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        // sensor.AddObservation(rb.transform.localPosition.x);
-        // sensor.AddObservation(rb.transform.localPosition.z);
-        
+        sensor.AddObservation(rb.velocity.x);
+        sensor.AddObservation(rb.velocity.z);
+
         Vector2 closestGoalPuck = stadium.ClosestGoalPuck(rb.transform);
         sensor.AddObservation(closestGoalPuck[0] / 32.0f);  // distance diff normalized
         sensor.AddObservation(closestGoalPuck[1] / 180.0f); // angle diff normalized
-        
-        sensor.AddObservation(stadium.AvgDistToGoalPuck());
-        sensor.AddObservation(rb.transform.eulerAngles.y / 180.0f);
+
+        //sensor.AddObservation(stadium.AvgDistToGoalPuck());
+        //sensor.AddObservation(rb.transform.eulerAngles.y / 180.0f);
     }
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
@@ -89,6 +89,7 @@ public class PlanarConstructionAgent : Agent
         if (changeInFitness > 0.0001f)
         {
             AddReward(1f / MaxStep);
+            print("reward!");
         }
         else // time penalty
         {
@@ -170,7 +171,7 @@ public class PlanarConstructionAgent : Agent
         float goalAngle = float.NaN;
         var vert = actionBuffers.DiscreteActions[0];
         var horz = actionBuffers.DiscreteActions[1];
-
+        
         if (vert == 0 && horz == 1)
         {
             goalAngle = 0;
