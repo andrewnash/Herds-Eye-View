@@ -48,8 +48,9 @@ public class PlanarConstructionAgent : Agent
             (int)resetParams.GetWithDefault("min_pucks", 1));
         distanceThreshold = (int)resetParams.GetWithDefault("distance_threshold", 10);
 
+        stadium.ResetObstructions();
         do
-        { 
+        {
             stadium.ResetStadium();
         } while (isCompeted());
     }
@@ -89,7 +90,10 @@ public class PlanarConstructionAgent : Agent
         if (changeInFitness > 0.0001f)
         {
             AddReward(1f / MaxStep);
-            print("reward!");
+        }
+        else if (changeInFitness < 0f)
+        {
+            AddReward(-2f / MaxStep);
         }
         else // time penalty
         {
@@ -206,12 +210,6 @@ public class PlanarConstructionAgent : Agent
         }
 
         return goalAngle;
-    }
-
-    // check if keys all 0 or all 1
-    private bool AllKeysOnOrOff(ActionBuffers actionBuffers)
-    {
-        return actionBuffers.DiscreteActions[0] == 2 && actionBuffers.DiscreteActions[1] == 2;
     }
 
     bool isCompeted()

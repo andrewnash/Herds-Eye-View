@@ -37,17 +37,24 @@ public class StadiumArea : MonoBehaviour
         cubeoffset = cube.GetComponent<Renderer>().bounds.size.z / 2 - 2;
         
         ResetStadium();
+        ResetObstructions();
         ResetColors();
-        // ResetObstructionScales();
-
     }
 
     // Randomize the scale of all pucks
-    public void ResetObstructionScales()
+    public void ResetObstructions()
     {
         foreach (Transform obs in obstructions)
         {
-            obs.localScale = new Vector3(Random.Range(0.5f, 2.5f), obs.localScale.y, Random.Range(0.5f, 2.5f));
+            obs.localScale = new Vector3(Random.Range(0.1f, 1.0f), Random.Range(1f, 5.0f), Random.Range(0.1f, 3.0f));
+            obs.position = RandomPos();
+            obs.eulerAngles = new Vector3(0, Random.Range(0f, 360f), 0);
+            obs.GetComponent<Renderer>().material.SetColor("_Color", RandomColor());
+
+            if (obs.TryGetComponent(out DetectableGameObject obj))
+            {
+                obj.ScanShapeRuntime();
+            }
         }
     }
 
@@ -163,7 +170,12 @@ public class StadiumArea : MonoBehaviour
     void Update()
     {
         if (Input.GetKey(KeyCode.Escape))
+        {
             ResetStadium();
+            ResetObstructions();
+            ResetColors();
+        }
+
     }
 
     public void winAnimation()
