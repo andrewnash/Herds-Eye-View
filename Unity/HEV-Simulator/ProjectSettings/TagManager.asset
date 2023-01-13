@@ -8,6 +8,7 @@ TagManager:
   - Agent
   - Floor
   - Wall
+  - Goal
   layers:
   - Default
   - TransparentFX
