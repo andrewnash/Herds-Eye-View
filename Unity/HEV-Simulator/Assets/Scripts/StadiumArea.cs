@@ -1,6 +1,7 @@
 using MBaske.Sensors.Grid;
 using System.Collections;
 using System.Net.WebSockets;
+using NaughtyAttributes.Test;
 using Unity.MLAgents.Sensors;
 using UnityEngine;
 
@@ -11,6 +12,9 @@ public class StadiumArea : MonoBehaviour
     public Transform pucks;
     public Transform agents;
     public Transform obstructions;
+
+    //vector of obstacles
+    private Transform[] currentObstructions = new Transform[0];
 
     public Transform GoalStadiumArea;
 
@@ -42,19 +46,28 @@ public class StadiumArea : MonoBehaviour
     }
 
     // Randomize the scale of all pucks
-    public void ResetObstructions()
+    public void ResetObstructions(int numObs = 3)
     {
-        foreach (Transform obs in obstructions)
+        foreach (Transform obs in currentObstructions)
         {
-            obs.localScale = new Vector3(Random.Range(0.1f, 1.0f), Random.Range(1f, 5.0f), Random.Range(0.1f, 3.0f));
-            obs.position = RandomPos();
-            obs.eulerAngles = new Vector3(0, Random.Range(0f, 360f), 0);
-            obs.GetComponent<Renderer>().material.SetColor("_Color", RandomColor());
+            obs.gameObject.SetActive(false);
+        }
 
-            if (obs.TryGetComponent(out DetectableGameObject obj))
-            {
-                obj.ScanShapeRuntime();
-            }
+        currentObstructions = new Transform[numObs];
+        for (int i = 0; i < numObs; i++)
+        {
+            Transform randObs = null;
+            do
+            { 
+                randObs = obstructions.GetChild(Random.Range(0, obstructions.childCount));
+            } while (randObs.gameObject.activeSelf);
+
+            randObs.gameObject.SetActive(true);
+            randObs.position = RandomPos();
+            randObs.eulerAngles = new Vector3(0, Random.Range(0f, 360f), 0);
+            randObs.GetComponent<Renderer>().material.SetColor("_Color", RandomColor());
+
+            currentObstructions[i] = randObs;
         }
     }
 
