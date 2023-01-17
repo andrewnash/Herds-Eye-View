@@ -60,7 +60,7 @@ public class StadiumArea : MonoBehaviour
         for (int i = 0; i < numObs; i++)
         {
             Transform randObs = null;
-            do
+            do // get a random obstruction that's not active
             { 
                 randObs = obstructions.GetChild(Random.Range(0, obstructions.childCount));
             } while (randObs.gameObject.activeSelf);
@@ -85,17 +85,16 @@ public class StadiumArea : MonoBehaviour
             if (i > currentMaxPucks)
             {
                 // disable puck over current max
-                ResetObject(puck, new Vector3(0, -20, 0));
                 puck.gameObject.SetActive(false);
                 continue;
             }
 
             puck.gameObject.SetActive(true);
-            ResetObject(puck, RandomPos(0f));
+            RandomResetObject(puck, 0f);
         }
         foreach (Transform agent in agents)
         {
-            ResetObject(agent.GetComponentInChildren<Rigidbody>().transform, RandomPos(1f));
+            RandomResetObject(agent.GetComponentInChildren<Rigidbody>().transform, 1f);
         }
     }
 
@@ -105,6 +104,22 @@ public class StadiumArea : MonoBehaviour
         obj.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
         obj.eulerAngles = new Vector3(0, BiasRandomAngle(position), 0);
         obj.position = position;
+    }
+
+    void RandomResetObject(Transform obj, float y)
+    {
+        ResetObject(obj, RandomPos(y));
+
+        // check if has StadiumCollisionChecker component
+        if (obj.GetComponent<StadiumCollisionChecker>() != null && obj.GetComponent<StadiumCollisionChecker>().isActiveAndEnabled)
+        {
+            // check if colliding
+            while (obj.GetComponent<StadiumCollisionChecker>().IsColliding())
+            {
+                obj.GetComponent<StadiumCollisionChecker>().ResetCollisions();
+                ResetObject(obj, RandomPos(y));
+            }
+        }
     }
 
     public void ChildReset(Transform child, float y)

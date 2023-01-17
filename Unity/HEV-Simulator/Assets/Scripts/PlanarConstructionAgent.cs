@@ -24,6 +24,8 @@ public class PlanarConstructionAgent : Agent
     private float changeInFitness = 0;
 
     public bool isTraining;
+    public bool isSaving;
+
     public bool LocalADController;
     public bool GlobalTurnController;
     public bool GlobalVectorController;
@@ -43,12 +45,13 @@ public class PlanarConstructionAgent : Agent
 
     public override void OnEpisodeBegin()
     {
+        if (isSaving) { return; }
+
         stadium.pucksRange = new Vector2Int(
             (int)resetParams.GetWithDefault("max_pucks", 2),
             (int)resetParams.GetWithDefault("min_pucks", 1));
         distanceThreshold = (int)resetParams.GetWithDefault("distance_threshold", 10);
         stadium.obstructionMax = (int)resetParams.GetWithDefault("obstacle_max", 3);
-
 
         stadium.ResetObstructions();
         do

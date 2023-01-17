@@ -5,7 +5,7 @@ using UnityEngine;
 public class StadiumCollisionChecker : MonoBehaviour
 {
     public float y;
-    public StadiumArea stadiumArea;
+    private int m_overlaps = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -18,11 +18,29 @@ public class StadiumCollisionChecker : MonoBehaviour
         
     }
 
-    void OnTriggerEnter(Collider c)
+    public bool IsColliding()
     {
-        if (c.tag == "Wall" || transform.position.y < y-5)
+        return m_overlaps > 0;
+    }
+
+    public void ResetCollisions()
+    {
+        m_overlaps = 0;
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Puck") || collision.gameObject.CompareTag("Wall"))
         {
-            stadiumArea.ChildReset(transform, y);
+            m_overlaps++;
         }
     }
+
+    /*void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Puck") || collision.gameObject.CompareTag("Wall"))
+        {
+            m_overlaps--;
+        }
+    }*/
 }

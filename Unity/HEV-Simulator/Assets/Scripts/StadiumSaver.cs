@@ -27,7 +27,10 @@ public class StadiumSaver : MonoBehaviour
     void Start()
     {
         stadium = GetComponent<StadiumArea>();
-        grid = GetComponentInChildren<GridSensorComponent2D>().GridSensor;
+        grid = stadium.agents.GetComponentInChildren<GridSensorComponent2D>().GridSensor;
+
+        stadium.currentMaxPucks = 24;
+        stadium.obstructionMax = 3;
 
         init();
     }
@@ -110,6 +113,7 @@ public class StadiumSaver : MonoBehaviour
             //     UnityEditor.EditorApplication.isPlaying = false;
 
             stadium.ResetStadium();
+            stadium.ResetObstructions();
 
             if (frameCount % colorChangeInterval == 0)
                 stadium.ResetColors();
