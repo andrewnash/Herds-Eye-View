@@ -29,6 +29,7 @@ public class StadiumArea : MonoBehaviour
     float cubeoffset;
 
     public float currentMaxPucks;
+    public int obstructionMax;
 
     public Vector2Int pucksRange;
 
@@ -46,8 +47,10 @@ public class StadiumArea : MonoBehaviour
     }
 
     // Randomize the scale of all pucks
-    public void ResetObstructions(int numObs = 3)
+    public void ResetObstructions()
     {
+        int numObs = Random.Range(0, obstructionMax + 1);
+
         foreach (Transform obs in currentObstructions)
         {
             obs.gameObject.SetActive(false);
