@@ -64,7 +64,7 @@ public class StadiumArea : MonoBehaviour
 
             randObs.gameObject.SetActive(true);
             randObs.position = RandomPos();
-            randObs.eulerAngles = new Vector3(0, Random.Range(0f, 360f), 0);
+            randObs.eulerAngles = new Vector3(90, Random.Range(0f, 360f), 0);
             randObs.GetComponent<Renderer>().material.SetColor("_Color", RandomColor());
 
             currentObstructions[i] = randObs;
