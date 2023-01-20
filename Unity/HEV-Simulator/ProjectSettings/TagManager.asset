@@ -9,6 +9,9 @@ TagManager:
   - Floor
   - Wall
   - Goal
+  - Agent (1)
+  - Agent (0)
+  - Agent (2)
   layers:
   - Default
   - TransparentFX

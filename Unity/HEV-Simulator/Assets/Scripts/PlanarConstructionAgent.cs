@@ -51,7 +51,7 @@ public class PlanarConstructionAgent : Agent
             (int)resetParams.GetWithDefault("max_pucks", 2),
             (int)resetParams.GetWithDefault("min_pucks", 1));
         distanceThreshold = (int)resetParams.GetWithDefault("distance_threshold", 10);
-        stadium.obstructionMax = (int)resetParams.GetWithDefault("obstacle_max", 3);
+        stadium.obstructionMax = (int)resetParams.GetWithDefault("obstacle_max", 0);
 
         stadium.ResetObstructions();
         do

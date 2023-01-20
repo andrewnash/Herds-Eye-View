@@ -93,8 +93,17 @@ namespace MBaske.Sensors.Grid
             Item item = m_ItemPool.Count > 0 ? m_ItemPool.Pop() : new Item();
             item.Detectable = detectable;
             item.NormPoints.AddRange(normPoints);
-            m_ItemsByTag[detectable.Tag].Add(item);
-            m_Detectables.Add(detectable);
+
+            //Debug.Log("Checking " + detectable.Tag + " in dict of size " + m_ItemsByTag.Count);
+            if (m_ItemsByTag.TryGetValue(detectable.Tag, out IList<Item> list))
+            {
+                m_ItemsByTag[detectable.Tag].Add(item);
+                m_Detectables.Add(detectable);
+            }
+            /*else
+            {
+                Debug.LogWarning("Unknown detectable tag: " + detectable.Tag);
+            }*/
         }
 
         /// <summary>

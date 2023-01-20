@@ -134,10 +134,11 @@ namespace MBaske.Sensors.Grid
             {
                 if (!cld.CompareTag(tag))
                 {
-                    Debug.LogWarning($"A nested collider's tag must match its parent " +
-                        $"DetectableGameObject's tag. Changing '{cld.tag}' to '{tag}' " +
-                        $"for collider '{cld.name}'.");
-                    cld.tag = tag;
+                    // Override logic from base package for HEV convenience
+                    Debug.LogWarning($"A nested collider's tag doesn't match its parent " +
+                                     $"DetectableGameObject's tag. NOT Changing '{cld.tag}' to '{tag}' " +
+                                     $"for collider '{cld.name}'.");
+                   // cld.tag = tag;
                 }
             }
         }

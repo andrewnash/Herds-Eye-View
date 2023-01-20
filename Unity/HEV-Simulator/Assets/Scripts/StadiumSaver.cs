@@ -11,7 +11,7 @@ public class StadiumSaver : MonoBehaviour
     public int numRobots;
     public int colorChangeInterval;
 
-    int frameCount = 0;
+    int frameCount = 13524;
     string time;
     string rootFolder = "C:data/";
 
@@ -105,12 +105,13 @@ public class StadiumSaver : MonoBehaviour
 
     void Update()
     {
-        if (collectData == true)
+        if (collectData)
         {
             CaptureHEVFrames();
 
-            // if (++frameCount >= numFrames)
-            //     UnityEditor.EditorApplication.isPlaying = false;
+            /*
+            if (++frameCount >= numFrames) 
+                UnityEditor.EditorApplication.isPlaying = false;*/
 
             stadium.ResetStadium();
             stadium.ResetObstructions();
