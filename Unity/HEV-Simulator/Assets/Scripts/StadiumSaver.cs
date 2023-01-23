@@ -11,11 +11,10 @@ public class StadiumSaver : MonoBehaviour
     public int numRobots;
     public int colorChangeInterval;
 
-    int frameCount = 13524;
+    int frameCount = 0;
     string time;
     string rootFolder = "C:data/";
 
-    GridSensor grid;
     StadiumArea stadium;
 
     struct Config
@@ -27,7 +26,6 @@ public class StadiumSaver : MonoBehaviour
     void Start()
     {
         stadium = GetComponent<StadiumArea>();
-        grid = stadium.agents.GetComponentInChildren<GridSensorComponent2D>().GridSensor;
 
         stadium.currentMaxPucks = 24;
         stadium.obstructionMax = 3;
@@ -43,16 +41,19 @@ public class StadiumSaver : MonoBehaviour
         rootFolder = "C:/data/" + time + "/";
 
         Directory.CreateDirectory(rootFolder);
-        Directory.CreateDirectory(rootFolder + "/hev");
         Directory.CreateDirectory(rootFolder + "/data");
         Directory.CreateDirectory(rootFolder + "/debug_cam");
         for (int i = 0; i < stadium.agents.childCount; i++)
-            Directory.CreateDirectory(rootFolder + "/robot_" + i.ToString());
-
+        {
+            Directory.CreateDirectory(rootFolder + "/hev_" + i);
+            Directory.CreateDirectory(rootFolder + "/robot_" + i);
+        }
+        
         Config config;
         config.num_frames = numFrames;
         config.num_robots = numRobots;
-        System.IO.File.WriteAllText(string.Format("{0}/config.json", rootFolder), JsonUtility.ToJson(config, true));
+
+        File.WriteAllText(rootFolder + "/config.json", JsonUtility.ToJson(config, true));
     }
 
     void CaptureHEVFrames()
@@ -64,21 +65,25 @@ public class StadiumSaver : MonoBehaviour
         {
             // Save Robot Cameras
             Transform agent = stadium.agents.GetChild(i);
-            Camera camera = agent.Find("AgentCamera").GetComponent<Camera>();
+            Camera camera = agent.GetComponentInChildren<Camera>();
             Capture(camera, string.Format("{0}/robot_{1}/", rootFolder, i.ToString()));
             data.AddCamera(camera, agent);
+
+            // Save HEV Frame
+            agent.GetComponent<GridSensorComponent2D>().GridSensor.Update();
+            byte[] bytes = agent.GetComponent<GridSensorComponent2D>().GridSensor.GetCompressedObservation();
+            File.WriteAllBytes(string.Format("{0}/hev_{1}/{2}.png", rootFolder, i.ToString(), frameCount), bytes);
         }
-        //print(JsonUtility.ToJson(data.Objectify(), true));
-        System.IO.File.WriteAllText(string.Format("{0}/data/{1}.json", rootFolder, frameCount), JsonUtility.ToJson(data.Objectify(), true));
+        
+        // dump frame data
+        File.WriteAllText(string.Format("{0}/data/{1}.json", rootFolder, frameCount), JsonUtility.ToJson(data.Objectify(), true));
 
         // Save Debug Camera
         Camera debugCam = GameObject.Find("Main Camera").GetComponent<Camera>();
         Capture(debugCam, string.Format("{0}/debug_cam/", rootFolder));
 
         // Save HEV
-        grid.Update();
-        byte[] bytes = grid.GetCompressedObservation();
-        System.IO.File.WriteAllBytes(string.Format("{0}/hev/{1}.png", rootFolder, frameCount), bytes);
+        
     }
 
     public void Capture(Camera cam, string path)
@@ -96,7 +101,7 @@ public class StadiumSaver : MonoBehaviour
 
         byte[] bytes = screenShot.EncodeToPNG();
         string filename = string.Format("{0}/{1}.png", path, frameCount);
-        System.IO.File.WriteAllBytes(filename, bytes);
+        File.WriteAllBytes(filename, bytes);
 
         cam.targetTexture = null;
         RenderTexture.active = null;
@@ -109,9 +114,8 @@ public class StadiumSaver : MonoBehaviour
         {
             CaptureHEVFrames();
 
-            /*
-            if (++frameCount >= numFrames) 
-                UnityEditor.EditorApplication.isPlaying = false;*/
+            if (Application.isEditor && ++frameCount >= numFrames) 
+                UnityEditor.EditorApplication.isPlaying = false;
 
             stadium.ResetStadium();
             stadium.ResetObstructions();
