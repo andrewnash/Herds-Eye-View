@@ -40,10 +40,6 @@ public class StadiumArea : MonoBehaviour
             
         archSize = arch.GetComponent<Renderer>().bounds.size.x - 2;
         cubeoffset = cube.GetComponent<Renderer>().bounds.size.z / 2 - 2;
-        
-        ResetStadium();
-        ResetObstructions();
-        ResetColors();
     }
 
     // Randomize the scale of all pucks
@@ -197,18 +193,6 @@ public class StadiumArea : MonoBehaviour
             floors.GetChild(i).GetComponent<Renderer>().material.SetColor("_Color", randColor);
         }
     }
-
-    void Update()
-    {
-        if (Input.GetKey(KeyCode.Escape))
-        {
-            ResetStadium();
-            ResetObstructions();
-            ResetColors();
-        }
-
-    }
-
     public void winAnimation()
     {
         StartCoroutine(TargetReachedSwapGroundMaterial(win, 0.5f));

@@ -118,7 +118,7 @@ public class StadiumSaver : MonoBehaviour
                 UnityEditor.EditorApplication.isPlaying = false;
 
             stadium.ResetStadium();
-            stadium.ResetObstructions();
+            //stadium.ResetObstructions();
 
             if (frameCount % colorChangeInterval == 0)
                 stadium.ResetColors();

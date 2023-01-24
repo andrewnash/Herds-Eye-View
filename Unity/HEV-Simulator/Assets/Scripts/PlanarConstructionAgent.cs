@@ -16,13 +16,6 @@ public class PlanarConstructionAgent : Agent
     float MOVEMENT_SPEED = 1.0f;
     float TURN_SPEED = 1.25f;
 
-    private EnvironmentParameters resetParams;
-
-    private int distanceThreshold = 0;
-
-    private float lastFitness = 0;
-    private float changeInFitness = 0;
-
     public bool isTraining;
     public bool isSaving;
 
@@ -40,24 +33,11 @@ public class PlanarConstructionAgent : Agent
         }
         
         stadium = GetComponentInParent<StadiumArea>();
-        resetParams = Academy.Instance.EnvironmentParameters;
     }
 
     public override void OnEpisodeBegin()
     {
-        if (isSaving) { return; }
-
-        stadium.pucksRange = new Vector2Int(
-            (int)resetParams.GetWithDefault("max_pucks", 2),
-            (int)resetParams.GetWithDefault("min_pucks", 1));
-        distanceThreshold = (int)resetParams.GetWithDefault("distance_threshold", 10);
-        stadium.obstructionMax = (int)resetParams.GetWithDefault("obstacle_max", 0);
-
-        stadium.ResetObstructions();
-        do
-        {
-            stadium.ResetStadium();
-        } while (isCompeted());
+        ;
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -87,30 +67,6 @@ public class PlanarConstructionAgent : Agent
         else if (GlobalVectorController)
         {
             MoveAgentGlobalVector(actionBuffers);
-        }
-
-        UpdateChangeInFitness();
-
-        // if fitness has increased, positive reward
-        if (changeInFitness > 0.0001f)
-        {
-            AddReward(1f / MaxStep);
-        }
-        else if (changeInFitness < 0f)
-        {
-            AddReward(-2f / MaxStep);
-        }
-        else // time penalty
-        {
-            AddReward(-1f / MaxStep);
-        }
-
-        // check if completed
-        if (isCompeted())
-        {
-            AddReward(10f);
-            stadium.winAnimation();
-            EndEpisode();
         }
     }
 
@@ -215,23 +171,6 @@ public class PlanarConstructionAgent : Agent
         }
 
         return goalAngle;
-    }
-
-    bool isCompeted()
-    {
-        if (stadium.AvgDistToGoalPuck() < distanceThreshold * (stadium.currentMaxPucks + 1))
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    private void UpdateChangeInFitness()
-    {
-        float fitness = stadium.Fitness();
-        changeInFitness = fitness - lastFitness;
-        lastFitness = fitness;
     }
     
     public override void Heuristic(in ActionBuffers actionsOut)
