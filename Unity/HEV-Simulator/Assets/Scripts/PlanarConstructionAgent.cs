@@ -19,6 +19,9 @@ public class PlanarConstructionAgent : Agent
     public bool isTraining;
     public bool isSaving;
 
+    private float lastFitness = 0;
+    private float changeInFitness = 0;
+
     public bool LocalADController;
     public bool GlobalTurnController;
     public bool GlobalVectorController;
@@ -37,7 +40,7 @@ public class PlanarConstructionAgent : Agent
 
     public override void OnEpisodeBegin()
     {
-        ;
+        changeInFitness = 0;
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -51,6 +54,13 @@ public class PlanarConstructionAgent : Agent
 
         //sensor.AddObservation(stadium.AvgDistToGoalPuck());
         //sensor.AddObservation(rb.transform.eulerAngles.y / 180.0f);
+    }
+
+    private void UpdateChangeInFitness()
+    {
+        float fitness = stadium.Fitness();
+        changeInFitness = fitness - lastFitness;
+        lastFitness = fitness;
     }
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
@@ -68,6 +78,22 @@ public class PlanarConstructionAgent : Agent
         {
             MoveAgentGlobalVector(actionBuffers);
         }
+
+        UpdateChangeInFitness();
+
+        if (GetComponentInChildren<StadiumCollisionChecker>().IsColliding())
+        {
+            // if fitness has increased, positive reward
+            if (changeInFitness > 0.0001f)
+            {
+                AddReward(0.01f);
+            }
+            /*else if (changeInFitness < 0f)
+            {
+                AddReward(-0.01f);
+            }*/
+        }
+
     }
 
     void MoveAgentADController(ActionBuffers actionBuffers)
@@ -222,30 +248,6 @@ public class PlanarConstructionAgent : Agent
         else
         {
             DiscreteActionsOut[0] = 1;
-        }
-    }
-
-    void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Puck"))
-        {
-            m_puckOverlaps++;
-        }
-        else if (collision.gameObject.CompareTag("Wall"))
-        {
-            m_wallOverlaps++;
-        }
-    }
-
-    void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Puck"))
-        {
-            m_puckOverlaps--;
-        }
-        else if (collision.gameObject.CompareTag("Wall"))
-        {
-            m_wallOverlaps--;
         }
     }
 }

@@ -1,9 +1,9 @@
 behaviors:
   PlanarConstruction:
-    trainer_type: ppo
+    trainer_type: poca
     hyperparameters:
       batch_size: 2048
-      buffer_size: 48000
+      buffer_size: 65536
       learning_rate: 0.0003
       beta: 0.01
       epsilon: 0.2

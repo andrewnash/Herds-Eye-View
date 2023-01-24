@@ -17,9 +17,6 @@ public class StadiumController : MonoBehaviour
     private StadiumArea m_Stadium;
     private SimpleMultiAgentGroup m_AgentGroup;
 
-    private float lastFitness = 0;
-    private float changeInFitness = 0;
-
     private int m_ResetTimer;
 
     // Start is called before the first frame update
@@ -48,6 +45,7 @@ public class StadiumController : MonoBehaviour
     {
         //m_Stadium.ResetObstructions();
         m_Stadium.ResetColors();
+        m_ResetTimer = 0;
 
         do
         {
@@ -74,13 +72,6 @@ public class StadiumController : MonoBehaviour
         }
     }
 
-    private void UpdateChangeInFitness()
-    {
-        float fitness = m_Stadium.Fitness();
-        changeInFitness = fitness - lastFitness;
-        lastFitness = fitness;
-    }
-
     void FixedUpdate()
     {
         m_ResetTimer += 1;
@@ -98,25 +89,12 @@ public class StadiumController : MonoBehaviour
             m_Stadium.winAnimation();
             m_AgentGroup.EndGroupEpisode();
             ResetScene();
-            
-            changeInFitness = 0f;
+
+            //changeInFitness = 0f;
             return;
         }
 
-        UpdateChangeInFitness();
-
-        // if fitness has increased, positive reward
-        if (changeInFitness > 0.0001f)
-        {
-            m_AgentGroup.AddGroupReward(1f / MaxEnvironmentSteps);
-        }
-        else if (changeInFitness < 0f)
-        {
-            m_AgentGroup.AddGroupReward(-2f / MaxEnvironmentSteps);
-        }
-        else // time penalty
-        {
-            m_AgentGroup.AddGroupReward(-1f / MaxEnvironmentSteps);
-        }
+        // time penalty
+        m_AgentGroup.AddGroupReward(-1f / MaxEnvironmentSteps);
     }
 }

@@ -91,6 +91,7 @@ public class StadiumArea : MonoBehaviour
         foreach (Transform agent in agents)
         {
             RandomResetObject(agent.GetComponentInChildren<Rigidbody>().transform, 1f);
+            agent.GetComponentInChildren<StadiumCollisionChecker>().ResetCollisions();
         }
     }
 

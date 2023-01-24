@@ -4,43 +4,36 @@ using UnityEngine;
 
 public class StadiumCollisionChecker : MonoBehaviour
 {
-    public float y;
-    private int m_overlaps = 0;
+    private int m_PuckOverlaps = 0;
 
     // Start is called before the first frame update
-    void Start()
-    {
-        StadiumArea stadiumArea = GetComponentInParent<StadiumArea>();
-    }
+    void Start() { }
 
-    void Update()
-    {
-        
-    }
+    void Update() { }
 
     public bool IsColliding()
     {
-        return m_overlaps > 0;
+        return m_PuckOverlaps > 0;
     }
 
     public void ResetCollisions()
     {
-        m_overlaps = 0;
+        m_PuckOverlaps = 0;
     }
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Puck") || collision.gameObject.CompareTag("Wall"))
+        if (collision.gameObject.CompareTag("Puck"))
         {
-            m_overlaps++;
+            m_PuckOverlaps++;
         }
     }
 
-    /*void OnCollisionExit(Collision collision)
+    void OnCollisionExit(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Puck") || collision.gameObject.CompareTag("Wall"))
+        if (collision.gameObject.CompareTag("Puck"))
         {
-            m_overlaps--;
+            m_PuckOverlaps--;
         }
-    }*/
+    }
 }
