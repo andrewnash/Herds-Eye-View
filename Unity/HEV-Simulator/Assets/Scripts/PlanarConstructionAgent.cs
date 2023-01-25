@@ -250,4 +250,27 @@ public class PlanarConstructionAgent : Agent
             DiscreteActionsOut[0] = 1;
         }
     }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Puck"))
+        {
+            m_puckOverlaps++;
+        }
+        else if (collision.gameObject.CompareTag("Wall"))
+        {
+            m_wallOverlaps++;
+        }
+    }
+    void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Puck"))
+        {
+            m_puckOverlaps--;
+        }
+        else if (collision.gameObject.CompareTag("Wall"))
+        {
+            m_wallOverlaps--;
+        }
+    }
 }
