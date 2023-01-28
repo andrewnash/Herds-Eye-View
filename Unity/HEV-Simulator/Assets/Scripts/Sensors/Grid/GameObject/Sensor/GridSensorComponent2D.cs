@@ -16,6 +16,31 @@ namespace MBaske.Sensors.Grid
         #region Geometry Settings
 
         /// <summary>
+        /// X/Z size of each grid cell.
+        /// </summary>
+        public bool IsHEV
+        {
+            get { return m_IsHEV; }
+            set { m_IsHEV = value;
+                OnHEVChange();
+            }
+        }
+        [SerializeField]
+        [OnValueChanged("OnHEVChange")]
+        [Foldout("Geometry")]
+        [Tooltip("X/Z size of individual grid cells.")]
+        private bool m_IsHEV;
+
+        private void OnHEVChange()
+        {
+            if (HasSensor)
+            {
+                ((GameObjectDetector2D)m_GridSensor.Detector)
+                    .IsHEV = m_IsHEV;
+            }
+        }
+
+        /// <summary>
         /// Whether and how to rotate detection bounds with the sensor component.
         /// </summary>
         public GameObjectDetector2D.SensorRotationType RotationType

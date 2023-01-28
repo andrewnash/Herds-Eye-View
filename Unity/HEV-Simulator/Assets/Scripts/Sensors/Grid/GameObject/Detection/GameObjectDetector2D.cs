@@ -22,7 +22,15 @@ namespace MBaske.Sensors.Grid
         {
             set { m_RotationType = value; }
         }
+
         private SensorRotationType m_RotationType;
+
+        public bool IsHEV
+        {
+            set { m_IsHEV = value; }
+        }
+        
+        private bool m_IsHEV = false;
 
         /// <summary>
         /// The world rotation to use if <see cref="Detector2DRotationType"/>
@@ -65,6 +73,11 @@ namespace MBaske.Sensors.Grid
                 case SensorRotationType.AgentXYZ:
                     rotation = m_Transform.rotation;
                     break;
+            }
+
+            if (m_IsHEV)
+            {
+                Debug.Log("I am HEV!!");
             }
 
             Vector3 position = m_Transform.position;
