@@ -292,7 +292,8 @@ namespace MBaske.Sensors.Grid
                 SensorOwner = GetComponentInParent<DetectableGameObject>(),
                 RotationType = RotationType,
                 WorldRotation = m_WorldRotation,
-                Constraint = (DetectionConstraint2D)CreateConstraint()
+                Constraint = (DetectionConstraint2D)CreateConstraint(),
+                IsHEV = m_IsHEV
             };
         }
 

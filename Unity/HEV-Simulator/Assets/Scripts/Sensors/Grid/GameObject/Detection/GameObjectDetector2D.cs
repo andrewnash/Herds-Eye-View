@@ -75,13 +75,15 @@ namespace MBaske.Sensors.Grid
                     break;
             }
 
-            if (m_IsHEV)
-            {
-                Debug.Log("I am HEV!!");
-            }
-
             Vector3 position = m_Transform.position;
             Matrix4x4 worldToLocalMatrix = Matrix4x4.TRS(position, rotation, Vector3.one).inverse;
+
+            if (m_IsHEV)
+            {
+                position = Vector3.zero;
+                rotation = Quaternion.identity;
+                worldToLocalMatrix = Matrix4x4.identity;
+            }
 
             int numFound = 0;
             do
