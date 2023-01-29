@@ -107,7 +107,7 @@ namespace MBaske.Sensors.Grid
                 // getter itself. Copies are only used for organizing observables 
                 // for the encoding settings.
                 ObservableType.User 
-                  => detectable.Observables.GetObservable(Index).Value(),
+                  => detectable.Observables.GetObservable(Index).Value(), //This is where we get obseravle?
                 ObservableType.OneHot 
                   => 1,
                 _ => 0

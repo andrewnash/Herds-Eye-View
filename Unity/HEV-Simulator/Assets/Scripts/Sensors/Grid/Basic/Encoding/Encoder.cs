@@ -97,7 +97,7 @@ namespace MBaske.Sensors.Grid
                         int channel = firstTagChannel;
 
                         // Iterate observables for current result item.
-                        foreach (var obs in tagObs)
+                        foreach (var obs in tagObs) // this is where we look through each observation, make edit here???
                         {
                             // We evaluate the observable here and write obsValue
                             // to all grid positions below, UNLESS it's distance.
