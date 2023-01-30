@@ -115,7 +115,10 @@ namespace MBaske.Sensors.Grid
                     // as each collider is a key in DetectableGameObject's cache.
                     // We also ignore the sensor owner if there is a  
                     // DetectableGameObject parent to the sensor.
-                    if (detectable != m_Owner && !Result.Contains(detectable))
+
+
+                    if (detectable != m_Owner && !Result.Contains(detectable) &&
+                        !(detectable.OnlyChildDetectable && detectable.transform.parent != m_Transform.parent))
                     {
                         m_NormPoints.Clear();
                         m_WorldPoints.Clear();

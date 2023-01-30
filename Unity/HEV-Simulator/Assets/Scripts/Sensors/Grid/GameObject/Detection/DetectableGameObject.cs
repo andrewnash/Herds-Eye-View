@@ -22,6 +22,11 @@ namespace MBaske.Sensors.Grid
         /// <inheritdoc/>
         public string Name => name;
 
+        /// <summary>
+        /// Only Children can only be detected by grid sensors with the same parent
+        /// </summary>
+        public bool OnlyChildDetectable = false;
+
         private PhysicsScene m_PhysicsScene;
         private IList<Collider> m_Colliders;
         private bool m_IsCompound;
@@ -134,11 +139,10 @@ namespace MBaske.Sensors.Grid
             {
                 if (!cld.CompareTag(tag))
                 {
-                    // Override logic from base package for HEV convenience
                     Debug.LogWarning($"A nested collider's tag doesn't match its parent " +
-                                     $"DetectableGameObject's tag. NOT Changing '{cld.tag}' to '{tag}' " +
-                                     $"for collider '{cld.name}'.");
-                   // cld.tag = tag;
+                                     $"DetectableGameObject's tag. Changing '{cld.tag}' to '{tag}' " +
+                                     $"for collider '{cld.name}'."); // hmm
+                    cld.tag = tag;
                 }
             }
         }
