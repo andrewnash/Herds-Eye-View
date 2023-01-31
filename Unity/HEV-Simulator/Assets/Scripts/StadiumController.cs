@@ -9,10 +9,10 @@ public class StadiumController : MonoBehaviour
     /// Max Academy steps before this platform resets
     /// </summary>
     /// <returns></returns>
-    [Header("Max Environment Steps")] public int MaxEnvironmentSteps = 5000;
+    [Header("Max Environment Steps")] public int MaxEnvironmentSteps;
+    [SerializeField] public int distanceThreshold;
 
     private EnvironmentParameters resetParams;
-    private int distanceThreshold = 0;
 
     private StadiumArea m_Stadium;
     private SimpleMultiAgentGroup m_AgentGroup;
