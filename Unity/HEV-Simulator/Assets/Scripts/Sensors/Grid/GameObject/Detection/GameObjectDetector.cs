@@ -117,8 +117,10 @@ namespace MBaske.Sensors.Grid
                     // DetectableGameObject parent to the sensor.
 
 
-                    if (detectable != m_Owner && !Result.Contains(detectable) &&
-                        !(detectable.OnlyChildDetectable && detectable.transform.parent != m_Transform.parent))
+                    // Skip Hack for Ally & Control Agent logical Detection
+                    if ((detectable.NotDetectableByParent && detectable.transform.parent.parent == m_Transform) ||
+                        (detectable.OnlyDetectableByParent && detectable.transform.parent.parent != m_Transform)) {}
+                    else if (detectable != m_Owner && !Result.Contains(detectable))
                     {
                         m_NormPoints.Clear();
                         m_WorldPoints.Clear();

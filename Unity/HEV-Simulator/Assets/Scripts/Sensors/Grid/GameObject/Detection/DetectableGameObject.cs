@@ -22,10 +22,8 @@ namespace MBaske.Sensors.Grid
         /// <inheritdoc/>
         public string Name => name;
 
-        /// <summary>
-        /// Only Children can only be detected by grid sensors with the same parent
-        /// </summary>
-        public bool OnlyChildDetectable = false;
+        public bool OnlyDetectableByParent = false;
+        public bool NotDetectableByParent = false;
 
         private PhysicsScene m_PhysicsScene;
         private IList<Collider> m_Colliders;
