@@ -2,26 +2,26 @@ behaviors:
   PlanarConstruction:
     trainer_type: poca
     hyperparameters:
-      batch_size: 1024
-      buffer_size: 4096
-      learning_rate: 0.00035
-      beta: 0.0025
-      epsilon: 0.4
+      batch_size: 2028
+      buffer_size: 16384
+      learning_rate: 0.0003
+      beta: 0.01
+      epsilon: 0.
       lambd: 0.95
-      num_epoch: 5
-      learning_rate_schedule: linear
+      num_epoch: 3
+      learning_rate_schedule: constant
     network_settings:
-      normalize: true
+      normalize: false
       hidden_units: 256
-      num_layers: 3
+      num_layers: 2
       vis_encode_type: simple
     reward_signals:
       extrinsic:
-        gamma: 0.95
-        strength: 0.99
-    keep_checkpoints: 8
+        gamma: 0.99
+        strength: 1.0
+    keep_checkpoints: 5
     max_steps: 50000000
-    time_horizon: 256
+    time_horizon: 64
     summary_freq: 10000
     threaded: True
 
@@ -92,7 +92,7 @@ environment_parameters:
           behavior: PlanarConstruction
           signal_smoothing: true
           min_lesson_length: 50
-          threshold: 0.25
+          threshold: 0.2
           require_reset: true
         value: 33.0
       - name: Lesson1
@@ -101,24 +101,24 @@ environment_parameters:
           behavior: PlanarConstruction
           signal_smoothing: true
           min_lesson_length: 50
-          threshold: 0.5
+          threshold: 0.4
           require_reset: true
-        value: 33.0
+        value: 28.0
       - name: Lesson2
         completion_criteria:
           measure: progress
           behavior: PlanarConstruction
           signal_smoothing: true
           min_lesson_length: 50
-          threshold: 0.75
-        value: 30.0
+          threshold: 0.6
+        value: 22.0
       - name: Lesson3
         completion_criteria:
           measure: progress
           behavior: PlanarConstruction
           signal_smoothing: true
           min_lesson_length: 50
-          threshold: 0.9
-        value: 28.0
+          threshold: 0.8
+        value: 15.0
       - name: Lesson4
-        value: 26.0
+        value: 8.0
