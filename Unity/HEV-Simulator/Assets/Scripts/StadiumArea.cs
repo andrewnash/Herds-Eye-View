@@ -206,9 +206,9 @@ public class StadiumArea : MonoBehaviour
 
     IEnumerator TargetReachedSwapGroundMaterial(Transform ind, float time)
     {
-        ind.position = new Vector3(transform.position.x, 1, transform.position.z);
+        ind.gameObject.SetActive(true);
         yield return new WaitForSeconds(time); // Wait for 2 sec
-        ind.position = new Vector3(transform.position.x, -2, transform.position.z);
+        ind.gameObject.SetActive(false);
     }
     
     public float AvgDistToGoalPuck()
