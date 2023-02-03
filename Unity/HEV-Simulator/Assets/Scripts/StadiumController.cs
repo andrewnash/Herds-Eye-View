@@ -29,7 +29,10 @@ public class StadiumController : MonoBehaviour
         m_AgentGroup = new SimpleMultiAgentGroup();
         foreach (Transform agent in m_Stadium.agents)
         {
-            m_AgentGroup.RegisterAgent(agent.GetComponent<Agent>());
+            if (agent.gameObject.activeSelf)
+            {
+                m_AgentGroup.RegisterAgent(agent.GetComponent<Agent>());
+            }
         }
 
         m_Stadium.pucksRange = new Vector2Int(
