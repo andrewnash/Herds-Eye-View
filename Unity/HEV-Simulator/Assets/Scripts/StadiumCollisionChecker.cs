@@ -31,7 +31,7 @@ public class StadiumCollisionChecker : MonoBehaviour
 
     void OnCollisionExit(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Puck"))
+        if (collision.gameObject.CompareTag("Puck") && m_PuckOverlaps > 0)
         {
             m_PuckOverlaps--;
         }

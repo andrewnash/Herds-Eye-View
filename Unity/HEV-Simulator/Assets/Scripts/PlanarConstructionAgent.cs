@@ -40,7 +40,9 @@ public class PlanarConstructionAgent : Agent
 
     public override void OnEpisodeBegin()
     {
+        lastFitness = 0;
         changeInFitness = 0;
+        GetComponentInChildren<StadiumCollisionChecker>().ResetCollisions();
     }
 
     public override void CollectObservations(VectorSensor sensor)
