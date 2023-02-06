@@ -10,7 +10,7 @@ public class StadiumController : MonoBehaviour
     /// </summary>
     /// <returns></returns>
     [Header("Max Environment Steps")] public int MaxEnvironmentSteps;
-    [SerializeField] public int distanceThreshold;
+    [SerializeField] public int m_DistanceThreshold;
 
     private EnvironmentParameters resetParams;
 
@@ -31,14 +31,14 @@ public class StadiumController : MonoBehaviour
         {
             if (agent.gameObject.activeSelf)
             {
-                m_AgentGroup.RegisterAgent(agent.GetComponent<Agent>());
+                m_AgentGroup.RegisterAgent(agent.GetComponent<PlanarConstructionAgent>());
             }
         }
 
         m_Stadium.pucksRange = new Vector2Int(
             (int)resetParams.GetWithDefault("max_pucks", 3),
             (int)resetParams.GetWithDefault("min_pucks", 1));
-        distanceThreshold = (int)resetParams.GetWithDefault("distance_threshold", 10);
+        m_DistanceThreshold = (int)resetParams.GetWithDefault("distance_threshold", 10);
         m_Stadium.obstructionMax = (int)resetParams.GetWithDefault("obstacle_max", 0);
 
         ResetScene();
@@ -53,17 +53,41 @@ public class StadiumController : MonoBehaviour
         do
         {
             m_Stadium.ResetStadium();
-        } while (isCompeted());
-    }
-    
-    bool isCompeted()
-    {
-        if (m_Stadium.AvgDistToGoalPuck() < distanceThreshold * (m_Stadium.currentMaxPucks + 1))
+        } while (IsValidStart());
+
+        foreach (Transform puck in m_Stadium.pucks)
         {
-            return true;
+            if (puck.gameObject.activeSelf)
+            {
+                puck.GetComponent<Puck>().Reset(m_DistanceThreshold);
+            }
+        }
+    }
+
+    bool IsValidStart()
+    {
+        foreach (Transform puck in m_Stadium.pucks)
+        {
+            if (puck.gameObject.activeSelf && m_Stadium.ClosestGoalPuck(puck.transform)[0] < m_DistanceThreshold)
+            {
+                return true;
+            }
         }
 
         return false;
+    }
+
+    bool HasWon()
+    {
+        foreach (Transform puck in m_Stadium.pucks)
+        {
+            if (puck.gameObject.activeSelf && !puck.GetComponent<Puck>().HasWon())
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     // Update is called once per frame
@@ -86,14 +110,13 @@ public class StadiumController : MonoBehaviour
         }
 
         // check if completed
-        if (isCompeted())
+        if (HasWon())
         {
             m_AgentGroup.AddGroupReward(10f);
             m_Stadium.winAnimation();
             m_AgentGroup.EndGroupEpisode();
             ResetScene();
 
-            //changeInFitness = 0f;
             return;
         }
 

@@ -12,6 +12,7 @@ TagManager:
   - Agent (1)
   - Agent (0)
   - Agent (2)
+  - Body
   layers:
   - Default
   - TransparentFX
