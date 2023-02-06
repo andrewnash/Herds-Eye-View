@@ -88,7 +88,7 @@ public class PlanarConstructionAgent : Agent
             // if fitness has increased, positive reward
             if (changeInFitness > 0.0001f)
             {
-                AddReward(0.01f);
+                AddReward(0.1f); // trying upping me
             }
             /*else if (changeInFitness < 0f)
             {
