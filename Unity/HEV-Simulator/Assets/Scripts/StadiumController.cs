@@ -53,7 +53,7 @@ public class StadiumController : MonoBehaviour
         do
         {
             m_Stadium.ResetStadium();
-        } while (IsValidStart());
+        } while (!IsValidStart());
 
         foreach (Transform puck in m_Stadium.pucks)
         {
@@ -70,11 +70,24 @@ public class StadiumController : MonoBehaviour
         {
             if (puck.gameObject.activeSelf && m_Stadium.ClosestGoalPuck(puck.transform)[0] < m_DistanceThreshold)
             {
-                return true;
+                return false;
+            }
+
+            if (puck.gameObject.activeSelf && puck.GetComponent<StadiumCollisionChecker>().IsColliding())
+            {
+                return false;
             }
         }
 
-        return false;
+        foreach (Transform agent in m_Stadium.agents)
+        {
+            if (agent.gameObject.activeSelf && agent.GetComponentInChildren<StadiumCollisionChecker>().IsColliding())
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     bool HasWon()

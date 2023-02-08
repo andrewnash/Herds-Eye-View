@@ -5,6 +5,7 @@ using UnityEngine;
 public class StadiumCollisionChecker : MonoBehaviour
 {
     private int m_PuckOverlaps = 0;
+    private int m_AgentOverlaps = 0;
 
     // Start is called before the first frame update
     void Start() { }
@@ -13,12 +14,13 @@ public class StadiumCollisionChecker : MonoBehaviour
 
     public bool IsColliding()
     {
-        return m_PuckOverlaps > 0;
+        return m_PuckOverlaps > 0 || m_AgentOverlaps > 0;
     }
 
     public void ResetCollisions()
     {
         m_PuckOverlaps = 0;
+        m_AgentOverlaps = 0;
     }
 
     void OnCollisionEnter(Collision collision)
@@ -27,6 +29,11 @@ public class StadiumCollisionChecker : MonoBehaviour
         {
             m_PuckOverlaps++;
         }
+
+        if (collision.gameObject.CompareTag("Agent"))
+        {
+            m_AgentOverlaps++;
+        }
     }
 
     void OnCollisionExit(Collision collision)
@@ -34,6 +41,11 @@ public class StadiumCollisionChecker : MonoBehaviour
         if (collision.gameObject.CompareTag("Puck") && m_PuckOverlaps > 0)
         {
             m_PuckOverlaps--;
+        }
+        
+        if (collision.gameObject.CompareTag("Agent") && m_AgentOverlaps > 0)
+        {
+            m_AgentOverlaps--;
         }
     }
 }
