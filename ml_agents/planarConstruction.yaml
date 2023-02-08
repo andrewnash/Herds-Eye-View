@@ -33,8 +33,8 @@ environment_parameters:
           measure: reward
           behavior: PlanarConstruction
           signal_smoothing: true
-          min_lesson_length: 1
-          threshold: 1
+          min_lesson_length: 10
+          threshold: 7
           require_reset: true
         value: 1.0
       - name: Lesson1
@@ -42,16 +42,16 @@ environment_parameters:
           measure: reward
           behavior: PlanarConstruction
           signal_smoothing: true
-          min_lesson_length: 1
-          threshold: 2
-        value: 2.0
+          min_lesson_length: 10
+          threshold: 7
+        value: 1.0
       - name: Lesson2
         completion_criteria:
           measure: reward
           behavior: PlanarConstruction
           signal_smoothing: true
-          min_lesson_length: 1
-          threshold: 4
+          min_lesson_length: 10
+          threshold: 7
         value: 2.0
       - name: Lesson3
         value: 2.0
@@ -62,8 +62,8 @@ environment_parameters:
           measure: reward
           behavior: PlanarConstruction
           signal_smoothing: true
-          min_lesson_length: 5
-          threshold: 1
+          min_lesson_length: 10
+          threshold: 7
           require_reset: true
         value: 2.0
       - name: Lesson1
@@ -71,16 +71,16 @@ environment_parameters:
           measure: reward
           behavior: PlanarConstruction
           signal_smoothing: true
-          min_lesson_length: 5
-          threshold: 2
+          min_lesson_length: 10
+          threshold: 7
         value: 4.0
       - name: Lesson2
         completion_criteria:
           measure: reward
           behavior: PlanarConstruction
           signal_smoothing: true
-          min_lesson_length: 5
-          threshold: 4
+          min_lesson_length: 10
+          threshold: 7
         value: 4.0
       - name: Lesson3
         value: 4.0
@@ -92,7 +92,7 @@ environment_parameters:
           behavior: PlanarConstruction
           signal_smoothing: true
           min_lesson_length: 10
-          threshold: 1
+          threshold: 7
           require_reset: true
         value: 33.0
       - name: Lesson1
@@ -101,7 +101,7 @@ environment_parameters:
           behavior: PlanarConstruction
           signal_smoothing: true
           min_lesson_length: 10
-          threshold: 2
+          threshold: 7
           require_reset: true
         value: 28.0
       - name: Lesson2
@@ -110,15 +110,15 @@ environment_parameters:
           behavior: PlanarConstruction
           signal_smoothing: true
           min_lesson_length: 10
-          threshold: 3
+          threshold: 7
         value: 22.0
       - name: Lesson3
         completion_criteria:
           measure: reward
           behavior: PlanarConstruction
           signal_smoothing: true
-          min_lesson_length: 50
-          threshold: 4
+          min_lesson_length: 10
+          threshold: 7
         value: 15.0
       - name: Lesson4
         value: 8.0

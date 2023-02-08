@@ -10,7 +10,7 @@ public class Puck : MonoBehaviour
 
     private float m_DistanceThreshold = 0;
     private float m_StartDistance = 0;
-    private float m_LastDistance = 0;
+    private float m_ClosestDistance = 0;
     
     private bool m_HasWon = false;
     
@@ -19,16 +19,16 @@ public class Puck : MonoBehaviour
         m_DistanceThreshold = distanceThreshold;
         
         m_StartDistance = m_Stadium.ClosestGoalPuck(transform)[0];
-        m_LastDistance = m_StartDistance;
+        m_ClosestDistance = m_StartDistance;
         m_MostRecentAgent = null;
         m_HasWon = false;
     }
 
     private void CheckWin()
     {
-        if (!m_HasWon && m_LastDistance < m_DistanceThreshold)
+        if (!m_HasWon && m_ClosestDistance < m_DistanceThreshold)
         {
-            m_MostRecentAgent.AddReward(1f);
+            m_MostRecentAgent.AddReward(5f);
             m_HasWon = true;
         }
     }
@@ -45,15 +45,16 @@ public class Puck : MonoBehaviour
         CheckWin();
 
         float currentDistance = m_Stadium.ClosestGoalPuck(transform)[0];
-        if (currentDistance < m_LastDistance)
+        if (currentDistance < m_ClosestDistance)
         {
             // scale distance moved by required distance to move to be within distance threshold
-            float reward = (m_LastDistance - currentDistance) / (m_StartDistance - m_DistanceThreshold);
+            float reward = (m_ClosestDistance - currentDistance) / (m_StartDistance - m_DistanceThreshold);
 
-            // Add 0-1 Scaled Reward
-            m_MostRecentAgent.AddReward(reward / (1 + reward));
+            print(reward*5);
+            // Add 0-5 Scaled Reward
+            m_MostRecentAgent.AddReward(reward*5);
+            m_ClosestDistance = currentDistance;
         }
-        m_LastDistance = currentDistance;
     }
 
 
