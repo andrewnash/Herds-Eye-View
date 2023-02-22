@@ -13,6 +13,14 @@ TagManager:
   - Agent (0)
   - Agent (2)
   - Body
+  - ground
+  - goal
+  - agent
+  - blockLarge
+  - wall
+  - blockSmall
+  - blockVeryLarge
+  - Block
   layers:
   - Default
   - TransparentFX
