@@ -95,6 +95,7 @@ public class PushBlockEnvController : MonoBehaviour
             item.StartingPos = item.Agent.transform.position;
             item.StartingRot = item.Agent.transform.rotation;
             item.Rb = item.Agent.GetComponent<Rigidbody>();
+            if (item.Rb == null) { item.Rb = item.Agent.GetComponentInChildren<Rigidbody>(); }
             m_AgentGroup.RegisterAgent(item.Agent);
         }
         ResetScene();
@@ -211,7 +212,7 @@ public class PushBlockEnvController : MonoBehaviour
             var pos = UseRandomAgentPosition ? GetRandomSpawnPos() : item.StartingPos;
             var rot = UseRandomAgentRotation ? GetRandomRot() : item.StartingRot;
 
-            item.Agent.transform.SetPositionAndRotation(pos, rot);
+            item.Rb.transform.SetPositionAndRotation(pos, rot);
             item.Rb.velocity = Vector3.zero;
             item.Rb.angularVelocity = Vector3.zero;
         }
