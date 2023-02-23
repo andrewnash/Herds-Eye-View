@@ -9,8 +9,8 @@ public class PushAgentCollab : Agent
     private PushBlockSettings m_PushBlockSettings;
     private Rigidbody m_AgentRb;  //cached on initialization
 
-    public bool LocalController;
-    public bool GlobalController;
+    public bool LocalADController;
+    public bool GlobalWASDController;
 
     void Awake()
     {
@@ -65,47 +65,57 @@ public class PushAgentCollab : Agent
     }
 
     
-    public void MoveAgentGlobal(ActionSegment<int> act)
+    public void MoveAgentGlobal(ActionBuffers actionBuffers)
     {
-        float goalAngle = float.NaN;
-        var action = act[0];
-
-        switch (action)
-        {
-            case 1:
-                goalAngle = 0;
-                break;
-            case 2:
-                goalAngle = 180;
-                break;
-            case 3:
-                goalAngle = 90;
-                break;
-            case 4:
-                goalAngle = 270;
-                break;
-            case 5:
-                goalAngle = 45;
-                break;
-            case 6:
-                goalAngle = 315;
-                break;
-            case 7:
-                goalAngle = 225;
-                break;
-            case 8:
-                goalAngle = 135;
-                break;
-        }
+        float goalAngle = ControlsToGoalAngle(actionBuffers);
 
         if (float.IsNaN(goalAngle))
             return;
 
         m_AgentRb.transform.eulerAngles = new Vector3(0, goalAngle, 0);
         m_AgentRb.AddForce(m_AgentRb.transform.forward * m_PushBlockSettings.agentRunSpeed, ForceMode.VelocityChange);
-        //m_AgentRb.transform.Rotate(rotateDir, Time.fixedDeltaTime * 200f);
-        //m_AgentRb.AddForce(dirToGo * m_PushBlockSettings.agentRunSpeed,
-        //    ForceMode.VelocityChange);
+    }
+    private float ControlsToGoalAngle(ActionBuffers actionBuffers)
+    {
+        // 8 possible goal angles
+        float goalAngle = float.NaN;
+        var vert = actionBuffers.DiscreteActions[0];
+        var horz = actionBuffers.DiscreteActions[1];
+
+        if (vert == 0 && horz == 1)
+        {
+            goalAngle = 0;
+        }
+        else if (vert == 0 && horz == 0)
+        {
+            goalAngle = 315;
+        }
+        else if (vert == 0 && horz == 2)
+        {
+            goalAngle = 45;
+        }
+        else if (vert == 2 && horz == 1)
+        {
+            goalAngle = 180;
+        }
+        else if (vert == 2 && horz == 0)
+        {
+            goalAngle = 225;
+        }
+        else if (vert == 2 && horz == 2)
+        {
+            goalAngle = 135;
+        }
+        else if (vert == 1 && horz == 0)
+        {
+            goalAngle = 270;
+        }
+        else if (vert == 1 && horz == 2)
+        {
+            goalAngle = 90;
+        }
+
+        return goalAngle;
     }
 
     /// <summary>
@@ -114,17 +124,31 @@ public class PushAgentCollab : Agent
     public override void OnActionReceived(ActionBuffers actionBuffers)
     {
         // Move the agent using the action.
-        if (LocalController)
+        if (LocalADController)
         {  
             MoveAgentTurn(actionBuffers.DiscreteActions);
         }
         else
         {
-            MoveAgentGlobal(actionBuffers.DiscreteActions);
+            MoveAgentGlobal(actionBuffers);
+        }
+    }
+    
+
+    public override void Heuristic(in ActionBuffers actionsOut)
+    {
+        // move agent
+        if (LocalADController)
+        {
+            HeuristicAD(actionsOut);
+        }
+        else
+        {
+            HeuristicWASD(actionsOut);
         }
     }
 
-    public override void Heuristic(in ActionBuffers actionsOut)
+    void HeuristicAD(in ActionBuffers actionsOut)
     {
         var discreteActionsOut = actionsOut.DiscreteActions;
         if (Input.GetKey(KeyCode.D))
@@ -143,5 +167,25 @@ public class PushAgentCollab : Agent
         {
             discreteActionsOut[0] = 2;
         }
+    }
+
+    // Set global goal angle with WASD keys
+    void HeuristicWASD(ActionBuffers actionsOut)
+    {
+        var DiscreteActionsOut = actionsOut.DiscreteActions;
+
+        // default off
+        DiscreteActionsOut[0] = 1;
+        DiscreteActionsOut[1] = 1;
+
+        if (Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S))
+            DiscreteActionsOut[0] = 0;
+        else if (!Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.S))
+            DiscreteActionsOut[0] = 2;
+
+        if (Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
+            DiscreteActionsOut[1] = 0;
+        else if (!Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.D))
+            DiscreteActionsOut[1] = 2;
     }
 }

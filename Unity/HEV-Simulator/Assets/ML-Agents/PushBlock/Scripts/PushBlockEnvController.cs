@@ -63,6 +63,7 @@ public class PushBlockEnvController : MonoBehaviour
     public bool UseRandomAgentPosition = true;
     public bool UseRandomBlockRotation = true;
     public bool UseRandomBlockPosition = true;
+    public bool UseRandomPlatformRotation = true;
     private PushBlockSettings m_PushBlockSettings;
 
     private int m_NumberOfRemainingBlocks;
@@ -107,6 +108,11 @@ public class PushBlockEnvController : MonoBehaviour
         if (m_ResetTimer >= MaxEnvironmentSteps && MaxEnvironmentSteps > 0)
         {
             m_AgentGroup.GroupEpisodeInterrupted();
+            ResetScene();
+        }
+       
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
             ResetScene();
         }
 
@@ -202,9 +208,12 @@ public class PushBlockEnvController : MonoBehaviour
         m_ResetTimer = 0;
 
         //Random platform rotation
-        var rotation = Random.Range(0, 4);
-        var rotationAngle = rotation * 90f;
-        area.transform.Rotate(new Vector3(0f, rotationAngle, 0f));
+        if (UseRandomPlatformRotation)
+        {
+            var rotation = Random.Range(0, 4);
+            var rotationAngle = rotation * 90f;
+            area.transform.Rotate(new Vector3(0f, rotationAngle, 0f));
+        }
 
         //Reset Agents
         foreach (var item in AgentsList)
