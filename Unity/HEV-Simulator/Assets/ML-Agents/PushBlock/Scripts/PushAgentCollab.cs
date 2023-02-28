@@ -8,6 +8,7 @@ public class PushAgentCollab : Agent
 
     private PushBlockSettings m_PushBlockSettings;
     private Rigidbody m_AgentRb;  //cached on initialization
+    private PushSensor m_PushSensor;
 
     public bool LocalADController;
     public bool GlobalWASDController;
@@ -21,11 +22,12 @@ public class PushAgentCollab : Agent
     {
         // Cache the agent rb
         m_AgentRb = GetComponent<Rigidbody>();
-
         if (m_AgentRb == null)
         {
             m_AgentRb = GetComponentInChildren<Rigidbody>();
         }
+
+        m_PushSensor = m_AgentRb.GetComponent<PushSensor>();
     }
 
     /// <summary>
@@ -72,9 +74,16 @@ public class PushAgentCollab : Agent
         if (float.IsNaN(goalAngle))
             return;
 
+        //float angleDifference = (goalAngle - m_AgentRb.transform.eulerAngles.y % 360 + 180) % 360 - 180;
+        //if (m_PushSensor.IsPushing() && Mathf.Abs(angleDifference) < 45)
+        //{
+        //    print("not turning " + gameObject.name + " angle is " + Mathf.Abs(angleDifference)); 
+        //}
+
         m_AgentRb.transform.eulerAngles = new Vector3(0, goalAngle, 0);
         m_AgentRb.AddForce(m_AgentRb.transform.forward * m_PushBlockSettings.agentRunSpeed, ForceMode.VelocityChange);
     }
+
     private float ControlsToGoalAngle(ActionBuffers actionBuffers)
     {
         // 8 possible goal angles
