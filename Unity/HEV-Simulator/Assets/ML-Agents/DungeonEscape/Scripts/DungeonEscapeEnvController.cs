@@ -94,7 +94,10 @@ public class DungeonEscapeEnvController : MonoBehaviour
             item.StartingPos = item.Agent.transform.position;
             item.StartingRot = item.Agent.transform.rotation;
             item.Rb = item.Agent.GetComponent<Rigidbody>();
+            if (item.Rb == null) { item.Rb = item.Agent.GetComponentInChildren<Rigidbody>(); }
             item.Col = item.Agent.GetComponent<Collider>();
+            if (item.Col == null) { item.Col = item.Agent.GetComponentInChildren<Collider>(); }
+
             // Add to team manager
             m_AgentGroup.RegisterAgent(item.Agent);
         }
@@ -228,7 +231,7 @@ public class DungeonEscapeEnvController : MonoBehaviour
             var pos = UseRandomAgentPosition ? GetRandomSpawnPos() : item.StartingPos;
             var rot = UseRandomAgentRotation ? GetRandomRot() : item.StartingRot;
 
-            item.Agent.transform.SetPositionAndRotation(pos, rot);
+            item.Rb.transform.SetPositionAndRotation(pos, rot);
             item.Rb.velocity = Vector3.zero;
             item.Rb.angularVelocity = Vector3.zero;
             item.Agent.MyKey.SetActive(false);
