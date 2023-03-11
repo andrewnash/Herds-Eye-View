@@ -14945,14 +14945,14 @@ MonoBehaviour:
   m_RotationType: 2
   m_DetectionBounds:
     m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 12, y: 1, z: 12}
+    m_Extent: {x: 12.32, y: 1, z: 12.32}
   m_EditorBounds:
     m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 12, y: 1, z: 12}
-  m_CellSize: 0.75
+    m_Extent: {x: 12.32, y: 1, z: 12.32}
+  m_CellSize: 0.77
   m_NumCells: {x: 32, y: 1, z: 32}
-  m_DetectionSize: {x: 24, y: 2, z: 24}
-  m_BoundsSize: {x: 24, y: 2, z: 24}
+  m_DetectionSize: {x: 24.64, y: 2, z: 24.64}
+  m_BoundsSize: {x: 24.64, y: 2, z: 24.64}
   m_Offset: {x: 0, y: 0, z: 0}
 --- !u!114 &8964598782516923884
 MonoBehaviour:
