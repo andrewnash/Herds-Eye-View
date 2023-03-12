@@ -140,7 +140,7 @@ public class DungeonEscapeEnvController : MonoBehaviour
     public void UnlockDoor()
     {
         m_AgentGroup.AddGroupReward(1f);
-        StartCoroutine(GoalScoredSwapGroundMaterial(m_PushBlockSettings.goalScoredMaterial, 0.5f));
+        //StartCoroutine(GoalScoredSwapGroundMaterial(m_PushBlockSettings.goalScoredMaterial, 0.5f));
 
         print("Unlocked Door");
         m_AgentGroup.EndGroupEpisode();
@@ -202,7 +202,7 @@ public class DungeonEscapeEnvController : MonoBehaviour
         m_AgentGroup.EndGroupEpisode();
 
         // Swap ground material for a bit to indicate we scored.
-        StartCoroutine(GoalScoredSwapGroundMaterial(m_PushBlockSettings.failMaterial, 0.5f));
+        //StartCoroutine(GoalScoredSwapGroundMaterial(m_PushBlockSettings.failMaterial, 0.5f));
         ResetScene();
     }
 

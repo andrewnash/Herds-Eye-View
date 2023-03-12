@@ -116,8 +116,8 @@ public class HEVSaver : MonoBehaviour
         {
             CaptureHEVFrames();
 
-            //if (Application.isEditor && ++frameCount >= numFrames) 
-            //    UnityEditor.EditorApplication.isPlaying = false;
+            if (Application.isEditor && ++frameCount >= numFrames) 
+                UnityEditor.EditorApplication.isPlaying = false;
         }
     }
 }
