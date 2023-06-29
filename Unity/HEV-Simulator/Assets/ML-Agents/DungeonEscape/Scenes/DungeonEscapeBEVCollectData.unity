@@ -1840,16 +1840,16 @@ MonoBehaviour:
   m_IsHEV: 0
   m_RotationType: 0
   m_DetectionBounds:
-    m_Center: {x: 0, y: 0.5, z: 0}
+    m_Center: {x: 0, y: 0.5, z: 11}
     m_Extent: {x: 12.48, y: 0.5, z: 12.48}
   m_EditorBounds:
-    m_Center: {x: 0, y: 0.5, z: 0}
+    m_Center: {x: 0, y: 0.5, z: 11}
     m_Extent: {x: 12.48, y: 0.5, z: 12.48}
   m_CellSize: 0.39
   m_NumCells: {x: 64, y: 1, z: 64}
   m_DetectionSize: {x: 24.96, y: 1, z: 24.96}
   m_BoundsSize: {x: 24.96, y: 1, z: 24.96}
-  m_Offset: {x: 0, y: 0.5, z: 0}
+  m_Offset: {x: 0, y: 0.5, z: 11}
 --- !u!114 &905169974
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2447,7 +2447,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f0d060d8c3074edf80fc69e847d4c60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxEnvironmentSteps: 15000
+  MaxEnvironmentSteps: 3000
   areaBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
@@ -2551,8 +2551,8 @@ MonoBehaviour:
   Grids:
   - {fileID: 905169973}
   DebugCamera: {fileID: 1009000887}
-  collectData: 0
-  numFrames: 500
+  collectData: 1
+  numFrames: 10000
   colorChangeInterval: 0
 --- !u!4 &4643237306651462
 Transform:
