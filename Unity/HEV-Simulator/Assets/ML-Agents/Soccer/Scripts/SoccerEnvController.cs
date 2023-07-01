@@ -60,7 +60,10 @@ public class SoccerEnvController : MonoBehaviour
         {
             item.StartingPos = item.Agent.transform.position;
             item.StartingRot = item.Agent.transform.rotation;
+            
             item.Rb = item.Agent.GetComponent<Rigidbody>();
+            if (item.Rb == null) { item.Rb = item.Agent.GetComponentInChildren<Rigidbody>(); }
+
             if (item.Agent.team == Team.Blue)
             {
                 m_BlueAgentGroup.RegisterAgent(item.Agent);
@@ -126,7 +129,7 @@ public class SoccerEnvController : MonoBehaviour
             var newStartPos = item.Agent.initialPos + new Vector3(randomPosX, 0f, 0f);
             var rot = item.Agent.rotSign * Random.Range(80.0f, 100.0f);
             var newRot = Quaternion.Euler(0, rot, 0);
-            item.Agent.transform.SetPositionAndRotation(newStartPos, newRot);
+            item.Rb.transform.SetPositionAndRotation(newStartPos, newRot);
 
             item.Rb.velocity = Vector3.zero;
             item.Rb.angularVelocity = Vector3.zero;

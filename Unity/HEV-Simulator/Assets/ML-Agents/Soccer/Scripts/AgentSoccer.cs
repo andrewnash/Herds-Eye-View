@@ -39,7 +39,7 @@ public class AgentSoccer : Agent
     float m_ForwardSpeed;
 
 
-    [HideInInspector]
+    //[HideInInspector]
     public Rigidbody agentRb;
     SoccerSettings m_SoccerSettings;
     BehaviorParameters m_BehaviorParameters;
@@ -90,6 +90,7 @@ public class AgentSoccer : Agent
         }
         m_SoccerSettings = FindObjectOfType<SoccerSettings>();
         agentRb = GetComponent<Rigidbody>();
+        if (agentRb == null) { agentRb = GetComponentInChildren<Rigidbody>(); }
         agentRb.maxAngularVelocity = 500;
 
         m_ResetParams = Academy.Instance.EnvironmentParameters;
@@ -109,35 +110,35 @@ public class AgentSoccer : Agent
         switch (forwardAxis)
         {
             case 1:
-                dirToGo = transform.forward * m_ForwardSpeed;
+                dirToGo = agentRb.transform.forward * m_ForwardSpeed;
                 m_KickPower = 1f;
                 break;
             case 2:
-                dirToGo = transform.forward * -m_ForwardSpeed;
+                dirToGo = agentRb.transform.forward * -m_ForwardSpeed;
                 break;
         }
 
         switch (rightAxis)
         {
             case 1:
-                dirToGo = transform.right * m_LateralSpeed;
+                dirToGo = agentRb.transform.right * m_LateralSpeed;
                 break;
             case 2:
-                dirToGo = transform.right * -m_LateralSpeed;
+                dirToGo = agentRb.transform.right * -m_LateralSpeed;
                 break;
         }
 
         switch (rotateAxis)
         {
             case 1:
-                rotateDir = transform.up * -1f;
+                rotateDir = agentRb.transform.up * -1f;
                 break;
             case 2:
-                rotateDir = transform.up * 1f;
+                rotateDir = agentRb.transform.up * 1f;
                 break;
         }
 
-        transform.Rotate(rotateDir, Time.deltaTime * 100f);
+        agentRb.transform.Rotate(rotateDir, Time.deltaTime * 100f);
         agentRb.AddForce(dirToGo * m_SoccerSettings.agentRunSpeed,
             ForceMode.VelocityChange);
     }

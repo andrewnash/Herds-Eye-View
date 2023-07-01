@@ -21,6 +21,13 @@ TagManager:
   - blockSmall
   - blockVeryLarge
   - Block
+  - purpleAgent
+  - blueAgent
+  - purpleGoal
+  - ball
+  - blueGoal
+  - blueAgent1
+  - purpleAgent1
   layers:
   - Default
   - TransparentFX
