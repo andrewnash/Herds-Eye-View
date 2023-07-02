@@ -19,6 +19,16 @@ public class AgentSoccer : Agent
     // * own teammate
     // * opposing player
 
+    // For HEV the order is:
+    // * ball
+    // * own goal
+    // * opposing goal
+    // * wall
+    // * itself
+    // * own teammate
+    // * opposing player 1 
+    // * opposing player 2
+
     public enum Position
     {
         Striker,
@@ -47,6 +57,9 @@ public class AgentSoccer : Agent
     public float rotSign;
 
     EnvironmentParameters m_ResetParams;
+
+    public bool GlobalController;
+    public bool LocalController;
 
     public override void Initialize()
     {
@@ -96,7 +109,7 @@ public class AgentSoccer : Agent
         m_ResetParams = Academy.Instance.EnvironmentParameters;
     }
 
-    public void MoveAgent(ActionSegment<int> act)
+    public void MoveAgentLocal(ActionSegment<int> act)
     {
         var dirToGo = Vector3.zero;
         var rotateDir = Vector3.zero;
@@ -143,6 +156,67 @@ public class AgentSoccer : Agent
             ForceMode.VelocityChange);
     }
 
+    public void MoveAgentGlobal(ActionSegment<int> act)
+    {
+        float goalAngle = ControlsToGoalAngle(act);
+
+        if (float.IsNaN(goalAngle))
+            return;
+
+        agentRb.transform.eulerAngles = new Vector3(0, goalAngle, 0);
+        agentRb.AddForce(agentRb.transform.forward * m_ForwardSpeed, ForceMode.VelocityChange);
+    }
+
+
+    private float ControlsToGoalAngle(ActionSegment<int> act)
+    {
+        // 8 possible goal angles
+        float goalAngle = float.NaN;
+
+        var horz = act[0];
+        var vert = act[1];
+
+        if (vert == 0 && horz == 1)
+        {
+            goalAngle = 0;
+        }
+        else if (vert == 0 && horz == 0)
+        {
+            goalAngle = 45;
+        }
+        else if (vert == 0 && horz == 2)
+        {
+            goalAngle = 315;
+        }
+        else if (vert == 2 && horz == 1)
+        {
+            goalAngle = 180;
+        }
+        else if (vert == 2 && horz == 0)
+        {
+            goalAngle = 135;
+        }
+        else if (vert == 2 && horz == 2)
+        {
+            goalAngle = 225;
+        }
+        else if (vert == 1 && horz == 0)
+        {
+            goalAngle = 90;
+        }
+        else if (vert == 1 && horz == 2)
+        {
+            goalAngle = 270;
+        }
+
+        if (team == Team.Purple)
+        {
+            goalAngle = (goalAngle + 180) % 360;
+        }
+
+        return goalAngle;
+    }
+
     public override void OnActionReceived(ActionBuffers actionBuffers)
 
     {
@@ -157,10 +231,29 @@ public class AgentSoccer : Agent
             // Existential penalty for Strikers
             AddReward(-m_Existential);
         }
-        MoveAgent(actionBuffers.DiscreteActions);
+
+        if (LocalController)
+        {
+            MoveAgentLocal(actionBuffers.DiscreteActions);
+        }
+        else
+        {
+            MoveAgentGlobal(actionBuffers.DiscreteActions);
+        }
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
+    {
+        if (LocalController)
+        {
+            HeuristicLocal(actionsOut);
+        }
+        else
+        {
+            HeuristicGlobal(actionsOut);
+        }
+    }
+    void HeuristicLocal(in ActionBuffers actionsOut)
     {
         var discreteActionsOut = actionsOut.DiscreteActions;
         //forward
@@ -191,6 +284,27 @@ public class AgentSoccer : Agent
             discreteActionsOut[1] = 2;
         }
     }
+
+    // Set global goal angle with WASD keys
+    void HeuristicGlobal(ActionBuffers actionsOut)
+    {
+        var DiscreteActionsOut = actionsOut.DiscreteActions;
+
+        // default off
+        DiscreteActionsOut[0] = 1;
+        DiscreteActionsOut[1] = 1;
+
+        if (Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S))
+            DiscreteActionsOut[0] = 0;
+        else if (!Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.S))
+            DiscreteActionsOut[0] = 2;
+
+        if (Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
+            DiscreteActionsOut[1] = 0;
+        else if (!Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.D))
+            DiscreteActionsOut[1] = 2;
+    }
+
     /// <summary>
     /// Used to provide a "kick" to the ball.
     /// </summary>
