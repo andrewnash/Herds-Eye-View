@@ -173,7 +173,7 @@ public class PushBlockEnvController : MonoBehaviour
     /// </summary>
     public void ScoredAGoal(Collider col, float score)
     {
-        print($"Scored {score} on {gameObject.name}");
+        // print($"Scored {score} on {gameObject.name}");
 
         //Decrement the counter
         m_NumberOfRemainingBlocks--;
@@ -192,6 +192,9 @@ public class PushBlockEnvController : MonoBehaviour
 
         if (done)
         {
+            // Report Timesteps
+            print($"{m_ResetTimer}");
+
             //Reset assets
             m_AgentGroup.EndGroupEpisode();
             ResetScene();
