@@ -28,7 +28,7 @@ public class StadiumArea : MonoBehaviour
     float archSize;
     float cubeoffset;
 
-    public float currentMaxPucks;
+    public float currentMaxPucks = 1;
     public int obstructionMax;
 
     public Vector2Int pucksRange;

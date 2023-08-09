@@ -18,6 +18,9 @@ public class StadiumController : MonoBehaviour
     private SimpleMultiAgentGroup m_AgentGroup;
 
     private int m_ResetTimer;
+    private int MAX_SCORE = 12;
+
+    private float m_scoreAmount = 1;
 
     // Start is called before the first frame update
     void Start()
@@ -54,6 +57,8 @@ public class StadiumController : MonoBehaviour
         {
             m_Stadium.ResetStadium();
         } while (!IsValidStart());
+
+        m_scoreAmount = MAX_SCORE / (m_Stadium.currentMaxPucks+1);
 
         foreach (Transform puck in m_Stadium.pucks)
         {
@@ -125,7 +130,7 @@ public class StadiumController : MonoBehaviour
         // check if completed
         if (HasWon())
         {
-            m_AgentGroup.AddGroupReward(10f);
+            //m_AgentGroup.AddGroupReward(10f);
             m_Stadium.winAnimation();
             m_AgentGroup.EndGroupEpisode();
             ResetScene();
@@ -135,5 +140,13 @@ public class StadiumController : MonoBehaviour
 
         // time penalty
         m_AgentGroup.AddGroupReward(-1f / MaxEnvironmentSteps);
+    }
+    
+    // Called by Puck when moved into a goal
+    public void Scored()
+    {
+        // print("Added reward");
+        // print(m_scoreAmount);
+        m_AgentGroup.AddGroupReward(m_scoreAmount);
     }
 }

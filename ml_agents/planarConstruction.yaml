@@ -20,7 +20,7 @@ behaviors:
         gamma: 0.99
         strength: 1.0
     keep_checkpoints: 5
-    max_steps: 50000000
+    max_steps: 10000000
     time_horizon: 64
     summary_freq: 10000
     threaded: True
@@ -30,28 +30,28 @@ environment_parameters:
     curriculum:
       - name: Lesson0
         completion_criteria:
-          measure: reward
+          measure: progress
           behavior: PlanarConstruction
           signal_smoothing: true
           min_lesson_length: 10
-          threshold: 7
+          threshold: 0.1
           require_reset: true
         value: 1.0
       - name: Lesson1
         completion_criteria:
-          measure: reward
+          measure: progress
           behavior: PlanarConstruction
           signal_smoothing: true
           min_lesson_length: 10
-          threshold: 7
+          threshold: 0.3
         value: 1.0
       - name: Lesson2
         completion_criteria:
-          measure: reward
+          measure: progress
           behavior: PlanarConstruction
           signal_smoothing: true
           min_lesson_length: 10
-          threshold: 7
+          threshold: 0.5
         value: 2.0
       - name: Lesson3
         value: 2.0
@@ -59,28 +59,28 @@ environment_parameters:
     curriculum:
       - name: Lesson0
         completion_criteria:
-          measure: reward
+          measure: progress
           behavior: PlanarConstruction
           signal_smoothing: true
           min_lesson_length: 10
-          threshold: 7
+          threshold: 0.1
           require_reset: true
         value: 2.0
       - name: Lesson1
         completion_criteria:
-          measure: reward
+          measure: progress
           behavior: PlanarConstruction
           signal_smoothing: true
           min_lesson_length: 10
-          threshold: 7
+          threshold: 0.3
         value: 4.0
       - name: Lesson2
         completion_criteria:
-          measure: reward
+          measure: progress
           behavior: PlanarConstruction
           signal_smoothing: true
           min_lesson_length: 10
-          threshold: 7
+          threshold: 0.5
         value: 4.0
       - name: Lesson3
         value: 4.0
@@ -88,37 +88,37 @@ environment_parameters:
     curriculum:
       - name: Lesson0
         completion_criteria:
-          measure: reward
+          measure: progress
           behavior: PlanarConstruction
           signal_smoothing: true
           min_lesson_length: 10
-          threshold: 7
+          threshold: 0.1
           require_reset: true
         value: 33.0
       - name: Lesson1
         completion_criteria:
-          measure: reward
+          measure: progress
           behavior: PlanarConstruction
           signal_smoothing: true
           min_lesson_length: 10
-          threshold: 7
+          threshold: 0.2
           require_reset: true
         value: 28.0
       - name: Lesson2
         completion_criteria:
-          measure: reward
+          measure: progress
           behavior: PlanarConstruction
           signal_smoothing: true
           min_lesson_length: 10
-          threshold: 7
+          threshold: 0.4
         value: 22.0
       - name: Lesson3
         completion_criteria:
-          measure: reward
+          measure: progress
           behavior: PlanarConstruction
           signal_smoothing: true
           min_lesson_length: 10
-          threshold: 7
+          threshold: 0.6
         value: 15.0
       - name: Lesson4
         value: 8.0
