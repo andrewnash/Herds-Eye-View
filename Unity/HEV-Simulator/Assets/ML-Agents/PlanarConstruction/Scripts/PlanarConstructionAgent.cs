@@ -58,7 +58,7 @@ public class PlanarConstructionAgent : Agent
         // move agent
         if (LocalADController)
         {
-            MoveAgentADController(actionBuffers);
+            MoveAgentADController(actionBuffers.DiscreteActions);
         }
         else if (GlobalTurnController)
         {
@@ -70,29 +70,37 @@ public class PlanarConstructionAgent : Agent
         }
     }
 
-    void MoveAgentADController(ActionBuffers actionBuffers)
+    //void MoveAgentADController(ActionBuffers actionBuffers)
+    void MoveAgentADController(ActionSegment<int> act)
     {
-        float rotate = 0;
-        switch (actionBuffers.DiscreteActions[0])
+        var dirToGo = Vector3.zero;
+        var rotateDir = Vector3.zero;
+
+        var action = act[0];
+
+        switch (action)
         {
-            case 0:
-                rotate = -TURN_SPEED;
-                break;
             case 1:
-                rotate = 0;
+                dirToGo = transform.forward * 1f;
                 break;
             case 2:
-                rotate = TURN_SPEED;
+                dirToGo = transform.forward * -1f;
+                break;
+            case 3:
+                rotateDir = transform.up * 1f;
+                break;
+            case 4:
+                rotateDir = transform.up * -1f;
+                break;
+            case 5:
+                dirToGo = transform.right * -0.75f;
+                break;
+            case 6:
+                dirToGo = transform.right * 0.75f;
                 break;
         }
-        rb.transform.Rotate(rb.transform.up * rotate, Time.fixedDeltaTime * 100);
-
-        float speed = MOVEMENT_SPEED;
-        if (m_wallOverlaps > 0)
-        {
-            speed /= 2;
-        }
-        rb.AddForce(rb.transform.forward * speed, ForceMode.VelocityChange);
+        rb.transform.Rotate(rotateDir, Time.fixedDeltaTime * 200f);
+        rb.AddForce(dirToGo * MOVEMENT_SPEED, ForceMode.VelocityChange);
     }
 
     void MoveAgentGlobalTurn(ActionBuffers actionBuffers)
@@ -209,19 +217,23 @@ public class PlanarConstructionAgent : Agent
     // A&D Keyboard turn
     private void HeuristicAD(ActionBuffers actionsOut)
     {
-        var DiscreteActionsOut = actionsOut.DiscreteActions;
-
-        if (Input.GetKey(KeyCode.A))
+        var discreteActionsOut = actionsOut.DiscreteActions;
+        
+        if (Input.GetKey(KeyCode.D))
         {
-            DiscreteActionsOut[0] = 0;
+            discreteActionsOut[0] = 3;
         }
-        else if (Input.GetKey(KeyCode.D))
+        else if (Input.GetKey(KeyCode.W))
         {
-            DiscreteActionsOut[0] = 2;
+            discreteActionsOut[0] = 1;
         }
-        else
+        else if (Input.GetKey(KeyCode.A))
         {
-            DiscreteActionsOut[0] = 1;
+            discreteActionsOut[0] = 4;
+        }
+        else if (Input.GetKey(KeyCode.S))
+        {
+            discreteActionsOut[0] = 2;
         }
     }
 
