@@ -16,7 +16,8 @@ public class StadiumArea : MonoBehaviour
     //vector of obstacles
     private Transform[] currentObstructions = new Transform[0];
 
-    public Transform GoalStadiumArea;
+    public StadiumArea GoalStadiumArea;
+    public bool AreaIsGoal;
 
     public Transform win;
     public Transform loose;
@@ -28,7 +29,8 @@ public class StadiumArea : MonoBehaviour
     float archSize;
     float cubeoffset;
 
-    public float currentMaxPucks = 1;
+    public float puckSpawnHeight;
+    public int currentMaxPucks = 1;
     public int obstructionMax;
 
     public Vector2Int pucksRange;
@@ -73,8 +75,15 @@ public class StadiumArea : MonoBehaviour
     // int pucks to reset, int agents to reset
     public void ResetStadium()
     {
-        currentMaxPucks = Random.Range(pucksRange.x-1, pucksRange.y);
+        if (!AreaIsGoal)
+        {
+            currentMaxPucks = Random.Range(pucksRange.x - 1, pucksRange.y);
 
+            // goal stadium max pucks is 1.5 times the current max
+            // GoalStadiumArea.currentMaxPucks = (int)(1.5 * currentMaxPucks);
+            // GoalStadiumArea.ResetStadium();
+        } 
+        
         for (int i=0; i < pucks.childCount; i++)
         {
             Transform puck = pucks.GetChild(i);
@@ -86,12 +95,16 @@ public class StadiumArea : MonoBehaviour
             }
 
             puck.gameObject.SetActive(true);
-            RandomResetObject(puck, 0f);
+            RandomResetObject(puck, puckSpawnHeight);
         }
-        foreach (Transform agent in agents)
+
+        if (!AreaIsGoal)
         {
-            RandomResetObject(agent.GetComponentInChildren<Rigidbody>().transform, 1f);
-            agent.GetComponentInChildren<StadiumCollisionChecker>().ResetCollisions();
+            foreach (Transform agent in agents)
+            {
+                RandomResetObject(agent.GetComponentInChildren<Rigidbody>().transform, 1f);
+                agent.GetComponentInChildren<StadiumCollisionChecker>().ResetCollisions();
+            }
         }
     }
 
@@ -228,7 +241,7 @@ public class StadiumArea : MonoBehaviour
 
     public Vector2 ClosestGoalPuck(Transform obj)
     {
-        Transform goalPucks = GoalStadiumArea.GetComponent<StadiumArea>().pucks;
+        Transform goalPucks = GoalStadiumArea.pucks;
         
         float minDist = float.MaxValue;
         float minAngle = 0;
