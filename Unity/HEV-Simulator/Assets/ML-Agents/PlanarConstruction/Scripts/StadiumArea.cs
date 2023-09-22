@@ -80,8 +80,8 @@ public class StadiumArea : MonoBehaviour
             currentMaxPucks = Random.Range(pucksRange.x - 1, pucksRange.y);
 
             // goal stadium max pucks is 1.5 times the current max
-            // GoalStadiumArea.currentMaxPucks = (int)(1.5 * currentMaxPucks);
-            // GoalStadiumArea.ResetStadium();
+            GoalStadiumArea.currentMaxPucks = (int)(1.5 * currentMaxPucks);
+            GoalStadiumArea.ResetStadium();
         } 
         
         for (int i=0; i < pucks.childCount; i++)

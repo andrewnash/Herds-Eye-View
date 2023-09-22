@@ -39,7 +39,7 @@ public class StadiumController : MonoBehaviour
         }
 
         m_Stadium.pucksRange = new Vector2Int(
-            (int)resetParams.GetWithDefault("max_pucks", 6),
+            (int)resetParams.GetWithDefault("max_pucks", 4),
             (int)resetParams.GetWithDefault("min_pucks", 1));
         m_DistanceThreshold = (int)resetParams.GetWithDefault("distance_threshold", 10);
         m_Stadium.obstructionMax = (int)resetParams.GetWithDefault("obstacle_max", 0);

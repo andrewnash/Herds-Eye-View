@@ -47,8 +47,9 @@ public class Puck : MonoBehaviour
     
     void Update()
     {
-        if (m_MostRecentAgent == null || HasWon()) { return; }
-        
+        //if (m_MostRecentAgent == null) { return; }
+        if (HasWon()) { return; }
+
         CheckWin();
 
         float currentDistance = m_Stadium.ClosestGoalPuck(transform)[0];
